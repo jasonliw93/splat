@@ -20,6 +20,7 @@ splat.AppRouter = Backbone.Router.extend({
         this.headerView = new splat.Header();  
 	// insert the rendered Header view element into the document DOM
         $('.header').html(this.headerView.render().el);
+
     },
 
     home: function() {
@@ -30,7 +31,7 @@ splat.AppRouter = Backbone.Router.extend({
         };
 	// insert the rendered Home view element into the document DOM
         $('#content').html(this.homeView.render().el);
-        document.body.style.backgroundImage = "url('../img/home_bg.jpg')";
+        this.headerView.selectMenuItem("Home");
     },
     about: function() {
     // If the Home view doesn't exist, instantiate one
@@ -40,7 +41,7 @@ splat.AppRouter = Backbone.Router.extend({
         };
     // insert the rendered Home view element into the document DOM
         $('#content').html(this.aboutView.render().el);
-        document.body.style.backgroundImage = "none";
+        this.headerView.selectMenuItem("About");
     }
 
 });

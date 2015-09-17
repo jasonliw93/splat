@@ -1,8 +1,22 @@
-
 body{
-	background-size: 100%;
-    background-repeat: no-repeat;
+  background-color: black;
+  padding-bottom:30px;
 }
+
+
+.home-hero img#splash{
+  position:fixed;
+  top:0;
+  left:0;
+  max-width: 100%;
+  height: auto;
+  width: 100%; /* ie8 */
+  min-width: 625px;
+  min-height: 468px;
+  overflow:hidden;
+  z-index:-1;
+}
+
 .home-hero {
 	text-align: center;
 	font-size: 36pt;
@@ -10,6 +24,12 @@ body{
 	color:white;
 }
 
+.about h1{
+  color: #B8CEE6;
+}
+.about{
+  color: white;
+}
 .footer {
   position: fixed;
   bottom: 0;
@@ -20,6 +40,6 @@ body{
 }
 .footer p{
   text-align: right;
-  padding-top: 10px;
+  padding-top: 5px;
   color: #999;
 }
