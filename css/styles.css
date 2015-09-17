@@ -1,0 +1,25 @@
+
+body{
+	background-size: 100%;
+    background-repeat: no-repeat;
+}
+.home-hero {
+	text-align: center;
+	font-size: 36pt;
+	font-family: "Verdana" ,"Geneva", "Helvetica";
+	color:white;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 30px;
+  background-color: black;
+}
+.footer p{
+  text-align: right;
+  padding-top: 10px;
+  color: #999;
+}

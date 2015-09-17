@@ -30,6 +30,7 @@ splat.AppRouter = Backbone.Router.extend({
         };
 	// insert the rendered Home view element into the document DOM
         $('#content').html(this.homeView.render().el);
+        document.body.style.backgroundImage = "url('../img/home_bg.jpg')";
     },
     about: function() {
     // If the Home view doesn't exist, instantiate one
@@ -39,7 +40,7 @@ splat.AppRouter = Backbone.Router.extend({
         };
     // insert the rendered Home view element into the document DOM
         $('#content').html(this.aboutView.render().el);
-        
+        document.body.style.backgroundImage = "none";
     }
 
 });
