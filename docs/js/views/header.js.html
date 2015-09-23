@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>home.js</title>
+  <title>header.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" media="all" href="doc-style.css" />
-  <script src="doc-filelist.js"></script>
+  <link rel="stylesheet" media="all" href="../../doc-style.css" />
+  <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "", thisFile = "courses/courses/cscc09f15/rosselet/asn/a1//home.js", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "courses/courses/cscc09f15/liwyanch//js/views/header.js", defaultSidebar = true;
   </script>
-  <script src="doc-script.js"></script>
+  <script src="../../doc-script.js"></script>
 </head>
 <body>
   <div id="sidebar_wrapper">
@@ -26,7 +26,7 @@
   <tbody>
       <tr>
         <td class="docs">
-          <h1>home.js</h1>
+          <h1>header.js</h1>
         </td>
         <td class="code highlight"></td>
       </tr>
@@ -65,7 +65,7 @@
 <p>note View-name (Home) matches name of template file Home.html</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nx">splat</span><span class="p">.</span><span class="nx">Home</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+<span class="nx">splat</span><span class="p">.</span><span class="nx">Header</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
 
 
 </pre></div>
@@ -94,8 +94,11 @@
         <td class="code highlight"><div class="highlight"><pre>
   <span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">());</span>
   <span class="k">return</span> <span class="k">this</span><span class="p">;</span>    <span class="c1">// support method chaining</span>
+    <span class="p">},</span>
+    <span class="nx">selectMenuItem</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">menuItem</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.nav li&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">);</span>
+      <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.nav a:contains(&#39;</span><span class="o">+</span> <span class="nx">menuItem</span> <span class="o">+</span><span class="s1">&#39;)&#39;</span><span class="p">).</span><span class="nx">parent</span><span class="p">().</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">);</span>
     <span class="p">}</span>
-
 <span class="p">});</span>
 </pre></div>
         </td>
