@@ -1,8 +1,16 @@
 body{
+  padding-top:70px;
   background-color: black;
+  color: white;
   padding-bottom:30px;
+  padding-left:20px;
 }
 
+.home-hero {
+	text-align: center;
+	font-size: 36pt;
+	font-family: "Verdana" ,"Geneva", "Helvetica";
+}
 
 .home-hero img#splash{
   position:fixed;
@@ -11,35 +19,22 @@ body{
   max-width: 100%;
   height: auto;
   width: 100%; /* ie8 */
-  min-width: 625px;
-  min-height: 468px;
+  min-width: 800px;
+  min-height: 100%;
   overflow:hidden;
   z-index:-1;
 }
-
-.home-hero {
-	text-align: center;
-	font-size: 36pt;
-	font-family: "Verdana" ,"Geneva", "Helvetica";
-	color:white;
-}
-
-.about h1{
+.about-hero h1{
   color: #B8CEE6;
-}
-.about{
-  color: white;
 }
 .footer {
   position: fixed;
+  left:0;
   bottom: 0;
   width: 100%;
-  /* Set the fixed height of the footer here */
   height: 30px;
   background-color: black;
-}
-.footer p{
-  text-align: right;
   padding-top: 5px;
   color: #999;
+  text-align: right;
 }
