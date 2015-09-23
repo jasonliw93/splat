@@ -1,3 +1,4 @@
+/*Default Format for Background*/
 body{
   padding-top:70px;
   background-color: black;
@@ -9,12 +10,14 @@ body{
 	margin: 0;
 }
 
+/*Font Style*/
 .home-hero {
 	text-align: center;
 	font-size: 36pt;
 	font-family: "Verdana" ,"Geneva", "Helvetica";
 }
 
+/*Splash Format*/
 .home-hero img#splash{
   position:fixed;
   top:0;
@@ -27,9 +30,13 @@ body{
   overflow:hidden;
   z-index:-1;
 }
+
+/*Font Colour for header in About page*/
 .about-hero h1{
   color: #B8CEE6;
 }
+
+/*Footer Format*/
 .footer {
   position: fixed;
   left:0;
