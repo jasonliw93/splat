@@ -11,7 +11,7 @@ Running webserver:
 ```
 python -m SimpleHTTPServer
 ```
-browse to http://0.0.0.0:8000
+browse to http://0.0.0.0:8000/public
 
 
 Fixing permission (for mathlab):
