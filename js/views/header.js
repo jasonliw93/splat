@@ -13,8 +13,11 @@ splat.Header = Backbone.View.extend({
 	this.$el.html(this.template());
 	return this;    // support method chaining
     },
+
     selectMenuItem: function (menuItem) {
+        //removes any active classes under <nav><li>
    		$('.nav li').removeClass('active');
+        //actives any tags associated to menuItem
     	$('.nav a:contains('+ menuItem +')').parent().addClass('active');
     }
 });
