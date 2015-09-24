@@ -4,7 +4,7 @@
 // declare splat-app namespace if it doesn't already exist
 var splat =  splat || {};
 
-// note View-name (Home) matches name of template file Home.html
+// note View-name (Header) matches name of template file Header.html
 splat.Header = Backbone.View.extend({
 
     // render the View
