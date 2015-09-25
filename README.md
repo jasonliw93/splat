@@ -30,3 +30,4 @@ submit -c cscc09f15 -a a1s1 a1s1.tgz
 submit -c cscc09f15 -a a1s2 a1s2.tgz
 submit -c cscc09f15 -a a1 a1.tgz
 ```
+Note you can resubmit by using the -f flag; see man submit on mathlab.utsc for details on usage.
