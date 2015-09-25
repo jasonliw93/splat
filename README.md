@@ -20,3 +20,13 @@ Fixing permission (for mathlab):
 sh permission.sh
 ```
 browse to https://mathlab.utsc.utoronto.ca/courses/cscc09f15/_UTORID_/_PATH_TO_PUBLIC_
+
+Submit Instructions:
+-------------------
+
+```
+tar -cvf a1.tgz public a1_docs.txt cover.pdf
+submit -c cscc09f15 -a a1s1 a1s1.tgz
+submit -c cscc09f15 -a a1s2 a1s2.tgz
+submit -c cscc09f15 -a a1 a1.tgz
+```
