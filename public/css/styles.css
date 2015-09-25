@@ -32,6 +32,20 @@ body{
   z-index:-1;
 }
 
+/*Smiley Format*/
+.about-hero img#smiley{
+  position:relative;
+  top:0;
+  right:50;
+  max-width: 50%;
+  height: auto;
+  width: 50%; /* ie8 */
+  min-width: 50px;
+  min-height: 50%;
+  overflow:hidden;
+  z-index:-1;
+}
+
 /*Font Colour for header in About page*/
 .about-hero h1{
   color: #B8CEE6;
