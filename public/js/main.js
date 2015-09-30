@@ -11,15 +11,22 @@ splat.AppRouter = Backbone.Router.extend({
     routes: {
         "": "home",
         "about": "about",
+        "movies": "browse",
+        "movies/add": "addHandler",
+        "movies/:id": "editHandler",
         "*default": "home",
     },
 
     // When an instance of an AppRouter is declared, create a Header view
     initialize: function() {
 	// instantiate a Header view
-        this.headerView = new splat.Header();  
+        this.headerView = new splat.Header();
 	// insert the rendered Header view element into the document DOM
         $('.header').html(this.headerView.render().el);
+        if (!this.movies) {
+            this.movies = new splat.Movies();
+        };
+        var moviesFetch = this.movies.fetch();
     },
 
     home: function() {
@@ -31,6 +38,29 @@ splat.AppRouter = Backbone.Router.extend({
 	// insert the rendered Home view element into the document DOM
         $('#content').html(this.homeView.render().el);
         this.headerView.selectMenuItem("Splat!");
+    },
+    addHandler: function() {
+    // If the Home view doesn't exist, instantiate one\
+        this.movie = new splat.Movie();
+        this.detailsView = new splat.Details({model:this.movie});
+        // insert the rendered Home view element into the document DOM
+        $('#content').html(this.detailsView.render().el);
+        this.headerView.selectMenuItem("Add Movie");
+    },
+    editHandler: function(id) {
+    // If the Home view doesn't exist, instantiate one\
+        
+        moviesFetch.done(function(coll, resp) {
+            // get movie and instantiate
+            // Details view
+            this.movie = this.movies.get(id);
+            this.detailsView = new splat.Details({model:this.movie});
+            // insert the rendered Home view element into the document DOM
+            $('#content').html(this.detailsView.render().el);
+            this.headerView.selectMenuItem("Add Movie");
+        }).fail(function(coll, resp) {
+            alert("Fetch movies failed!");
+        });
     },
     about: function() {
     // If the Home view doesn't exist, instantiate one
@@ -49,7 +79,7 @@ splat.AppRouter = Backbone.Router.extend({
 // template loading is complete, instantiate a Backbone router
 // with history.
 
-splat.utils.loadTemplates(['Home', 'Header', 'About'], function() {
+splat.utils.loadTemplates(['Home', 'Header', 'About', 'Details'], function() {
     splat.app = new splat.AppRouter();
     Backbone.history.start();
 });

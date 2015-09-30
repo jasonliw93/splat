@@ -32,6 +32,29 @@ body{
   z-index:-1;
 }
 
+.home-btn{
+background-color : rgba(0, 0, 0, 0.5);
+border: 4px;
+color : #999;
+white-space : normal;
+vertical-align: middle;
+font-family: Arvo;
+max-width :200px;
+margin: 10px 6px;
+
+}
+.home-btn .img{
+  width: 30%;
+}
+.home-btn .text{
+  width: 70%;
+}
+.home-btn img{
+  width: 75%;
+  opacity: 1.0;
+}
+
+
 /*Smiley Format*/
 .about-hero img#smiley{
   position:relative;
@@ -62,4 +85,15 @@ body{
   padding: 5px;
   color: #999;
   text-align: right;
+}
+
+.editActions {
+  padding-left: 0;
+}
+
+.form-group {
+  font-family: Andika;
+}
+.form-group input{
+    color:black;
 }
