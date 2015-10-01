@@ -5,7 +5,15 @@
 var splat = splat || {};
 
 splat.utils = {
-
+    showAlert: function(alertType, text, cssStyle) {
+        //'Success', "Movie added", 'alert-success'
+        //.show() and .fadeOut() 
+        return;
+    },
+    hideNotice: function(){
+        //.stop()
+        return;
+    },
     // Asynchronously load templates located in separate .html files using
     // jQuery "deferred" mechanism, an implementation of Promises.  Note we
     // depend on template file names matching corresponding View file names,

@@ -26,7 +26,8 @@ splat.AppRouter = Backbone.Router.extend({
         if (!this.movies) {
             this.movies = new splat.Movies();
         };
-        var moviesFetch = this.movies.fetch();
+        this.moviesFetch = this.movies.fetch();
+
     },
 
     home: function() {
@@ -42,22 +43,22 @@ splat.AppRouter = Backbone.Router.extend({
     addHandler: function() {
     // If the Home view doesn't exist, instantiate one\
         this.movie = new splat.Movie();
-        this.detailsView = new splat.Details({model:this.movie});
+        this.detailsView = new splat.Details({collection:this.movies, model:this.movie});
         // insert the rendered Home view element into the document DOM
         $('#content').html(this.detailsView.render().el);
         this.headerView.selectMenuItem("Add Movie");
     },
     editHandler: function(id) {
     // If the Home view doesn't exist, instantiate one\
-        
-        moviesFetch.done(function(coll, resp) {
+        var self = this;
+        this.moviesFetch.done(function(coll, resp) {
             // get movie and instantiate
             // Details view
-            this.movie = this.movies.get(id);
-            this.detailsView = new splat.Details({model:this.movie});
+            self.movie = self.movies.get(id);
+            this.detailsView = new splat.Details({collection:self.movies, model:self.movie});
             // insert the rendered Home view element into the document DOM
             $('#content').html(this.detailsView.render().el);
-            this.headerView.selectMenuItem("Add Movie");
+            self.headerView.selectMenuItem("Add Movie");
         }).fail(function(coll, resp) {
             alert("Fetch movies failed!");
         });
