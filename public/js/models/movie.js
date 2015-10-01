@@ -8,7 +8,7 @@ splat.Movie = Backbone.Model.extend({
     idAttribute: "_id", 
     defaults: {
         title : "",  // movie title    
-        released : undefined,  // release year
+        released : "",  // release year
         director: "", // movie's director
         rating : "",  // MPAA movie rating: G, PG, PG-13, R, NC-17, NR
         starring : [],  // array principal actors
@@ -17,7 +17,7 @@ splat.Movie = Backbone.Model.extend({
         synopsis : "",  // brief outline of the movie
         freshTotal : 0.0,   // cumulative total of review fresh (1.0) votes
         freshVotes : 0.0,   // number of review ratings
-        trailer : undefined,  // URL for trailer/movie-streaming
+        trailer : "",  // URL for trailer/movie-streaming
         poster : "img/placeholder.png",  // movie-poster image URL
         dated : undefined,  // date of movie posting
     }

@@ -10,6 +10,7 @@ splat.MovieForm = Backbone.View.extend({
         "click #moviesave":  "save",
         "click #moviedel": "destroy",
         "focusout .form-group input": "update",
+        "focusout .form-group textarea": "update",
     },
     
     update: function (e){
