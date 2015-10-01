@@ -1,19 +1,17 @@
-<div class="thumbnails col-lg-2 col-md-3 col-sm-4 col-xs-6">
-  <div class="thumbnail plain" title="some message">
-    <div class="some_class">
+<div  class="thumbnails col-lg-2 col-md-3 col-sm-4 col-xs-6">
+    <div class="thumbnail plain" title="Click here to edit item">
+    <div class="thumbnail-container">
       <a href="#movies/<%= _id %>" class="plain">
-        <video class="img-responsive" controls poster="<%= poster %>" >
+        <video preload="none" class="img-responsive" controls poster="<%= poster %>" >
             <source src="<%= trailer %>" type="video/mp4"/>
         </video>
-
-        <div class="some_class_2">
+        <div class="thumbnail-text">
           <b><%= title %></b> (<%= released %>)<br/>
           <b>Directed by: </b> <%= director %><br/>
           <b>Starring: </b> <%= starring %><br/>
           <b>Genres: </b> <%= genre %> <b>Rating: </b> <%= rating %><br/>
-          <!-- ADD-CODE -->
         </div>
       </a>
     </div>
   </div>
-</div>
+</div> 

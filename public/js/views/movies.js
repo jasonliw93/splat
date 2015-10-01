@@ -10,19 +10,18 @@ splat.MoviesView = Backbone.View.extend({
     initialize: function() {
     	this.movieThumbLoad = $.get('tpl/MovieThumb.html');
     },
+    moviesTemplate: _.template([
+		"<% movies.each(function(movie) { %>",
+		"<%= movieTemplate(movie.toJSON()) %>",
+		"<% }); %>",
+	].join('')),
     render: function () {
     	var self = this;
 		this.movieThumbLoad.done(function(markup) {
 				// apply to model, inject to Details view
 			self.movieTemplate = _.template(markup);
-			
-			self.collection.each(function(model) {
-			   var obj = model.toJSON();
-			   obj["id"] = model.id;
-			   self.$el.append(self.movieTemplate(obj));
-			}, self)
+			self.$el.html(self.moviesTemplate({movies: self.collection, movieTemplate: self.movieTemplate}));
 		});
-	// set the view element ($el) HTML content using its template
 		return this;    // support method chaining
     }
 
