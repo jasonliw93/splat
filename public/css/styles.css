@@ -91,9 +91,16 @@ margin: 10px 6px;
   padding-left: 0;
 }
 
-.form-group {
+.form-group label{
   font-family: Andika;
 }
 .form-group input{
     color:black;
+}
+#notification-panel{
+  display:none;
+}
+
+video{
+  width= 100%;
 }

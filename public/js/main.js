@@ -26,9 +26,9 @@ splat.AppRouter = Backbone.Router.extend({
         if (!this.movies) {
             this.movies = new splat.Movies();
         };
-        var moviesFetch = this.movies.fetch();
-    },
+        this.moviesFetch = this.movies.fetch();
 
+    },
     home: function() {
 	// If the Home view doesn't exist, instantiate one
 
@@ -39,25 +39,48 @@ splat.AppRouter = Backbone.Router.extend({
         $('#content').html(this.homeView.render().el);
         this.headerView.selectMenuItem("Splat!");
     },
+    browse: function() {
+    // If the Home view doesn't exist, instantiate one\
+        var self = this;
+        this.moviesFetch.done(function(coll, resp) {
+            // get movie and instantiate
+            // Details view
+            self.movie = self.movies.first();
+            self.moviesView = new splat.MoviesView({collection:self.movies});
+            // insert the rendered Home view element into the document DOM
+            $('#content').html(self.moviesView.render().el);
+            self.headerView.selectMenuItem("Browse Movies");
+        }).fail(function(coll, resp) {
+            alert("Fetch movies failed!");
+        });
+    },
     addHandler: function() {
     // If the Home view doesn't exist, instantiate one\
-        this.movie = new splat.Movie();
-        this.detailsView = new splat.Details({model:this.movie});
-        // insert the rendered Home view element into the document DOM
-        $('#content').html(this.detailsView.render().el);
-        this.headerView.selectMenuItem("Add Movie");
+        var self = this;
+        this.moviesFetch.done(function(coll, resp) {
+            // get movie and instantiate
+            // Details view
+            self.movie = new splat.Movie();
+            this.detailsView = new splat.Details({collection:self.movies, model:self.movie});
+            // insert the rendered Home view element into the document DOM
+            $('#content').html(this.detailsView.render().el);
+            self.headerView.selectMenuItem("Add Movie");
+        }).fail(function(coll, resp) {
+            alert("Fetch movies failed!");
+        });
+
     },
     editHandler: function(id) {
     // If the Home view doesn't exist, instantiate one\
-        
-        moviesFetch.done(function(coll, resp) {
+        var self = this;
+        this.moviesFetch.done(function(coll, resp) {
             // get movie and instantiate
             // Details view
-            this.movie = this.movies.get(id);
-            this.detailsView = new splat.Details({model:this.movie});
+            self.movie = self.movies.get(id);
+            this.detailsView = new splat.Details({collection:self.movies, model:self.movie});
             // insert the rendered Home view element into the document DOM
             $('#content').html(this.detailsView.render().el);
-            this.headerView.selectMenuItem("Add Movie");
+            self.headerView.selectMenuItem("Add Movie");
         }).fail(function(coll, resp) {
             alert("Fetch movies failed!");
         });

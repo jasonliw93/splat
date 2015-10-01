@@ -4,6 +4,7 @@
 var splat =  splat || {};
 
 splat.Movie = Backbone.Model.extend({
+    
     idAttribute: "_id", 
     defaults: {
         title : "",  // movie title    

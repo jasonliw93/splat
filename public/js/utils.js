@@ -5,7 +5,21 @@
 var splat = splat || {};
 
 splat.utils = {
-
+    showNotice: function(noticeType, noticeText, cssStyle) {
+        this.hideNotice();
+        $('#alert-type').html(noticeType);
+        $('#alert-text').html(noticeText);
+        $('#notification-panel').animate({opacity:'100'});
+        $('#notification-panel').addClass("alert");
+        $('#notification-panel').addClass(cssStyle);
+        $('#notification-panel').show();
+        $('#notification-panel').fadeOut(5000);
+    },
+    hideNotice: function(){
+        $('#notification-panel').stop();
+        $('#notification-panel').hide();
+        $('#notification-panel').removeClass();
+    },
     // Asynchronously load templates located in separate .html files using
     // jQuery "deferred" mechanism, an implementation of Promises.  Note we
     // depend on template file names matching corresponding View file names,
