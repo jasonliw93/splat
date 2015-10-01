@@ -5,14 +5,20 @@
 var splat = splat || {};
 
 splat.utils = {
-    showAlert: function(alertType, text, cssStyle) {
-        //'Success', "Movie added", 'alert-success'
-        //.show() and .fadeOut() 
-        return;
+    showNotice: function(noticeType, noticeText, cssStyle) {
+        this.hideNotice();
+        $('#alert-type').html(noticeType);
+        $('#alert-text').html(noticeText);
+        $('#notification-panel').animate({opacity:'100'});
+        $('#notification-panel').addClass("alert");
+        $('#notification-panel').addClass(cssStyle);
+        $('#notification-panel').show();
+        $('#notification-panel').fadeOut(5000);
     },
     hideNotice: function(){
-        //.stop()
-        return;
+        $('#notification-panel').stop();
+        $('#notification-panel').hide();
+        $('#notification-panel').removeClass();
     },
     // Asynchronously load templates located in separate .html files using
     // jQuery "deferred" mechanism, an implementation of Promises.  Note we

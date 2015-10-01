@@ -97,3 +97,10 @@ margin: 10px 6px;
 .form-group input{
     color:black;
 }
+#notification-panel{
+  display:none;
+}
+
+video{
+  width= 100%;
+}
