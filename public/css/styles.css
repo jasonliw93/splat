@@ -5,11 +5,15 @@ body{
   color: white; /*#FFE8AA*/
   padding-bottom:30px;
   padding-left:20px;
+  padding-right:20px;
 }
 .navbar-nav {
   margin: 0;
 }
 
+#content {
+ 
+}
 /*Font Style*/
 .home-hero {
   text-align: center;
