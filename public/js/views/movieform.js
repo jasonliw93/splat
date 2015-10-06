@@ -9,20 +9,29 @@ splat.MovieForm = Backbone.View.extend({
 	events: {
         "click #moviesave":  "save",
         "click #moviedel": "destroy",
-        "focusout .form-group input": "change",
-        "focusout .form-group textarea": "change",
+        "change .form-group input": "change",
+        "change .form-group textarea": "change",
     },
-    
     change: function (e){
-    	var obj = {};
-       	obj[e.currentTarget.name] = e.currentTarget.value
+    	splat.utils.hideNotice();
+		var obj = {};
+    	if (e.target.name == 'starring' || e.target.name == 'genre'){
+			obj[e.target.name] = e.target.value.split(",");
+    	}else{
+       		obj[e.target.name] = e.target.value
+       	}
        	this.model.set(obj);
 		splat.utils.showNotice('Note!', 
-			'Movie Attribute udated, to make changes permanent, click "Save Changes" button'
-			, 'alert-info');
+				'Movie Attribute udated, to make changes permanent, click "Save Changes" button'
+				, 'alert-info');
+		var check = this.model.validateItem(e.target.name);
+		check.isValid ? 
+			splat.utils.removeValidationError(e.target.name) 
+			:splat.utils.addValidationError(e.target.name, check.message);
     },
     save: function (){
     	var self = this;
+    	this.model.set({'dated': Date()});
     	this.collection.create(this.model, {
 			wait: true,  // don't destroy client model until server responds
 			success: function(model, response) {

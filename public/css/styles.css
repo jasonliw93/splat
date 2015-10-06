@@ -10,9 +10,7 @@ body{
 .navbar-nav {
   margin: 0;
 }
-.navbar .navbar-brand {
-  font-size: 125%;
-}
+
 /*Font Style*/
 .home-hero {
   text-align: center;
@@ -126,4 +124,8 @@ a div.thumbnail-text
   text-align: right;
   font-family: Arial;
   color: white ;
+}
+
+.form-horizontal {
+  padding-right: 20px;
 }
