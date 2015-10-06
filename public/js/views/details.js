@@ -10,8 +10,8 @@ splat.Details = Backbone.View.extend({
     render: function () {
 	// set the view element ($el) HTML content using its template
 		this.$el.html(this.template());
-		this.Movieformview = new splat.MovieForm({collection:this.collection, model:this.model});
-		this.$el.find('#movieform').html(this.Movieformview.render().el);
+		this.MovieFormView = new splat.MovieForm({collection:this.collection, model:this.model});
+		this.$('#movieform').html(this.MovieFormView.render().el);
 		return this;    // support method chaining
     }
 

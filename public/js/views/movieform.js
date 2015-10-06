@@ -9,15 +9,13 @@ splat.MovieForm = Backbone.View.extend({
 	events: {
         "click #moviesave":  "save",
         "click #moviedel": "destroy",
-        "focusout .form-group input": "update",
-        "focusout .form-group textarea": "update",
+        "focusout .form-group input": "change",
+        "focusout .form-group textarea": "change",
     },
     
-    update: function (e){
-    	var changed = e.currentTarget;
-       	var value = $(e.currentTarget).val();
-       	var obj = {};
-       	obj[changed.name] = value;
+    change: function (e){
+    	var obj = {};
+       	obj[e.currentTarget.name] = e.currentTarget.value
        	this.model.set(obj);
 		splat.utils.showNotice('Note!', 
 			'Movie Attribute udated, to make changes permanent, click "Save Changes" button'

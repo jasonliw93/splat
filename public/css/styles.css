@@ -10,12 +10,16 @@ body{
   margin: 0;
 }
 
+.navbar .navbar-brand {
+  font-size: 125%;
+}
 /*Font Style*/
 .home-hero {
   text-align: center;
   font-color: white;
   font-size: 36pt;
   font-family: "Verdana" ,"Geneva", "Helvetica";
+  text-shadow: 1px 1px 1px #000;
 }
 
 /*Splash Format*/
@@ -41,7 +45,6 @@ vertical-align: middle;
 font-family: Arvo;
 max-width :200px;
 margin: 10px 6px;
-
 }
 .home-btn .img{
   width: 30%;
@@ -53,7 +56,6 @@ margin: 10px 6px;
   width: 75%;
   opacity: 1.0;
 }
-
 
 /*Smiley Format*/
 .about-hero img#smiley{
