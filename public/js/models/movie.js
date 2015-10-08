@@ -6,14 +6,18 @@ var splat =  splat || {};
 splat.Movie = Backbone.Model.extend({
     initialize: function() {
         this.validators = {};
+        //regex for input values
         var titleRegex = /^[a-zA-Z0-9 \,\.\?\-\'\*]+$/;
         var yearRegex = /^(189[6-9]|19\d\d|201\d)$/
         var ratingRegex = /^[a-zA-Z0-9 \,\.\?\-\'\*]+$/;
+
+        //validator for title
         this.validators.title = function (value) {
             return (value && titleRegex.test(value)) ? 
                 {isValid: true}: 
                 {isValid: false, message: "Only 1 or more letters-digits-spaces allowed"};
         };
+        //validator for release year
         this.validators.released = function (value) {
             return (value && yearRegex.test(value)) ? 
                 {isValid: true}: 
@@ -21,6 +25,7 @@ splat.Movie = Backbone.Model.extend({
         };
         this.validators.director = this.validators.title;
         this.validators.rating = this.validators.title;
+        //validator for starring
         this.validators.starring = function (values) {
             for(v in values)
             {
