@@ -6,6 +6,9 @@ var splat =  splat || {};
 
 // note View-name (Home) matches name of template file Home.html
 splat.MovieForm = Backbone.View.extend({
+    initialize: function() {
+    	this.movieFormLoad = $.get('tpl/MovieForm.html');
+    },
 	events: {
         "click #moviesave":  "save",
         "click #moviedel": "destroy",
@@ -30,16 +33,20 @@ splat.MovieForm = Backbone.View.extend({
 			:splat.utils.addValidationError(e.target.name, check.message);
     },
     save: function (){
+    	splat.utils.hideNotice();
     	var self = this;
-    	this.model.set({'dated': Date()});
     	this.model.on('invalid', function(model, error) {
+    		console.log(self.model.invalid);
 		  	splat.utils.showNotice('Invalid', error, 'alert-warning');
+		  	for (var key in self.model.invalid) {
+		  		splat.utils.addValidationError(key, self.model.invalid[key]);	
+			}
 		});
     	this.collection.create(this.model, {
 			wait: true,  // don't destroy client model until server responds
 			success: function(model, response) {
 			// later, we'll navigate to the browse view upon success
-			    splat.app.navigate('#movies/' + self.model.id , {replace:true, trigger:true});
+			    splat.app.navigate('#movies/' + self.model.id , {replace:true, trigger:false});
 			// notification panel, defined in section 2.6
 			    splat.utils.showNotice('Success', "Movie has been saved", 'alert-success');
 			},
@@ -50,6 +57,7 @@ splat.MovieForm = Backbone.View.extend({
 		});
     },
     destroy: function(){
+    	splat.utils.hideNotice();
     	this.model.destroy({
 			wait: true,  // don't destroy client model until server responds
 			success: function(model, response) {
@@ -69,12 +77,11 @@ splat.MovieForm = Backbone.View.extend({
     render: function () {
 	// set the view element ($el) HTML content using its template
 		var self = this;
-		$.get('tpl/MovieForm.html', function(markup) {
+		this.movieFormLoad.done(function(markup) {
 				self.movieFormTemplate = _.template(markup);
 				self.$el.html(self.movieFormTemplate(self.model.toJSON()));
 				// apply to model, inject to Details view
 		});
-		
 		return this;    // support method chaining
     }
 

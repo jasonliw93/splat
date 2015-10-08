@@ -6,7 +6,9 @@ var splat =  splat || {};
 
 // note View-name (Home) matches name of template file Home.html
 splat.MoviePoster = Backbone.View.extend({
-
+    initialize: function() {
+    	this.moviePosterLoad = $.get('tpl/MoviePoster.html');
+    },
 	events: {
         "change #selectImage":  "selectImage",
         "dragover #imageCanvas": "dragoverHandler",
@@ -78,12 +80,11 @@ splat.MoviePoster = Backbone.View.extend({
     render: function () {
 	// set the view element ($el) HTML content using its template
 		var self = this;
-		$.get('tpl/MoviePoster.html', function(markup) {
-				self.moviePosterTemplate = _.template(markup);
-				self.$el.html(self.moviePosterTemplate());
-				self.setCanvasImage(self.model.get('poster'));
+		this.moviePosterLoad.done(function(markup) {
+			self.moviePosterTemplate = _.template(markup);
+			self.$el.html(self.moviePosterTemplate());
+			self.setCanvasImage(self.model.get('poster'));
 		});
 		return this;    // support method chaining
     }
-
 });

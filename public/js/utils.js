@@ -6,29 +6,28 @@ var splat = splat || {};
 
 splat.utils = {
     showNotice: function(noticeType, noticeText, cssStyle) {
-        $('#notification-panel').stop();
+        $('#notification-panel').addClass("alert");
+        $('#notification-panel').stop();        
+        $('#notification-panel').css("opacity", "1.0");
         $('#alert-type').html(noticeType);
         $('#alert-text').html(noticeText);
-        $('#notification-panel').animate({opacity:'100'});
-        $('#notification-panel').addClass("alert");
         $('#notification-panel').addClass(cssStyle);
         $('#notification-panel').show();
         $('#notification-panel').fadeOut(5000);
     },
     hideNotice: function(){
-        $('#notification-panel').stop();
         $('#notification-panel').hide();
         $('#notification-panel').removeClass();
     },
     addValidationError: function(field, message) {
         // use jQuery to address input field by its
         // name attribute
-        var formGroup = $('.form-group input[name=' + field +']').parent();
+        var formGroup = $('.form-group input[name=' + field +'] , textarea[name=' + field +'] ').parent();
         formGroup.addClass('has-error');
         $('.help-block', formGroup).html(message);
     },
     removeValidationError: function (field) {
-        var formGroup = $('.form-group input[name=' + field +']').parent();
+        var formGroup = $('.form-group input[name=' + field +'] , textarea[name=' + field +'] ').parent();
         formGroup.removeClass('has-error');
         $('.help-block', formGroup).html('');
     },
