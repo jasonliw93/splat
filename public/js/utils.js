@@ -6,7 +6,7 @@ var splat = splat || {};
 
 splat.utils = {
     showNotice: function(noticeType, noticeText, cssStyle) {
-        this.hideNotice();
+        $('#notification-panel').stop();
         $('#alert-type').html(noticeType);
         $('#alert-text').html(noticeText);
         $('#notification-panel').animate({opacity:'100'});
@@ -19,6 +19,18 @@ splat.utils = {
         $('#notification-panel').stop();
         $('#notification-panel').hide();
         $('#notification-panel').removeClass();
+    },
+    addValidationError: function(field, message) {
+        // use jQuery to address input field by its
+        // name attribute
+        var formGroup = $('.form-group input[name=' + field +']').parent();
+        formGroup.addClass('has-error');
+        $('.help-block', formGroup).html(message);
+    },
+    removeValidationError: function (field) {
+        var formGroup = $('.form-group input[name=' + field +']').parent();
+        formGroup.removeClass('has-error');
+        $('.help-block', formGroup).html('');
     },
     // Asynchronously load templates located in separate .html files using
     // jQuery "deferred" mechanism, an implementation of Promises.  Note we
