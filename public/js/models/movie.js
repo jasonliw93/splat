@@ -11,7 +11,7 @@ splat.Movie = Backbone.Model.extend({
         var actorRegex = /^[a-zA-Z \-\']+$/;
         var yearRegex = /^(19[1-9]\d|20[0-1][0-6])$/ //1910-2016
         var ratingRegex = /^(G|PG|PG\-13|R|NC\-17|NR)$/;
-        var durationRegex =  /^(\d+\d+\d+)$/;
+        var durationRegex =  /^(\d\d?\d?)$/;
 
         this.validators.title = function (value) {
             return (value && titleRegex.test(value)) ? 
@@ -25,7 +25,6 @@ splat.Movie = Backbone.Model.extend({
                 {isValid: false, message: "Only Year between 1910 - 2016"};
         };
         this.validators.director = this.validators.title;
-
         this.validators.rating = function (value) {
             return (value && ratingRegex.test(value)) ? 
                 {isValid: true}: 
@@ -71,17 +70,17 @@ splat.Movie = Backbone.Model.extend({
         : {isValid: true};
     },
     validate: function (attrs) {
-        var failed = false
+        var failed = []
         for (var key in attrs) {
             if (attrs.hasOwnProperty(key)) {
                 var check = this.validateItem(key);
                 if (!check.isValid){
                     splat.utils.addValidationError(key, check.message);
-                    failed = true;
+                    failed.push(key);
                 }
             }
         }
-        if (failed){
+        if (failed.length > 0){
             var message = "Please validate the fields";
             splat.utils.showNotice('Not Valid', message, 'alert-warning');
             return message
