@@ -141,3 +141,14 @@ a div.thumbnail-text
 .form-horizontal {
   padding-right: 20px;
 }
+#imageCanvas{
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+}
+.drag-enter#imageCanvas{
+    border-width: 2px;
+    color: #ccc;
+    border-style: dashed;
+    border-color: #ccc;
+}

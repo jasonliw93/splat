@@ -32,17 +32,20 @@ splat.MovieForm = Backbone.View.extend({
     save: function (){
     	var self = this;
     	this.model.set({'dated': Date()});
+    	this.model.on('invalid', function(model, error) {
+		  	splat.utils.showNotice('Invalid', error, 'alert-warning');
+		});
     	this.collection.create(this.model, {
 			wait: true,  // don't destroy client model until server responds
 			success: function(model, response) {
 			// later, we'll navigate to the browse view upon success
 			    splat.app.navigate('#movies/' + self.model.id , {replace:true, trigger:true});
 			// notification panel, defined in section 2.6
-			    splat.utils.showNotice('Success', "Movie added", 'alert-success');
+			    splat.utils.showNotice('Success', "Movie has been saved", 'alert-success');
 			},
 			error: function(model, response) {
-			// display the error response from the server
-			    splat.utils.requestFailed(response);
+				console.log('error');
+				splat.utils.showNotice('Error', "Movie not saved", 'alert-danger');
 			}
 		});
     },

@@ -11,8 +11,7 @@ splat.Movie = Backbone.Model.extend({
         var actorRegex = /^[a-zA-Z \-\']+$/;
         var yearRegex = /^(19[1-9]\d|20[0-1][0-6])$/ //1910-2016
         var ratingRegex = /^(G|PG|PG\-13|R|NC\-17|NR)$/;
-        var durationRegex =  /^(\d|[1-9]\d|[1-9]\d\d)$/;
-
+        var durationRegex =  /^(\d+\d+\d+)$/;
 
         this.validators.title = function (value) {
             return (value && titleRegex.test(value)) ? 
@@ -35,7 +34,6 @@ splat.Movie = Backbone.Model.extend({
 
         this.validators.starring = function (values) {
             var index;
-            console.log(values);
             for (index = 0; index < values.length; index++) {
                 if (!values[index] || !actorRegex.test(values[index])){
                     return {isValid: false, message: "one-or-more comma-separated sequences of whitespace-separated words"};
@@ -73,17 +71,20 @@ splat.Movie = Backbone.Model.extend({
         : {isValid: true};
     },
     validate: function (attrs) {
+        var failed = false
         for (var key in attrs) {
-          if (attrs.hasOwnProperty(key)) {
-                console.log(key + " start");
+            if (attrs.hasOwnProperty(key)) {
                 var check = this.validateItem(key);
                 if (!check.isValid){
                     splat.utils.addValidationError(key, check.message);
                     failed = true;
                 }
-          }
+            }
         }
         if (failed){
-            return "can't end before it starts";}
+            var message = "Please validate the fields";
+            splat.utils.showNotice('Not Valid', message, 'alert-warning');
+            return message
+        }
     }
 });
