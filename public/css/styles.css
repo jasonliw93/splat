@@ -34,6 +34,7 @@ body{
   z-index:-1;
 }
 
+/*Format for buttons on Home.html*/
 .home-btn{
 background-color : rgba(0, 0, 0, 0.5);
 border: 4px;
@@ -44,12 +45,18 @@ font-family: Arvo;
 max-width :200px;
 margin: 10px 6px;
 }
+
+/*Size of buttons on Home.html*/
 .home-btn .img{
   width: 30%;
 }
+
+/*Size of buttons on Home.html*/
 .home-btn .text{
   width: 70%;
 }
+
+/*img size in button*/
 .home-btn img{
   width: 75%;
   opacity: 1.0;
@@ -87,18 +94,23 @@ margin: 10px 6px;
   text-align: right;
 }
 
+/*Container format for buttons in movie form*/
 .editActions {
   padding-left: 0;
   padding-bottom: 20px;
   text-align: center;
 }
 
+/*font for labels in Movie Form*/
 .form-group label{
   font-family: Andika;
 }
+
+/*font for input in Movie Form*/
 .form-group input, textarea{
     color:black;
 }
+
 #notification-panel{
   display:none;
 }
