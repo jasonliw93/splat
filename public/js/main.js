@@ -44,9 +44,9 @@ splat.AppRouter = Backbone.Router.extend({
         var self = this;
         this.moviesFetch.done(function(coll, resp) {
             // get movie and instantiate
-            // Details view
-            self.movie = self.movies.first();
-            self.moviesView = new splat.MoviesView({collection:self.movies});
+            if (!self.moviesView) {
+                self.moviesView = new splat.MoviesView({collection:self.movies});
+            };
             // insert the rendered Home view element into the document DOM
             $('#content').html(self.moviesView.render().el);
             self.headerView.selectMenuItem("Browse Movies");
