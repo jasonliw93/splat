@@ -144,7 +144,8 @@ a div.thumbnail-text
 #imageCanvas{
     border-width: 2px;
     border-style: solid;
-    border-color: black;
+    border-color: #ccc;
+    max-width: 100%;
 }
 .drag-enter#imageCanvas{
     border-width: 2px;
