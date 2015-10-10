@@ -143,9 +143,6 @@ a div.thumbnail-text {
     padding-right: 20px;
 }
 #imageCanvas {
-    border-width: 2px;
-    border-style: solid;
-    border-color: #333333;
     max-width: 100%;
 }
 span.help-block {

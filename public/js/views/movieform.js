@@ -34,7 +34,7 @@ splat.MovieForm = Backbone.View.extend({
         splat.utils.hideNotice();
         var self = this;
         this.model.on('invalid', function(model, error) {
-            splat.utils.showNotice('Error', error, 'alert-error');
+            splat.utils.showNotice('Error', error, 'alert-danger');
             for (var key in self.model.invalid) {
                 splat.utils.addValidationError(key, self.model.invalid[key]);
             }
