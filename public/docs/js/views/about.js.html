@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "courses/courses/cscc09f15/liwyanch//js/views/about.js", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "courses/courses/cscc09f15/liwyanch/a1//js/views/about.js", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
 </head>
@@ -51,7 +51,7 @@
 <p>declare splat-app namespace if it doesn't already exist</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="kd">var</span> <span class="nx">splat</span> <span class="o">=</span>  <span class="nx">splat</span> <span class="o">||</span> <span class="p">{};</span>
+<span class="kd">var</span> <span class="nx">splat</span> <span class="o">=</span> <span class="nx">splat</span> <span class="o">||</span> <span class="p">{};</span>
 
 
 </pre></div>
@@ -79,7 +79,7 @@
 <p>render the View</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -92,8 +92,8 @@
 <p>set the view element ($el) HTML content using its template</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">());</span>
-  <span class="k">return</span> <span class="k">this</span><span class="p">;</span>    <span class="c1">// support method chaining</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">());</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">;</span> <span class="c1">// support method chaining</span>
     <span class="p">}</span>
 
 <span class="p">});</span>

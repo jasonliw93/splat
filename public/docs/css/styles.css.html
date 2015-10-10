@@ -38,69 +38,155 @@
 
         </td>
         <td class="code highlight"><div class="highlight"><pre><span class="c">/*Default Format for Background*/</span>
-<span class="nt">body</span><span class="p">{</span>
-  <span class="k">padding-top</span><span class="o">:</span><span class="m">70px</span><span class="p">;</span>
-  <span class="k">background-color</span><span class="o">:</span> <span class="nb">black</span><span class="p">;</span>
-  <span class="k">color</span><span class="o">:</span> <span class="nb">white</span><span class="p">;</span> <span class="c">/*#FFE8AA*/</span>
-  <span class="k">padding-bottom</span><span class="o">:</span><span class="m">30px</span><span class="p">;</span>
-  <span class="k">padding-left</span><span class="o">:</span><span class="m">20px</span><span class="p">;</span>
+
+<span class="nt">body</span> <span class="p">{</span>
+    <span class="k">padding-top</span><span class="o">:</span> <span class="m">70px</span><span class="p">;</span>
+    <span class="k">background-color</span><span class="o">:</span> <span class="nb">black</span><span class="p">;</span>
+    <span class="k">color</span><span class="o">:</span> <span class="nb">white</span><span class="p">;</span>
+    <span class="k">padding-bottom</span><span class="o">:</span> <span class="m">30px</span><span class="p">;</span>
+    <span class="k">padding-left</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span>
+    <span class="k">padding-right</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="nc">.navbar-nav</span> <span class="p">{</span>
-  <span class="k">margin</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">margin</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
 <span class="p">}</span>
-
 <span class="c">/*Font Style*/</span>
+
 <span class="nc">.home-hero</span> <span class="p">{</span>
-  <span class="k">text-align</span><span class="o">:</span> <span class="k">center</span><span class="p">;</span>
-  <span class="k">font</span><span class="o">-</span><span class="k">color</span><span class="o">:</span> <span class="nb">white</span><span class="p">;</span>
-  <span class="k">font-size</span><span class="o">:</span> <span class="m">36pt</span><span class="p">;</span>
-  <span class="k">font-family</span><span class="o">:</span> <span class="s2">&quot;Verdana&quot;</span> <span class="o">,</span><span class="s2">&quot;Geneva&quot;</span><span class="o">,</span> <span class="s2">&quot;Helvetica&quot;</span><span class="p">;</span>
+    <span class="k">text-align</span><span class="o">:</span> <span class="k">center</span><span class="p">;</span>
+    <span class="k">font</span><span class="o">-</span><span class="k">color</span><span class="o">:</span> <span class="nb">white</span><span class="p">;</span>
+    <span class="k">font-size</span><span class="o">:</span> <span class="m">36pt</span><span class="p">;</span>
+    <span class="k">font-family</span><span class="o">:</span> <span class="s2">&quot;Verdana&quot;</span><span class="o">,</span> <span class="s2">&quot;Geneva&quot;</span><span class="o">,</span> <span class="s2">&quot;Helvetica&quot;</span><span class="p">;</span>
+    <span class="k">text-shadow</span><span class="o">:</span> <span class="m">1px</span> <span class="m">1px</span> <span class="m">1px</span> <span class="m">#000</span><span class="p">;</span>
 <span class="p">}</span>
-
 <span class="c">/*Splash Format*/</span>
-<span class="nc">.home-hero</span> <span class="nt">img</span><span class="nf">#splash</span><span class="p">{</span>
-  <span class="k">position</span><span class="o">:</span><span class="k">fixed</span><span class="p">;</span>
-  <span class="k">top</span><span class="o">:</span><span class="m">0</span><span class="p">;</span>
-  <span class="k">left</span><span class="o">:</span><span class="m">0</span><span class="p">;</span>
-  <span class="k">max-width</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span>
-  <span class="k">height</span><span class="o">:</span> <span class="k">auto</span><span class="p">;</span>
-  <span class="k">width</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span> <span class="c">/* ie8 */</span>
-  <span class="k">min-width</span><span class="o">:</span> <span class="m">800px</span><span class="p">;</span>
-  <span class="k">min-height</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span>
-  <span class="k">overflow</span><span class="o">:</span><span class="k">hidden</span><span class="p">;</span>
-  <span class="k">z-index</span><span class="o">:-</span><span class="m">1</span><span class="p">;</span>
-<span class="p">}</span>
 
+<span class="nc">.home-hero</span> <span class="nt">img</span><span class="nf">#splash</span> <span class="p">{</span>
+    <span class="k">position</span><span class="o">:</span> <span class="k">fixed</span><span class="p">;</span>
+    <span class="k">top</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">left</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">max-width</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span>
+    <span class="k">height</span><span class="o">:</span> <span class="k">auto</span><span class="p">;</span>
+    <span class="k">width</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span>
+    <span class="c">/* ie8 */</span>
+    
+    <span class="k">min-width</span><span class="o">:</span> <span class="m">800px</span><span class="p">;</span>
+    <span class="k">min-height</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span>
+    <span class="k">overflow</span><span class="o">:</span> <span class="k">hidden</span><span class="p">;</span>
+    <span class="k">z-index</span><span class="o">:</span> <span class="m">-1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c">/*Format for buttons on Home.html*/</span>
+
+<span class="nc">.home-btn</span> <span class="p">{</span>
+    <span class="k">background-color</span><span class="o">:</span> <span class="n">rgba</span><span class="p">(</span><span class="m">0</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="m">0</span><span class="o">.</span><span class="m">5</span><span class="p">);</span>
+    <span class="k">border</span><span class="o">:</span> <span class="m">4px</span><span class="p">;</span>
+    <span class="k">color</span><span class="o">:</span> <span class="m">#999</span><span class="p">;</span>
+    <span class="k">white-space</span><span class="o">:</span> <span class="k">normal</span><span class="p">;</span>
+    <span class="k">vertical-align</span><span class="o">:</span> <span class="k">middle</span><span class="p">;</span>
+    <span class="k">font-family</span><span class="o">:</span> <span class="n">Arvo</span><span class="p">;</span>
+    <span class="k">max-width</span><span class="o">:</span> <span class="m">200px</span><span class="p">;</span>
+    <span class="k">margin</span><span class="o">:</span> <span class="m">10px</span> <span class="m">6px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c">/*Size of buttons on Home.html*/</span>
+
+<span class="nc">.home-btn</span> <span class="nc">.img</span> <span class="p">{</span>
+    <span class="k">width</span><span class="o">:</span> <span class="m">30</span><span class="o">%</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c">/*Size of buttons on Home.html*/</span>
+
+<span class="nc">.home-btn</span> <span class="nc">.text</span> <span class="p">{</span>
+    <span class="k">width</span><span class="o">:</span> <span class="m">70</span><span class="o">%</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c">/*img size in button*/</span>
+
+<span class="nc">.home-btn</span> <span class="nt">img</span> <span class="p">{</span>
+    <span class="k">width</span><span class="o">:</span> <span class="m">75</span><span class="o">%</span><span class="p">;</span>
+    <span class="k">opacity</span><span class="o">:</span> <span class="m">1</span><span class="o">.</span><span class="m">0</span><span class="p">;</span>
+<span class="p">}</span>
 <span class="c">/*Smiley Format*/</span>
-<span class="nc">.about-hero</span> <span class="nt">img</span><span class="nf">#smiley</span><span class="p">{</span>
-  <span class="k">position</span><span class="o">:</span><span class="k">relative</span><span class="p">;</span>
-  <span class="k">top</span><span class="o">:</span><span class="m">0</span><span class="p">;</span>
-  <span class="k">right</span><span class="o">:</span><span class="m">50</span><span class="p">;</span>
-  <span class="k">max-width</span><span class="o">:</span> <span class="m">50</span><span class="o">%</span><span class="p">;</span>
-  <span class="k">height</span><span class="o">:</span> <span class="k">auto</span><span class="p">;</span>
-  <span class="k">width</span><span class="o">:</span> <span class="m">50</span><span class="o">%</span><span class="p">;</span> <span class="c">/* ie8 */</span>
-  <span class="k">min-width</span><span class="o">:</span> <span class="m">50px</span><span class="p">;</span>
-  <span class="k">min-height</span><span class="o">:</span> <span class="m">50</span><span class="o">%</span><span class="p">;</span>
-  <span class="k">overflow</span><span class="o">:</span><span class="k">hidden</span><span class="p">;</span>
-  <span class="k">z-index</span><span class="o">:-</span><span class="m">1</span><span class="p">;</span>
-<span class="p">}</span>
 
+<span class="nc">.about-hero</span> <span class="nt">img</span><span class="nf">#smiley</span> <span class="p">{</span>
+    <span class="k">position</span><span class="o">:</span> <span class="k">relative</span><span class="p">;</span>
+    <span class="k">top</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">right</span><span class="o">:</span> <span class="m">50</span><span class="p">;</span>
+    <span class="k">max-width</span><span class="o">:</span> <span class="m">50</span><span class="o">%</span><span class="p">;</span>
+    <span class="k">height</span><span class="o">:</span> <span class="k">auto</span><span class="p">;</span>
+    <span class="k">width</span><span class="o">:</span> <span class="m">50</span><span class="o">%</span><span class="p">;</span>
+    <span class="c">/* ie8 */</span>
+    
+    <span class="k">min-width</span><span class="o">:</span> <span class="m">50px</span><span class="p">;</span>
+    <span class="k">min-height</span><span class="o">:</span> <span class="m">50</span><span class="o">%</span><span class="p">;</span>
+    <span class="k">overflow</span><span class="o">:</span> <span class="k">hidden</span><span class="p">;</span>
+    <span class="k">z-index</span><span class="o">:</span> <span class="m">-1</span><span class="p">;</span>
+<span class="p">}</span>
 <span class="c">/*Font Colour for header in About page*/</span>
-<span class="nc">.about-hero</span> <span class="nt">h1</span><span class="p">{</span>
-  <span class="k">color</span><span class="o">:</span> <span class="m">#B8CEE6</span><span class="p">;</span>
-<span class="p">}</span>
 
+<span class="nc">.about-hero</span> <span class="nt">h1</span> <span class="p">{</span>
+    <span class="k">color</span><span class="o">:</span> <span class="m">#B8CEE6</span><span class="p">;</span>
+<span class="p">}</span>
 <span class="c">/*Footer Format*/</span>
+
 <span class="nc">.footer</span> <span class="p">{</span>
-  <span class="k">position</span><span class="o">:</span> <span class="k">fixed</span><span class="p">;</span>
-  <span class="k">left</span><span class="o">:</span><span class="m">0</span><span class="p">;</span>
-  <span class="k">bottom</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
-  <span class="k">width</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span>
-  <span class="k">height</span><span class="o">:</span> <span class="m">30px</span><span class="p">;</span>
-  <span class="k">background-color</span><span class="o">:</span> <span class="nb">black</span><span class="p">;</span>
-  <span class="k">padding</span><span class="o">:</span> <span class="m">5px</span><span class="p">;</span>
-  <span class="k">color</span><span class="o">:</span> <span class="m">#999</span><span class="p">;</span>
-  <span class="k">text-align</span><span class="o">:</span> <span class="k">right</span><span class="p">;</span>
+    <span class="k">position</span><span class="o">:</span> <span class="k">fixed</span><span class="p">;</span>
+    <span class="k">left</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">bottom</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">width</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span>
+    <span class="k">height</span><span class="o">:</span> <span class="m">30px</span><span class="p">;</span>
+    <span class="k">background-color</span><span class="o">:</span> <span class="nb">black</span><span class="p">;</span>
+    <span class="k">padding</span><span class="o">:</span> <span class="m">5px</span><span class="p">;</span>
+    <span class="k">color</span><span class="o">:</span> <span class="m">#999</span><span class="p">;</span>
+    <span class="k">text-align</span><span class="o">:</span> <span class="k">right</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c">/*Container format for buttons in movie form*/</span>
+
+<span class="nc">.editActions</span> <span class="p">{</span>
+    <span class="k">padding-left</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">padding-bottom</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span>
+    <span class="k">text-align</span><span class="o">:</span> <span class="k">center</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c">/*font for labels in Movie Form*/</span>
+
+<span class="nc">.form-group</span> <span class="nt">label</span> <span class="p">{</span>
+    <span class="k">font-family</span><span class="o">:</span> <span class="n">Andika</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c">/*font for input in Movie Form*/</span>
+
+<span class="nc">.form-group</span> <span class="nt">input</span><span class="o">,</span>
+<span class="nt">textarea</span> <span class="p">{</span>
+    <span class="k">color</span><span class="o">:</span> <span class="nb">black</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nf">#notification-panel</span> <span class="p">{</span>
+    <span class="k">display</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.thumbnails</span> <span class="p">{</span>
+    <span class="k">left</span><span class="o">-</span><span class="k">margin</span><span class="o">:</span> <span class="m">0px</span><span class="p">;</span>
+    <span class="k">right</span><span class="o">-</span><span class="k">margin</span><span class="o">:</span> <span class="m">15px</span><span class="p">;</span>
+    <span class="k">height</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.thumbnails</span> <span class="nc">.thumbnail</span> <span class="p">{</span>
+    <span class="k">position</span><span class="o">:</span> <span class="k">relative</span><span class="p">;</span>
+    <span class="k">border-width</span><span class="o">:</span> <span class="m">1px</span><span class="p">;</span>
+    <span class="k">border</span><span class="o">-</span><span class="n">radius</span><span class="o">:</span> <span class="m">4px</span><span class="p">;</span>
+    <span class="k">border-color</span><span class="o">:</span> <span class="m">#25383C</span><span class="p">;</span>
+    <span class="k">right</span><span class="o">-</span><span class="k">margin</span><span class="o">:</span> <span class="m">5px</span><span class="p">;</span>
+    <span class="k">background-color</span><span class="o">:</span> <span class="nb">black</span><span class="p">;</span>
+    <span class="k">width</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">a</span> <span class="nt">div</span><span class="nc">.thumbnail-text</span> <span class="p">{</span>
+    <span class="k">font-size</span><span class="o">:</span> <span class="m">80</span><span class="o">%</span><span class="p">;</span>
+    <span class="k">text-align</span><span class="o">:</span> <span class="k">right</span><span class="p">;</span>
+    <span class="k">font-family</span><span class="o">:</span> <span class="n">Arial</span><span class="p">;</span>
+    <span class="k">color</span><span class="o">:</span> <span class="nb">white</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.form-horizontal</span> <span class="p">{</span>
+    <span class="k">padding-right</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nf">#imageCanvas</span> <span class="p">{</span>
+    <span class="k">max-width</span><span class="o">:</span> <span class="m">100</span><span class="o">%</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">span</span><span class="nc">.help-block</span> <span class="p">{</span>
+    <span class="k">padding</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">margin</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
         </td>
