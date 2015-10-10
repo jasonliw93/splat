@@ -12,13 +12,15 @@ splat.Movie = Backbone.Model.extend({
         var yearRegex = /^(19[1-9]\d|20[0-1][0-6])$/ //1910-2016
         var ratingRegex = /^(G|PG|PG\-13|R|NC\-17|NR)$/;
         var durationRegex = /^(\d\d?\d?)$/;
-        var urlRegex = /^((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
+        var urlRegex = /^(https?:\/\/[\w-]+(\.[\w-]+)+(:\d+)?(\/\S*)?)$/;
+        var wordRegex = /^[\w\d \,\.\?\-\'\*]+$/;
+
         this.validators.title = function(value) {
             return (value && titleRegex.test(value)) ? {
                 isValid: true
             } : {
                 isValid: false,
-                message: "Must consist of one or more letter and/or digit characters optionally with space characters and special characters."
+                message: "You must enter a movie title. Only letters-digits-spaces and \",\", \".\", \"!\", \"?\", \"-\", \"'\", \"*\" allowed"
             };
         };
         //validator for release year
@@ -27,32 +29,37 @@ splat.Movie = Backbone.Model.extend({
                 isValid: true
             } : {
                 isValid: false,
-                message: "Must be a 4-digit year in the range 1910-2016."
+                message: "You must enter a year between 1910 and 2016"
             };
         };
-        this.validators.director = this.validators.title;
+        this.validators.director = function(value) {
+            return (value && titleRegex.test(value)) ? {
+                isValid: true
+            } : {
+                isValid: false,
+                message: "You must enter a director's name. Only letters-digits-spaces and \",\", \".\", \"!\", \"?\", \"-\", \"'\", \"*\" allowed"
+            };
+        };
         this.validators.rating = function(value) {
             return (value && ratingRegex.test(value)) ? {
                 isValid: true
             } : {
                 isValid: false,
-                message: "Must consist of one of G, PG, PG-13, R, NC-17, NR."
+                message: "You must enter one of G, PG, PG-13, R, NC-17, NR."
             };
         };
 
         this.validators.starring = function(values) {
+            var notValid = {
+                isValid: false,
+                message: "You must enter atleast one actor's name. Only letters-spaces and \"-\", \"'\""
+            };
             if (values.length == 0) {
-                return {
-                    isValid: false,
-                    message: "Must consist of one-or-more comma-separated sequences of whitespace-separated words."
-                };
+                return notValid;
             }
             for (var index = 0; index < values.length; index++) {
                 if (!values[index] || !actorRegex.test(values[index])) {
-                    return {
-                        isValid: false,
-                        message: "Must consist of one-or-more comma-separated sequences of whitespace-separated words."
-                    };
+                    return notValid;
                 }
             }
             return {
@@ -64,24 +71,47 @@ splat.Movie = Backbone.Model.extend({
                 isValid: true
             } : {
                 isValid: false,
-                message: "Must consist of an integer in the range 0-999."
+                message: "You must enter a duration between 0 and 999."
             };
         };
-        this.validators.genre = this.validators.starring;
-        this.validators.synopsis = function(value) {
-            return actorRegex.test(value) ? {
-                isValid: true
-            } : {
-                isValid: false,
-                message: "Must consist of a non-empty word list."
+        this.validators.genre = function(values) {
+                var notValid = {
+                    isValid: false,
+                    message: "You must enter atleast one movie genre. Only letters-spaces and \"-\", \"'\""
+                };
+                if (values.length == 0) {
+                    return notValid;
+                }
+                for (var index = 0; index < values.length; index++) {
+                    if (!values[index] || !actorRegex.test(values[index])) {
+                        return notValid;
+                    }
+                }
+                return {
+                    isValid: true
+                }
+            },
+            this.validators.synopsis = function(value) {
+                var notValid = {
+                    isValid: false,
+                    message: "You must enter a synopsis. Only letters-digits-spaces and \",\", \".\", \"!\", \"?\", \"-\", \"'\", \"*\" allowed."
+                };
+                var lines = value.split('\n')
+                for (var index = 0; index < lines.length; index++) {
+                    if (!wordRegex.test(lines[index])) {
+                        return notValid;
+                    }
+                }
+                return {
+                    isValid: true
+                }
             };
-        };
         this.validators.trailer = function(value) {
             return (value && urlRegex.test(value)) ? {
                 isValid: true
             } : {
                 isValid: false,
-                message: "Must be either an empty string or a properly-formatted URL."
+                message: "You must enter a valid video url"
             };
         };
     },
@@ -118,7 +148,7 @@ splat.Movie = Backbone.Model.extend({
             }
         }
         if (Object.keys(this.invalid).length) {
-            return "Please validate the fields";
+            return "Fix validation errors and try again";
         }
     }
 });
