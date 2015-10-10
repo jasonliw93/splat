@@ -16,7 +16,20 @@ splat.AppRouter = Backbone.Router.extend({
         "movies/:id": "editHandler",
         "*default": "home",
     },
-
+    /* Invoke close() on the currentView before replacing it with the
+       new view, to avoid memory leaks and ghost views.
+       Note that for composite views (views with subviews), must make sure
+       to close â€œchildâ€ views when the parent is closed.  The parent view
+       should keep track of its child views so it can call their respective
+       close() methods when its own close() method is invoked. */
+    showView: function(selector, view) {
+        console.log("showing view", view);
+        if (this.currentView) {
+            this.currentView.close();
+        }
+        this.currentView = view;
+        $(selector).html(view.render().el);
+    },
     // When an instance of an AppRouter is declared, create a Header view
     initialize: function() {
 	// instantiate a Header view
@@ -27,7 +40,6 @@ splat.AppRouter = Backbone.Router.extend({
             this.movies = new splat.Movies();
         };
         this.moviesFetch = this.movies.fetch();
-
     },
     home: function() {
 	// If the Home view doesn't exist, instantiate one
@@ -36,7 +48,8 @@ splat.AppRouter = Backbone.Router.extend({
             this.homeView = new splat.Home();
         };
 	// insert the rendered Home view element into the document DOM
-        $('#content').html(this.homeView.render().el);
+        //$('#content').html(this.homeView.render().el);
+        this.showView('#content', this.homeView);
         this.headerView.selectMenuItem("Splat!");
     },
     browse: function() {
@@ -48,7 +61,7 @@ splat.AppRouter = Backbone.Router.extend({
                 self.moviesView = new splat.MoviesView({collection:self.movies});
             };
             // insert the rendered Home view element into the document DOM
-            $('#content').html(self.moviesView.render().el);
+            self.showView('#content', self.moviesView);
             self.headerView.selectMenuItem("Browse Movies");
         }).fail(function(coll, resp) {
             alert("Fetch movies failed!");
@@ -61,9 +74,9 @@ splat.AppRouter = Backbone.Router.extend({
             // get movie and instantiate
             // Details view
             self.movie = new splat.Movie();
-            this.detailsView = new splat.Details({collection:self.movies, model:self.movie});
+            self.detailsView = new splat.Details({collection:self.movies, model:self.movie});
             // insert the rendered Home view element into the document DOM
-            $('#content').html(this.detailsView.render().el);
+            self.showView('#content', self.detailsView);
             self.headerView.selectMenuItem("Add Movie");
         }).fail(function(coll, resp) {
             alert("Fetch movies failed!");
@@ -77,9 +90,9 @@ splat.AppRouter = Backbone.Router.extend({
             // get movie and instantiate
             // Details view
             self.movie = self.movies.get(id);
-            this.detailsView = new splat.Details({collection:self.movies, model:self.movie});
+            self.detailsView = new splat.Details({collection:self.movies, model:self.movie});
             // insert the rendered Home view element into the document DOM
-            $('#content').html(this.detailsView.render().el);
+            self.showView('#content', self.detailsView);
             self.headerView.selectMenuItem("Browse Movies");
         }).fail(function(coll, resp) {
             alert("Fetch movies failed!");
@@ -91,8 +104,8 @@ splat.AppRouter = Backbone.Router.extend({
         if (!this.aboutView) {
             this.aboutView = new splat.About();
         };
-    // insert the rendered Home view element into the document DOM
-        $('#content').html(this.aboutView.render().el);
+        // insert the rendered Home view element into the document DOM
+        this.showView('#content', this.aboutView);
         this.headerView.selectMenuItem("About");
     }
 

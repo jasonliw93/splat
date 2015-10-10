@@ -49,7 +49,6 @@ splat.Movie = Backbone.Model.extend({
         };
         this.validators.genre = this.validators.starring;
         this.validators.synopsis = function(value) {
-            console.log(value)
             return actorRegex.test(value)? 
                 {isValid: true}: 
                 {isValid: false, message: "Must consist of a non-empty word list."};
@@ -74,7 +73,7 @@ splat.Movie = Backbone.Model.extend({
         freshVotes : 0.0,   // number of review ratings
         trailer : "",  // URL for trailer/movie-streaming
         poster : "img/placeholder.png",  // movie-poster image URL
-        dated : undefined,  // date of movie posting
+        dated : new Date(),  // date of movie posting
     },
     validateItem: function(key) {
         // if a validator is defined on this key

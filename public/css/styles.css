@@ -144,14 +144,8 @@ a div.thumbnail-text
 #imageCanvas{
     border-width: 2px;
     border-style: solid;
-    border-color: #ccc;
+    border-color: #333333;
     max-width: 100%;
-}
-.drag-enter#imageCanvas{
-    border-width: 2px;
-    color: #ccc;
-    border-style: dashed;
-    border-color: #ccc;
 }
 
 span.help-block{

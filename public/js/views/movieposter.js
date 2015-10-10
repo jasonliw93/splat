@@ -12,8 +12,6 @@ splat.MoviePoster = Backbone.View.extend({
 	events: {
         "change #selectImage":  "selectImage",
         "dragover #imageCanvas": "dragoverHandler",
-        "dragenter #imageCanvas": "dragenterHandler",
-        "dragleave #imageCanvas": "dragleaveHandler",
         "drop #imageCanvas": "dropHandler",
     },
     selectImage: function(event) {
@@ -43,13 +41,6 @@ splat.MoviePoster = Backbone.View.extend({
 		// field - so use originalEvent
 		event.originalEvent.dataTransfer.dropEffect ='copy';
 	},
-	dragenterHandler: function(event) {
-		console.log(event);
-		event.currentTarget.className = 'drag-enter'
-	},
-	dragleaveHandler: function(event) {
-		event.currentTarget.className = '';
-	},
 	dropHandler: function (event) {
 		event.currentTarget.className = '';
 		event.stopPropagation(); 
@@ -70,16 +61,6 @@ splat.MoviePoster = Backbone.View.extend({
 	    var img = new Image();
 	    var self = this;
 	    img.onload = function() {
-	    	//ctx.drawImage(img, 0, 0, img.width, img.height);
-	    	console.log(img);
-	    	console.log(canvas);
-	    	// canvas is 450 x 300
-	    	// image is 900 x 100 (900/450) img.width / canvas.width
-	    	// should become 450 x 50
-
-	    	//scale = img.width / img.height // 
-            //ctx.drawImage(img, 0, 0, img.width, img.height, 
-            //				   0, 0, canvas.width, img.height / (img.width / canvas.width));
 			var width;
 			var height;
 			var y = 0;
