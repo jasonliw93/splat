@@ -7,7 +7,7 @@ var splat = splat || {};
 splat.utils = {
     showNotice: function(noticeType, noticeText, cssStyle) {
         $('#notification-panel').addClass("alert");
-        $('#notification-panel').stop();        
+        $('#notification-panel').stop();
         $('#notification-panel').css("opacity", "1.0");
         $('#alert-type').html(noticeType);
         $('#alert-text').html(noticeText);
@@ -15,19 +15,19 @@ splat.utils = {
         $('#notification-panel').show();
         $('#notification-panel').fadeOut(5000);
     },
-    hideNotice: function(){
+    hideNotice: function() {
         $('#notification-panel').hide();
         $('#notification-panel').removeClass();
     },
     addValidationError: function(field, message) {
         // use jQuery to address input field by its
         // name attribute
-        var formGroup = $('.form-group input[name=' + field +'] , textarea[name=' + field +'] ').parent();
+        var formGroup = $('.form-group input[name=' + field + '] , textarea[name=' + field + '] ').parent();
         formGroup.addClass('has-error');
         $('.help-block', formGroup).html(message);
     },
-    removeValidationError: function (field) {
-        var formGroup = $('.form-group input[name=' + field +'] , textarea[name=' + field +'] ').parent();
+    removeValidationError: function(field) {
+        var formGroup = $('.form-group input[name=' + field + '] , textarea[name=' + field + '] ').parent();
         formGroup.removeClass('has-error');
         $('.help-block', formGroup).html('');
     },
@@ -41,37 +41,37 @@ splat.utils = {
      */
     loadTemplates: function(views, callback) {
 
-	// Array of deferred actions to keep track of template load status
+        // Array of deferred actions to keep track of template load status
         var deferreds = [];
 
-	// Process each template-file in views array
+        // Process each template-file in views array
         /*
          * @param {[integer]} index:  position of view template within views array
          * @param {[String]} view:  root name (w/o .html) of view template file
          */
         $.each(views, function(index, view) {
-	    // If an associated Backbone view is defined, set its template function
+            // If an associated Backbone view is defined, set its template function
             if (splat[view]) {
 
-		// Push task of retrieving template file into deferred array.
-		// Task performs "get" request to load the template, then passes
-		// resulting template data to anonymous function to process it.
-	        /*
-	         * @param {String} data:  HTML from template file as String
-	         */
+                // Push task of retrieving template file into deferred array.
+                // Task performs "get" request to load the template, then passes
+                // resulting template data to anonymous function to process it.
+                /*
+                 * @param {String} data:  HTML from template file as String
+                 */
                 deferreds.push($.get('tpl/' + view + '.html', function(data) {
-	    	    // Set template function on associated Backbone view.
+                    // Set template function on associated Backbone view.
                     splat[view].prototype.template = _.template(data);
                 }));
 
-	    // No Backbone view file is defined; cannot set template function.
+                // No Backbone view file is defined; cannot set template function.
             } else {
                 console.log(view + " not found");
             }
         });
 
-	// When all deferred template-loads have completed,
-	// invoke callback function.
+        // When all deferred template-loads have completed,
+        // invoke callback function.
         $.when.apply(null, deferreds).done(callback);
     }
 };

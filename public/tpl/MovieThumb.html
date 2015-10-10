@@ -1,22 +1,22 @@
 <!-- Container for movie -->
-<div  class="thumbnails col-lg-2 col-md-3 col-sm-4 col-xs-6">
+<div class="thumbnails col-lg-2 col-md-3 col-sm-4 col-xs-6">
     <!-- Form for movie-->
     <div class="thumbnail plain" title="Click here to edit item">
-    <!-- Allows interactive container for movie-->
-    <div class="thumbnail-container">
-      <a href="#movies/<%= _id %>" class="plain">
-        <!-- Source to get movie-->
-        <video preload="none" class="img-responsive" controls poster="<%= poster %>" >
-            <source src="<%= trailer %>" type="video/mp4"/>
-        </video>
-        <!-- Movie information-->
-        <div class="thumbnail-text">
-          <b><%= title %></b> (<%= released %>)<br/>
-          <b>Directed by: </b> <%= director %><br/>
-          <b>Starring: </b> <%= starring %><br/>
-          <b>Genres: </b> <%= genre %> <b>Rating: </b> <%= rating %><br/>
+        <!-- Allows interactive container for movie-->
+        <div class="thumbnail-container">
+            <a href="#movies/<%= _id %>" class="plain">
+                <!-- Source to get movie-->
+                <video preload="none" class="img-responsive" controls poster="<%= poster %>">
+                    <source src="<%= trailer %>" type="video/mp4" />
+                </video>
+                <!-- Movie information-->
+                <div class="thumbnail-text">
+                    <b><%= title %></b> (<%= released %>)<br/>
+                    <b>Directed by: </b> <%= director %><br/>
+                    <b>Starring: </b> <%= starring %><br/>
+                    <b>Genres: </b> <%= genre %> <b>Rating: </b> <%= rating %><br/>
+                </div>
+            </a>
         </div>
-      </a>
     </div>
-  </div>
-</div> 
+</div>

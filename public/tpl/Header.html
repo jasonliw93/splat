@@ -1,39 +1,42 @@
 <!-- Navigation Bar-->
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
-    	<div class="navbar-header">
-	    <!-- when header collapses, display a dropdown with 3 icon-bar's -->
-            <button type="button" class="navbar-toggle collapsed" 
-			data-toggle="collapse" data-target="#nav-collapse">
+        <div class="navbar-header">
+            <!-- when header collapses, display a dropdown with 3 icon-bar's -->
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-collapse">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <!-- ADD CODE -->
             </button>
             <!-- Button Name for homepage Splat -->
-             <ul class="nav navbar-nav home-menu">
+            <ul class="nav navbar-nav home-menu">
                 <li>
-                  <a class="navbar-brand" href="#">Splat!</a>
+                    <a class="navbar-brand" href="#">Splat!</a>
                 </li>
             </ul>
-	   </div>
+        </div>
 
         <div id="nav-collapse" class="navbar-collapse collapse">
             <!-- Button for About page-->
             <ul class="nav navbar-nav pull-left">
-              <!-- adjust the link to change its behavior -->
-                <li><a href="#movies">Browse Movies</a></li>
-                <li><a href="#movies/add">Add Movie</a></li>
+                <!-- adjust the link to change its behavior -->
+                <li><a href="#movies">Browse Movies</a>
+                </li>
+                <li><a href="#movies/add">Add Movie</a>
+                </li>
             </ul>
             <ul class="nav navbar-nav pull-right">
-		      <!-- adjust the link to change its behavior -->
-                <li><a href="#about">About</a></li>
+                <!-- adjust the link to change its behavior -->
+                <li><a href="#about">About</a>
+                </li>
             </ul>
-        </div> <!--/.nav-collapse -->
+        </div>
+        <!--/.nav-collapse -->
     </div>
 </nav>
 <!-- Alert box-->
 <div id="notification-panel" class="alert alert-success" role="alert">
-  <b><span id="alert-type"></span></b>&nbsp;
-  <span id="alert-text"></span>
+    <b><span id="alert-type"></span></b>&nbsp;
+    <span id="alert-text"></span>
 </div>

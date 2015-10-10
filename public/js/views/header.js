@@ -2,22 +2,22 @@
 "use strict";
 
 // declare splat-app namespace if it doesn't already exist
-var splat =  splat || {};
+var splat = splat || {};
 
 // note View-name (Header) matches name of template file Header.html
 splat.Header = Backbone.View.extend({
 
     // render the View
-    render: function () {
-	// set the view element ($el) HTML content using its template
-	this.$el.html(this.template());
-	return this;    // support method chaining
+    render: function() {
+        // set the view element ($el) HTML content using its template
+        this.$el.html(this.template());
+        return this; // support method chaining
     },
 
-    selectMenuItem: function (menuItem) {
+    selectMenuItem: function(menuItem) {
         //removes any active classes under <nav><li>
-   		$('.nav li').removeClass('active');
+        $('.nav li').removeClass('active');
         //actives any tags associated to menuItem
-    	$('.nav a:contains('+ menuItem +')').parent().addClass('active');
+        $('.nav a:contains(' + menuItem + ')').parent().addClass('active');
     }
 });

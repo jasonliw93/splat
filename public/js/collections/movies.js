@@ -1,7 +1,7 @@
 "use strict";
 
 // declare splat-app namespace if it doesn't already exist
-var splat =  splat || {};
+var splat = splat || {};
 
 splat.Movies = Backbone.Collection.extend({
 
