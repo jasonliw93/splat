@@ -75,37 +75,37 @@ splat.Movie = Backbone.Model.extend({
             };
         };
         this.validators.genre = function(values) {
-                var notValid = {
-                    isValid: false,
-                    message: "You must enter atleast one movie genre. Only letters-spaces and \"-\", \"'\""
-                };
-                if (values.length == 0) {
+            var notValid = {
+                isValid: false,
+                message: "You must enter atleast one movie genre. Only letters-spaces and \"-\", \"'\""
+            };
+            if (values.length == 0) {
+                return notValid;
+            }
+            for (var index = 0; index < values.length; index++) {
+                if (!values[index] || !actorRegex.test(values[index])) {
                     return notValid;
                 }
-                for (var index = 0; index < values.length; index++) {
-                    if (!values[index] || !actorRegex.test(values[index])) {
-                        return notValid;
-                    }
-                }
-                return {
-                    isValid: true
-                }
-            },
-            this.validators.synopsis = function(value) {
-                var notValid = {
-                    isValid: false,
-                    message: "You must enter a synopsis. Only letters-digits-spaces and \",\", \".\", \"!\", \"?\", \"-\", \"'\", \"*\" allowed."
-                };
-                var lines = value.split('\n')
-                for (var index = 0; index < lines.length; index++) {
-                    if (!wordRegex.test(lines[index])) {
-                        return notValid;
-                    }
-                }
-                return {
-                    isValid: true
-                }
+            }
+            return {
+                isValid: true
+            }
+        };
+        this.validators.synopsis = function(value) {
+            var notValid = {
+                isValid: false,
+                message: "You must enter a synopsis. Only letters-digits-spaces and \",\", \".\", \"!\", \"?\", \"-\", \"'\", \"*\" allowed."
             };
+            var lines = value.split('\n')
+            for (var index = 0; index < lines.length; index++) {
+                if (!wordRegex.test(lines[index])) {
+                    return notValid;
+                }
+            }
+            return {
+                isValid: true
+            }
+        };
         this.validators.trailer = function(value) {
             return (value && urlRegex.test(value)) ? {
                 isValid: true

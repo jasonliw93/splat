@@ -23,6 +23,9 @@ splat.MoviePoster = Backbone.View.extend({
         }
         // else display error notification
     },
+    // Read pictureFile from filesystem, resulting in
+    // DataURL (base64 representation of image data).
+    // Use as model poster attrib. and image src attrib.
     imageRead: function(pictureFile, type) {
         var self = this;
         var reader = new FileReader();
@@ -64,15 +67,15 @@ splat.MoviePoster = Backbone.View.extend({
     // quality are optional params for image-type and quality setting
     resize: function(sourceImg, type, quality) {
         var type = type || "image/jpeg"; // default MIME image type
-        var quality = quality || "0.95"; // tradeoff quality vs size
+        var quality = quality || 0.6; // tradeoff quality vs size
         var image = new Image(), MAX_HEIGHT = 300, MAX_WIDTH = 450, x = 0, y = 0;
         image.src = sourceImg;
         if (image.width / image.height > MAX_WIDTH / MAX_HEIGHT) {
             image.height = image.height * MAX_WIDTH / image.width;
-            image.width = MAX_WIDTH; //canvas.width / img.width 225px to 450 then scale is 2
+            image.width = MAX_WIDTH; 
             y = (MAX_HEIGHT - image.height) / 2;
         }else{
-            image.width = image.width * MAX_HEIGHT / image.height; //canvas.width / img.width 225px to 450 then scale is 2
+            image.width = image.width * MAX_HEIGHT / image.height;
             image.height = MAX_HEIGHT;
             x = (MAX_WIDTH - image.width) / 2;
         }
