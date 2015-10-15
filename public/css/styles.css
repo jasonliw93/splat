@@ -111,9 +111,10 @@ body {
     font-family: Andika;
 }
 /*font for input in Movie Form*/
-
-.form-group input,
-textarea {
+.form-group input{
+    color: black;
+}
+.form-group textarea{
     color: black;
 }
 #notification-panel {
@@ -142,8 +143,10 @@ a div.thumbnail-text {
 .form-horizontal {
     padding-right: 20px;
 }
-#imageCanvas {
+#detailsImage {
+    border:1px solid #9d9d9d;
     max-width: 100%;
+    margin : 10px 0px;
 }
 span.help-block {
     padding: 0;
