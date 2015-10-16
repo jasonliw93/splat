@@ -4,7 +4,7 @@
 // declare splat-app namespace if it doesn't already exist
 var splat = splat || {};
 
-// note View-name (Home) matches name of template file Home.html
+// note View-name (MoviePoster) matches name of template file MoviePoster.html
 splat.MoviePoster = Backbone.View.extend({
     initialize: function() {
         this.moviePosterLoad = $.get('tpl/MoviePoster.html');
@@ -20,8 +20,9 @@ splat.MoviePoster = Backbone.View.extend({
         // if the file type is image, read it
         if (this.pictureFile.type.startsWith("image/")) {
             this.imageRead(this.pictureFile, this.pictureFile.type);
+        } else { // else display error notification
+            splat.utils.showNotice('Error', "Please select a valid image file", 'alert-danger');
         }
-        // else display error notification
     },
     // Read pictureFile from filesystem, resulting in
     // DataURL (base64 representation of image data).
@@ -60,8 +61,9 @@ splat.MoviePoster = Backbone.View.extend({
         if (this.pictureFile.type.startsWith("image/")) {
             // Read image file and display in img tag
             this.imageRead(this.pictureFile, this.pictureFile.type);
+        } else { // else display notification error
+            splat.utils.showNotice('Error', "Please select a valid image file", 'alert-danger');
         }
-        // else display notification error
     },
     // Resize sourceImg, returning result as a DataURL value. Type,
     // quality are optional params for image-type and quality setting
@@ -93,7 +95,7 @@ splat.MoviePoster = Backbone.View.extend({
         this.moviePosterLoad.done(function(markup) {
             self.moviePosterTemplate = _.template(markup);
             self.$el.html(self.moviePosterTemplate());
-            $('#detailsImage').attr("src", self.model.get('poster'));
+            self.$('#detailsImage').attr("src", self.model.get('poster'));            
         });
         return this; // support method chaining
     }

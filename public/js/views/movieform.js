@@ -4,7 +4,7 @@
 // declare splat-app namespace if it doesn't already exist
 var splat = splat || {};
 
-// note View-name (Home) matches name of template file Home.html
+// note View-name (MovieForm) matches name of template file MovieForm.html
 splat.MovieForm = Backbone.View.extend({
     initialize: function() {
         this.movieFormLoad = $.get('tpl/MovieForm.html');
@@ -43,8 +43,6 @@ splat.MovieForm = Backbone.View.extend({
             wait: true, // don't destroy client model until server responds
             success: function(model, response) {
                 // later, we'll navigate to the browse view upon success
-                self.detailsEditView = self.detailsAddView;
-                self.detailsAddView = undefined;
                 splat.app.navigate('#movies/' + self.model.id, {
                     replace: true,
                     trigger: false
