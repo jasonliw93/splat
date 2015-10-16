@@ -114,14 +114,6 @@ splat.Movie = Backbone.Model.extend({
                 message: "You must enter a valid video url"
             };
         };
-        this.validators.dated = function(value) {
-            return (value instanceof Date) ? {
-                isValid: true
-            } : {
-                isValid: false,
-                message: "You must enter a Date value"
-            };
-        };
     },
     idAttribute: "_id",
     defaults: {
@@ -149,13 +141,15 @@ splat.Movie = Backbone.Model.extend({
     },
     validate: function(attrs) {
         this.invalid = {};
+        var countInvalid = 0;
         for (var key in attrs) {
             var check = this.validateItem(key);
             if (!check.isValid) {
                 this.invalid[key] = check.message;
+                countInvalid += 1;
             }
         }
-        if (Object.keys(this.invalid).length) {
+        if (countInvalid) {
             return "Fix validation errors and try again";
         }
     }
