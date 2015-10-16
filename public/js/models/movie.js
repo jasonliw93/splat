@@ -107,11 +107,19 @@ splat.Movie = Backbone.Model.extend({
             }
         };
         this.validators.trailer = function(value) {
-            return (value && urlRegex.test(value)) ? {
+            return (!value || urlRegex.test(value)) ? {
                 isValid: true
             } : {
                 isValid: false,
                 message: "You must enter a valid video url"
+            };
+        };
+        this.validators.dated = function(value) {
+            return (value instanceof Date) ? {
+                isValid: true
+            } : {
+                isValid: false,
+                message: "You must enter a Date value"
             };
         };
     },
