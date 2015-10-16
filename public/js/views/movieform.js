@@ -32,29 +32,30 @@ splat.MovieForm = Backbone.View.extend({
     },
     save: function() {
         splat.utils.hideNotice();
-        var self = this;
-        this.model.on('invalid', function(model, error) {
-            splat.utils.showNotice('Error', error, 'alert-danger');
-            for (var key in self.model.invalid) {
-                splat.utils.addValidationError(key, self.model.invalid[key]);
+        if (this.model.isValid()){
+            var self = this;
+            this.collection.create(this.model, {
+                wait: true, // don't destroy client model until server responds
+                success: function(model, response) {
+                    // later, we'll navigate to the browse view upon success
+                    splat.app.navigate('#movies/' + self.model.id, {
+                        replace: true,
+                        trigger: false
+                    });
+                    // notification panel, defined in section 2.6
+                    splat.utils.showNotice('Success', "Movie has been saved", 'alert-success');
+                },
+                error: function(model, response) {
+                    console.log('error');
+                    splat.utils.showNotice('Error!', "Movie not saved", 'alert-danger');
+                }
+            });
+        } else {
+            splat.utils.showNotice('Error!', this.model.validationError, 'alert-danger');
+            for (var key in this.model.invalid) {
+                splat.utils.addValidationError(key, this.model.invalid[key]);
             }
-        });
-        this.collection.create(this.model, {
-            wait: true, // don't destroy client model until server responds
-            success: function(model, response) {
-                // later, we'll navigate to the browse view upon success
-                splat.app.navigate('#movies/' + self.model.id, {
-                    replace: true,
-                    trigger: false
-                });
-                // notification panel, defined in section 2.6
-                splat.utils.showNotice('Success', "Movie has been saved", 'alert-success');
-            },
-            error: function(model, response) {
-                console.log('error');
-                splat.utils.showNotice('Error', "Movie not saved", 'alert-danger');
-            }
-        });
+        }
     },
     destroy: function() {
         splat.utils.hideNotice();
