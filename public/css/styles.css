@@ -152,3 +152,7 @@ span.help-block {
     padding: 0;
     margin: 0;
 }
+
+#selectImage{
+    display: none;
+}

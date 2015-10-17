@@ -21,7 +21,7 @@ splat.MovieForm = Backbone.View.extend({
         if (e.target.name == 'starring' || e.target.name == 'genre') {
             obj[e.target.name] = e.target.value.split(",");
         } else {
-            obj[e.target.name] = e.target.value
+            obj[e.target.name] = e.target.value;
         }
         this.model.set(obj);
         splat.utils.showNotice('Note!',
@@ -39,8 +39,7 @@ splat.MovieForm = Backbone.View.extend({
                 splat.utils.addValidationError(key, self.model.invalid[key]);
             }
         });
-        this.collection.create(this.model, {
-            wait: true, // don't destroy client model until server responds
+        this.collection.create(this.model, {            
             success: function(model, response) {
                 // later, we'll navigate to the browse view upon success
                 splat.app.navigate('#movies/' + self.model.id, {
@@ -55,6 +54,8 @@ splat.MovieForm = Backbone.View.extend({
                 splat.utils.showNotice('Error', "Movie not saved", 'alert-danger');
             }
         });
+        
+
     },
     destroy: function() {
         splat.utils.hideNotice();

@@ -4,117 +4,6 @@
 var splat = splat || {};
 
 splat.Movie = Backbone.Model.extend({
-    initialize: function() {
-        this.validators = {};
-        //regex for input values
-        var titleRegex = /^[a-zA-Z0-9 \,\.\?\-\'\*]+$/;
-        var actorRegex = /^[a-zA-Z \-\']+$/;
-        var yearRegex = /^(19[1-9]\d|20[0-1][0-6])$/ //1910-2016
-        var ratingRegex = /^(G|PG|PG\-13|R|NC\-17|NR)$/;
-        var durationRegex = /^(\d\d?\d?)$/;
-        var urlRegex = /^(https?:\/\/[\w-]+(\.[\w-]+)+(:\d+)?(\/\S*)?)$/;
-        var wordRegex = /^[\w\d \,\.\?\-\'\*]+$/;
-
-        this.validators.title = function(value) {
-            return (value && titleRegex.test(value)) ? {
-                isValid: true
-            } : {
-                isValid: false,
-                message: "You must enter a movie title. Only letters-digits-spaces and \",\", \".\", \"!\", \"?\", \"-\", \"'\", \"*\" allowed"
-            };
-        };
-        //validator for release year
-        this.validators.released = function(value) {
-            return (value && yearRegex.test(value)) ? {
-                isValid: true
-            } : {
-                isValid: false,
-                message: "You must enter a year between 1910 and 2016"
-            };
-        };
-        this.validators.director = function(value) {
-            return (value && titleRegex.test(value)) ? {
-                isValid: true
-            } : {
-                isValid: false,
-                message: "You must enter a director's name. Only letters-digits-spaces and \",\", \".\", \"!\", \"?\", \"-\", \"'\", \"*\" allowed"
-            };
-        };
-        this.validators.rating = function(value) {
-            return (value && ratingRegex.test(value)) ? {
-                isValid: true
-            } : {
-                isValid: false,
-                message: "You must enter one of G, PG, PG-13, R, NC-17, NR."
-            };
-        };
-
-        this.validators.starring = function(values) {
-            var notValid = {
-                isValid: false,
-                message: "You must enter atleast one actor's name. Only letters-spaces and \"-\", \"'\""
-            };
-            if (values.length == 0) {
-                return notValid;
-            }
-            for (var index = 0; index < values.length; index++) {
-                if (!values[index] || !actorRegex.test(values[index])) {
-                    return notValid;
-                }
-            }
-            return {
-                isValid: true
-            }
-        }
-        this.validators.duration = function(value) {
-            return (value && durationRegex.test(value)) ? {
-                isValid: true
-            } : {
-                isValid: false,
-                message: "You must enter a duration between 0 and 999."
-            };
-        };
-        this.validators.genre = function(values) {
-            var notValid = {
-                isValid: false,
-                message: "You must enter atleast one movie genre. Only letters-spaces and \"-\", \"'\""
-            };
-            if (values.length == 0) {
-                return notValid;
-            }
-            for (var index = 0; index < values.length; index++) {
-                if (!values[index] || !actorRegex.test(values[index])) {
-                    return notValid;
-                }
-            }
-            return {
-                isValid: true
-            }
-        };
-        this.validators.synopsis = function(value) {
-            var notValid = {
-                isValid: false,
-                message: "You must enter a synopsis. Only letters-digits-spaces and \",\", \".\", \"!\", \"?\", \"-\", \"'\", \"*\" allowed."
-            };
-            var lines = value.split('\n')
-            for (var index = 0; index < lines.length; index++) {
-                if (!wordRegex.test(lines[index])) {
-                    return notValid;
-                }
-            }
-            return {
-                isValid: true
-            }
-        };
-        this.validators.trailer = function(value) {
-            return (!value || urlRegex.test(value)) ? {
-                isValid: true
-            } : {
-                isValid: false,
-                message: "You must enter a valid video url"
-            };
-        };
-    },
     idAttribute: "_id",
     defaults: {
         title: "", // movie title    
@@ -131,6 +20,123 @@ splat.Movie = Backbone.Model.extend({
         poster: "img/placeholder.png", // movie-poster image URL
         dated: new Date(), // date of movie posting
     },
+    validators: {
+        title : function(value) {
+            var titleRegex = /^[a-zA-Z0-9 \,\.\?\-\'\*]+$/;
+            return (value && titleRegex.test(value)) ? {
+                isValid: true
+            } : {
+                isValid: false,
+                message: "You must enter a movie title. Only letters-digits-spaces and \",\", \".\", \"!\", \"?\", \"-\", \"'\", \"*\" allowed"
+            };
+        },
+        released : function(value) {
+            var yearRegex = /^(19[1-9]\d|20[0-1][0-6])$/ //1910-2016
+            return (value && yearRegex.test(value)) ? {
+                isValid: true
+            } : {
+                isValid: false,
+                message: "You must enter a year between 1910 and 2016"
+            };
+        },
+        director : function(value) {
+            var directorRegex = /^[a-zA-Z0-9 \,\.\?\-\'\*]+$/;
+            return (value && directorRegex.test(value)) ? {
+                isValid: true
+            } : {
+                isValid: false,
+                message: "You must enter a director's name. Only letters-digits-spaces and \",\", \".\", \"!\", \"?\", \"-\", \"'\", \"*\" allowed"
+            };
+        },
+        rating : function(value) {
+            var ratingRegex = /^(G|PG|PG\-13|R|NC\-17|NR)$/;
+            return (value && ratingRegex.test(value)) ? {
+                isValid: true
+            } : {
+                isValid: false,
+                message: "You must enter one of G, PG, PG-13, R, NC-17, NR."
+            };
+        },
+        starring : function(values) {
+            var actorRegex = /^[a-zA-Z \-\']+$/;
+            var notValid = {
+                isValid: false,
+                message: "You must enter atleast one actor's name. Only letters-spaces and \"-\", \"'\""
+            };
+            if (!(values instanceof Array) || values.length == 0) {
+                return notValid;
+            }
+            for (var index = 0; index < values.length; index++) {
+                if (!values[index] || !actorRegex.test(values[index])) {
+                    return notValid;
+                }
+            }
+            return {
+                isValid: true
+            }
+        },
+        duration : function(value) {
+            var durationRegex = /^(\d\d?\d?)$/;
+            return (value && durationRegex.test(value)) ? {
+                isValid: true
+            } : {
+                isValid: false,
+                message: "You must enter a duration between 0 and 999."
+            };
+        },
+        genre : function(values) {
+            var genreRegex = /^[a-zA-Z \-\']+$/;
+            var notValid = {
+                isValid: false,
+                message: "You must enter atleast one movie genre. Only letters-spaces and \"-\", \"'\""
+            };
+            if (!(values instanceof Array) || values.length == 0) {
+                return notValid;
+            }
+            for (var index = 0; index < values.length; index++) {
+                if (!values[index] || !genreRegex.test(values[index])) {
+                    return notValid;
+                }
+            }
+            return {
+                isValid: true
+            }
+        },
+        synopsis : function(value) {
+            var wordRegex = /^[\w\d \,\.\?\-\'\*]+$/;
+            var notValid = {
+                isValid: false,
+                message: "You must enter a synopsis. Only letters-digits-spaces and \",\", \".\", \"!\", \"?\", \"-\", \"'\", \"*\" allowed."
+            };
+            var lines = value.split('\n')
+            for (var index = 0; index < lines.length; index++) {
+                if (!wordRegex.test(lines[index])) {
+                    return notValid;
+                }
+            }
+            return {
+                isValid: true
+            }
+        },
+        trailer : function(value) {
+            var urlRegex = /^(https?:\/\/[\w-]+(\.[\w-]+)+(:\d+)?(\/\S*)?)$/;
+            return (!value || urlRegex.test(value)) ? {
+                isValid: true
+            } : {
+                isValid: false,
+                message: "You must enter a valid trailer url"
+            };
+        },
+        dated : function(value) {
+            var d = new Date(value);
+            return (value && d instanceof Date && !isNaN(d)) ? {
+                isValid: true
+            } : {
+                isValid: false,
+                message: "You must enter a valid dated date"
+            };
+        }
+    },
     validateItem: function(key) {
         // if a validator is defined on this key
         // test it, else defaults to valid
@@ -141,15 +147,19 @@ splat.Movie = Backbone.Model.extend({
     },
     validate: function(attrs) {
         this.invalid = {};
-        var countInvalid = 0;
+        var isInvalid = false;
         for (var key in attrs) {
-            var check = this.validateItem(key);
-            if (!check.isValid) {
-                this.invalid[key] = check.message;
-                countInvalid += 1;
+            if (this.validators[key]){
+                var check = this.validators[key](attrs[key])
+                if (!check.isValid){
+                    this.invalid[key] = check.message;
+                    isInvalid = true
+                }
             }
         }
-        if (countInvalid) {
+        if (isInvalid) {
+            console.log("not valid", this);
+            console.trace();
             return "Fix validation errors and try again";
         }
     }
