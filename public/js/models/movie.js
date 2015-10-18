@@ -158,8 +158,6 @@ splat.Movie = Backbone.Model.extend({
             }
         }
         if (isInvalid) {
-            console.log("not valid", this);
-            console.trace();
             return "Fix validation errors and try again";
         }
     }

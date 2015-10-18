@@ -19,6 +19,10 @@ splat.utils = {
         $('#notification-panel').hide();
         $('#notification-panel').removeClass();
     },
+    requestFailed: function(response) {
+        console.log(response);
+        alert(response);
+    },
     addValidationError: function(field, message) {
         // use jQuery to address input field by its
         // name attribute

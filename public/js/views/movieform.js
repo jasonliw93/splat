@@ -19,7 +19,7 @@ splat.MovieForm = Backbone.View.extend({
         splat.utils.hideNotice();
         var obj = {};
         if (e.target.name == 'starring' || e.target.name == 'genre') {
-            obj[e.target.name] = e.target.value.split(",");
+            obj[e.target.name] = e.target.value.split(",").map(Function.prototype.call, String.prototype.trim);
         } else {
             obj[e.target.name] = e.target.value;
         }
@@ -39,7 +39,7 @@ splat.MovieForm = Backbone.View.extend({
                 splat.utils.addValidationError(key, self.model.invalid[key]);
             }
         });
-        this.collection.create(this.model, {            
+        this.collection.create(this.model, {
             success: function(model, response) {
                 // later, we'll navigate to the browse view upon success
                 splat.app.navigate('#movies/' + self.model.id, {
@@ -50,11 +50,10 @@ splat.MovieForm = Backbone.View.extend({
                 splat.utils.showNotice('Success', "Movie has been saved", 'alert-success');
             },
             error: function(model, response) {
-                console.log('error');
-                splat.utils.showNotice('Error', "Movie not saved", 'alert-danger');
+                splat.utils.requestFailed(response);
             }
         });
-        
+
 
     },
     destroy: function() {
