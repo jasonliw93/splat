@@ -13,8 +13,9 @@
                 <div class="thumbnail-text">
                     <b><%= title %></b> (<%= released %>)<br/>
                     <b>Directed by: </b> <%= director %><br/>
-                    <b>Starring: </b> <%= starring %><br/>
-                    <b>Genres: </b> <%= genre %> <b>Rating: </b> <%= rating %><br/>
+                    <b>Starring: </b> <%= starring.join(', ') %><br/>
+                    <b>Genres: </b> <%= genre.join(', ') %><br/>
+                    <b>Rating: </b> <%= rating %><br/>
                 </div>
             </a>
         </div>
