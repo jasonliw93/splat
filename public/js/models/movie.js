@@ -103,7 +103,7 @@ splat.Movie = Backbone.Model.extend({
             }
         },
         synopsis : function(value) {
-            var wordRegex = /^[\w\d \,\.\?\-\'\*]+$/;
+            var wordRegex = /^[ \w\d\,\.\?\-\'\*]+$/;
             var notValid = {
                 isValid: false,
                 message: "You must enter a synopsis. Only letters-digits-spaces and \",\", \".\", \"!\", \"?\", \"-\", \"'\", \"*\" allowed."
