@@ -26,12 +26,12 @@ splat.utils = {
     addValidationError: function(field, message) {
         // use jQuery to address input field by its
         // name attribute
-        var formGroup = $('.form-group input[name=' + field + '] , textarea[name=' + field + '] ').parent();
+        var formGroup = $('.form-group').find('input[name=' + field + '], textarea[name=' + field + ']').parent().parent();
         formGroup.addClass('has-error');
         $('.help-block', formGroup).html(message);
     },
     removeValidationError: function(field) {
-        var formGroup = $('.form-group input[name=' + field + '] , textarea[name=' + field + '] ').parent();
+        var formGroup = $('.form-group').find('input[name=' + field + '], textarea[name=' + field + ']').parent().parent();
         formGroup.removeClass('has-error');
         $('.help-block', formGroup).html('');
     },

@@ -32,12 +32,7 @@ splat.MoviePoster = Backbone.View.extend({
         var reader = new FileReader();
         // callback for when read operation is finished
         reader.onload = function(event) {
-            var targetImgElt = $('#detailsImage')[0];
-            targetImgElt.src = self.resize(reader.result);
-            self.model.set('poster', targetImgElt.src);
-            splat.utils.showNotice('Note!',
-            'Movie Poster udated, to make changes permanent, click "Save Changes" button', 'alert-info');
-            //self.setCanvasImage(reader.result);
+            self.resize(reader.result);
         };
         reader.readAsDataURL(pictureFile); // read image file
     },
@@ -68,25 +63,32 @@ splat.MoviePoster = Backbone.View.extend({
     // Resize sourceImg, returning result as a DataURL value. Type,
     // quality are optional params for image-type and quality setting
     resize: function(sourceImg, type, quality) {
+        var self = this;
         var type = type || "image/jpeg"; // default MIME image type
         var quality = quality || 0.6; // tradeoff quality vs size
         var image = new Image(), MAX_HEIGHT = 300, MAX_WIDTH = 450, x = 0, y = 0;
-        image.src = sourceImg;
-        if (image.width / image.height > MAX_WIDTH / MAX_HEIGHT) {
-            image.height = image.height * MAX_WIDTH / image.width;
-            image.width = MAX_WIDTH; 
-            y = (MAX_HEIGHT - image.height) / 2;
-        }else{
-            image.width = image.width * MAX_HEIGHT / image.height;
-            image.height = MAX_HEIGHT;
-            x = (MAX_WIDTH - image.width) / 2;
+        image.onload = function() {
+            if (image.width / image.height > MAX_WIDTH / MAX_HEIGHT) {
+                image.height = image.height * MAX_WIDTH / image.width;
+                image.width = MAX_WIDTH; 
+                y = (MAX_HEIGHT - image.height) / 2;
+            }else{
+                image.width = image.width * MAX_HEIGHT / image.height;
+                image.height = MAX_HEIGHT;
+                x = (MAX_WIDTH - image.width) / 2;
+            }
+            var canvas = document.createElement("canvas");
+            canvas.width = MAX_WIDTH;
+            canvas.height = MAX_HEIGHT;
+            var ctx = canvas.getContext("2d"); // get 2D rendering context
+            ctx.drawImage(image,x,y, image.width, image.height); // render
+            var targetImgElt = $('#detailsImage')[0];
+            var imageSrc = canvas.toDataURL(type, quality);
+            targetImgElt.src = imageSrc;
+            self.model.set('poster', imageSrc);
+            splat.utils.showNotice('Note!', 'Movie Poster udated, to make changes permanent, click "Save Changes" button', 'alert-info');
         }
-        var canvas = document.createElement("canvas");
-        canvas.width = MAX_WIDTH;
-        canvas.height = MAX_HEIGHT;
-        var ctx = canvas.getContext("2d"); // get 2D rendering context
-        ctx.drawImage(image,x,y, image.width, image.height); // render
-        return canvas.toDataURL(type, quality);
+        image.src = sourceImg;
     },
     // render the View
     render: function() {
