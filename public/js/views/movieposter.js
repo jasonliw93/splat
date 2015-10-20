@@ -18,7 +18,7 @@ splat.MoviePoster = Backbone.View.extend({
         // set object attribute for image uploader
         this.pictureFile = event.target.files[0];
         // if the file type is image, read it
-        if (this.pictureFile.type.startsWith("image/")) {
+        if (this.pictureFile.type.indexOf('image/') == 0) {
             this.imageRead(this.pictureFile, this.pictureFile.type);
         } else { // else display error notification
             splat.utils.showNotice('Error', "Please select a valid image file", 'alert-danger');
@@ -34,7 +34,9 @@ splat.MoviePoster = Backbone.View.extend({
         reader.onload = function(event) {
             self.resize(reader.result);
         };
+
         reader.readAsDataURL(pictureFile); // read image file
+
     },
     dragoverHandler: function(event) {
         // don't let parent element catch event
@@ -53,7 +55,7 @@ splat.MoviePoster = Backbone.View.extend({
         // set object attribute for use by uploadPicture
         this.pictureFile = ev.dataTransfer.files[0];
         // only process image files
-        if (this.pictureFile.type.startsWith("image/")) {
+        if (this.pictureFile.type.indexOf('image/') == 0) {
             // Read image file and display in img tag
             this.imageRead(this.pictureFile, this.pictureFile.type);
         } else { // else display notification error
@@ -65,7 +67,7 @@ splat.MoviePoster = Backbone.View.extend({
     resize: function(sourceImg, type, quality) {
         var self = this;
         var type = type || "image/jpeg"; // default MIME image type
-        var quality = quality || 0.6; // tradeoff quality vs size
+        var quality = quality || 0.95; // tradeoff quality vs size
         var image = new Image(), MAX_HEIGHT = 300, MAX_WIDTH = 450, x = 0, y = 0;
         image.onload = function() {
             // proportion for img
