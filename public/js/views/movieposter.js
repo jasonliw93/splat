@@ -68,6 +68,7 @@ splat.MoviePoster = Backbone.View.extend({
         var quality = quality || 0.6; // tradeoff quality vs size
         var image = new Image(), MAX_HEIGHT = 300, MAX_WIDTH = 450, x = 0, y = 0;
         image.onload = function() {
+            // proportion for img
             if (image.width / image.height > MAX_WIDTH / MAX_HEIGHT) {
                 image.height = image.height * MAX_WIDTH / image.width;
                 image.width = MAX_WIDTH; 

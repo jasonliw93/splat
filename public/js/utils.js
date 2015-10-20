@@ -5,6 +5,7 @@
 var splat = splat || {};
 
 splat.utils = {
+    // shows a fade in notice
     showNotice: function(noticeType, noticeText, cssStyle) {
         $('#notification-panel').addClass("alert");
         $('#notification-panel').stop();
@@ -15,21 +16,28 @@ splat.utils = {
         $('#notification-panel').show();
         $('#notification-panel').fadeOut(5000);
     },
+    
+    // hides the notice
     hideNotice: function() {
         $('#notification-panel').hide();
         $('#notification-panel').removeClass();
     },
+    
+    // alerts the user if the request between the server has failed in the console
     requestFailed: function(response) {
         console.log(response);
         alert(response);
     },
+    
+    // validation error notices
     addValidationError: function(field, message) {
-        // use jQuery to address input field by its
-        // name attribute
+        // use jQuery to address input field by its name attribute
         var formGroup = $('.form-group').find('input[name=' + field + '], textarea[name=' + field + ']').parent().parent();
         formGroup.addClass('has-error');
         $('.help-block', formGroup).html(message);
     },
+    
+    // removes the error notices
     removeValidationError: function(field) {
         var formGroup = $('.form-group').find('input[name=' + field + '], textarea[name=' + field + ']').parent().parent();
         formGroup.removeClass('has-error');

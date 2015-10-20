@@ -24,6 +24,7 @@ splat.AppRouter = Backbone.Router.extend({
         $('.header').html(this.headerView.render().el);
 
         this.movies = new splat.Movies();
+        // fetches the movies
         this.moviesFetch = this.movies.fetch();
     },
     /* Invoke close() on the currentView before replacing it with the
@@ -36,6 +37,7 @@ splat.AppRouter = Backbone.Router.extend({
         if (this.currentView) {
             this.currentView.close();
         }
+        //current view becomes the new view so that we can render the view element
         this.currentView = view;
         $(selector).html(view.render().el);
 
@@ -51,25 +53,25 @@ splat.AppRouter = Backbone.Router.extend({
         this.headerView.selectMenuItem("Splat!");
     },
     about: function() {
-        // If the Home view doesn't exist, instantiate one
+        // If the About view doesn't exist, instantiate one
         if (!this.aboutView) {
             this.aboutView = new splat.About();
         };
-        // insert the rendered Home view element into the document DOM
+        // insert the rendered About view element into the document DOM
         this.showView('#content', this.aboutView);
         this.headerView.selectMenuItem("About");
     },
     browse: function() {
-        // If the Home view doesn't exist, instantiate one\
         var self = this;
         this.moviesFetch.done(function(coll, resp) {
-            // get movie and instantiate
+            // If the Browse view doesn't exist, instantiate one\
             if (!self.moviesView){
+                //gets the movies
                 self.moviesView = new splat.MoviesView({
                     collection: self.movies
                 });
             }
-            // insert the rendered Home view element into the document DOM
+            // insert the rendered Browse view element into the document DOM
             self.showView('#content', self.moviesView);
             self.headerView.selectMenuItem("Browse Movies");
         }).fail(function(coll, resp) {
@@ -77,8 +79,7 @@ splat.AppRouter = Backbone.Router.extend({
         });
     },
     addHandler: function() {
-        // get movie and instantiate
-        // Details view
+        // get movies and instantiate Details view
         this.movie = new splat.Movie();
         this.detailsView = new splat.Details({
             collection: this.movies,
@@ -89,17 +90,15 @@ splat.AppRouter = Backbone.Router.extend({
         this.headerView.selectMenuItem("Add Movie");
     },
     editHandler: function(id) {
-        // If the Home view doesn't exist, instantiate one\
         var self = this;
         this.moviesFetch.done(function(coll, resp) {
-            // get movie and instantiate
-            // Details view
+            // get movies and instantiate Details view
             self.movie = self.movies.get(id);
             self.detailsView = new splat.Details({
                 collection: self.movies,
                 model: self.movie
             });
-            // insert the rendered Home view element into the document DOM
+            // insert the rendered Detail view element into the document DOM
             self.showView('#content', self.detailsView);
             self.headerView.selectMenuItem("Add Movie");
         }).fail(function(coll, resp) {

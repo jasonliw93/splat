@@ -10,6 +10,8 @@ splat.MoviesView = Backbone.View.extend({
     initialize: function() {
         this.movieThumbLoad = $.get('tpl/MovieThumb.html');
     },
+    
+    //
     moviesTemplate: _.template([
         "<% movies.each(function(movie) { %>",
         "<%= movieTemplate(movie.toJSON()) %>",
