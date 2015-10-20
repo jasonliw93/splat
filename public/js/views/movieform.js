@@ -8,6 +8,13 @@ var splat = splat || {};
 splat.MovieForm = Backbone.View.extend({
     initialize: function() {
         this.movieFormLoad = $.get('tpl/MovieForm.html');
+        var self = this;
+        this.model.on('invalid', function(model, error) {
+            splat.utils.showNotice('Error', error, 'alert-danger');
+            for (var key in self.model.invalid) {
+                splat.utils.addValidationError(key, self.model.invalid[key]);
+            }
+        });
     },
     events: {
         "click #moviesave": "save",
@@ -18,30 +25,28 @@ splat.MovieForm = Backbone.View.extend({
     change: function(e) {
         splat.utils.hideNotice();
         var obj = {};
-        if (e.target.name == 'starring' || e.target.name == 'genre') {
-            obj[e.target.name] = e.target.value.split(",").map(Function.prototype.call, String.prototype.trim);
+        var name = e.target.name
+        var value = e.target.value
+        if (name == 'starring' || name == 'genre') {
+            obj[name] = value.split(",").map(Function.prototype.call, String.prototype.trim);
+        } else if (name == 'duration'){
+            obj[name] = Number(value);
         } else {
-            obj[e.target.name] = e.target.value;
+            obj[name] = value;
         }
         this.model.set(obj);
-        splat.utils.showNotice('Note!',
-            'Movie Attribute udated, to make changes permanent, click "Save Changes" button', 'alert-info');
-        var check = this.model.validateItem(e.target.name);
+        splat.utils.showNotice('Note!', 'Movie Attribute udated, to make changes permanent, click "Save Changes" button', 'alert-info');
+        var check = this.model.validateItem(name);
         check.isValid ?
-            splat.utils.removeValidationError(e.target.name) : splat.utils.addValidationError(e.target.name, check.message);
+            splat.utils.removeValidationError(name) : splat.utils.addValidationError(name, check.message);
     },
     save: function() {
         splat.utils.hideNotice();
         var self = this;
-        this.model.on('invalid', function(model, error) {
-            splat.utils.showNotice('Error', error, 'alert-danger');
-            for (var key in self.model.invalid) {
-                splat.utils.addValidationError(key, self.model.invalid[key]);
-            }
-        });
         this.collection.create(this.model, {
             success: function(model, response) {
                 // later, we'll navigate to the browse view upon success
+                wait: true,
                 splat.app.navigate('#movies/' + self.model.id, {
                     replace: true,
                     trigger: false
@@ -53,8 +58,6 @@ splat.MovieForm = Backbone.View.extend({
                 splat.utils.requestFailed(response);
             }
         });
-
-
     },
     destroy: function() {
         splat.utils.hideNotice();

@@ -4,7 +4,7 @@
 // declare splat-app namespace if it doesn't already exist
 var splat = splat || {};
 
-// note View-name (Home) matches name of template file Home.html
+// note View-name (Details) matches name of template file Details.html
 splat.Details = Backbone.View.extend({
     // render the View
     initialize: function() {
@@ -18,6 +18,7 @@ splat.Details = Backbone.View.extend({
         });
     },
     onClose: function() {
+        // closes the sub-views before this view is unbinded and closed.
         this.MovieFormView.close();
         this.MoviePosterView.close();
     },

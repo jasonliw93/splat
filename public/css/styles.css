@@ -10,11 +10,17 @@ body {
     margin: 0;
 }
 
+#notification-panel {
+    display: none;
+}
+
 #content{
     color: white;
     padding-left: 20px;
     padding-right: 20px;
 }
+
+/*Footer Format*/
 
 .footer {
     position: fixed;
@@ -35,6 +41,7 @@ body {
     font-family: "Verdana", "Geneva", "Helvetica";
     text-shadow: 1px 1px 1px #000;
 }
+
 /*Splash Format*/
 
 .home-hero img#splash {
@@ -44,8 +51,6 @@ body {
     max-width: 100%;
     height: auto;
     width: 100%;
-    /* ie8 */
-    
     min-width: 800px;
     min-height: 100%;
     overflow: hidden;
@@ -82,26 +87,15 @@ body {
 /*Smiley Format*/
 
 .about-hero img#smiley {
-    position: relative;
-    top: 0;
-    right: 50;
-    max-width: 50%;
     height: auto;
     width: 50%;
-    /* ie8 */
-    
-    min-width: 50px;
-    min-height: 50%;
-    overflow: hidden;
-    z-index: -1;
 }
+
 /*Font Colour for header in About page*/
 
 .about-hero h1 {
     color: #B8CEE6;
 }
-/*Footer Format*/
-
 
 /*Container format for buttons in movie form*/
 
@@ -110,21 +104,17 @@ body {
     padding-bottom: 20px;
     text-align: center;
 }
+
 /*font for labels in Movie Form*/
 
 .form-group label {
     font-family: Andika;
 }
-/*font for input in Movie Form*/
-.form-group input{
+/*font color for input in Movie Form*/
+.form-group input, .form-group textarea{
     color: black;
 }
-.form-group textarea{
-    color: black;
-}
-#notification-panel {
-    display: none;
-}
+
 .thumbnails {
     left-margin: 0px;
     right-margin: 15px;
@@ -139,25 +129,20 @@ body {
     background-color: black;
     width: 100%;
 }
+
 a div.thumbnail-text {
     font-size: 80%;
     text-align: right;
     font-family: Arial;
     color: white;
 }
-.form-horizontal {
-    padding-right: 20px;
-}
+
 #detailsImage {
     border:1px solid #9d9d9d;
     max-width: 100%;
     margin : 10px 0px;
 }
-span.help-block {
-    padding: 0;
-    margin: 0;
-}
 
-#selectImage{
+#selectImageBtn{
     display: none;
 }

@@ -14,15 +14,15 @@ splat.Movie = Backbone.Model.extend({
         duration: undefined, // run-time in minutes
         genre: [], // genre terms, e.g. action, comedy, etc
         synopsis: "", // brief outline of the movie
-        freshTotal: 0.0, // cumulative total of review fresh (1.0) votes
-        freshVotes: 0.0, // number of review ratings
+        freshTotal: 0, // cumulative total of review fresh (1.0) votes
+        freshVotes: 0, // number of review ratings
         trailer: "", // URL for trailer/movie-streaming
         poster: "img/placeholder.png", // movie-poster image URL
         dated: new Date(), // date of movie posting
     },
     validators: {
         title : function(value) {
-            var titleRegex = /^[a-zA-Z0-9 \,\.\?\-\'\*]+$/;
+            var titleRegex = /^[a-zA-Z0-9 \,\.\!\?\-\'\*]+$/;
             return (value && titleRegex.test(value)) ? {
                 isValid: true
             } : {
@@ -40,7 +40,7 @@ splat.Movie = Backbone.Model.extend({
             };
         },
         director : function(value) {
-            var directorRegex = /^[a-zA-Z0-9 \,\.\?\-\'\*]+$/;
+            var directorRegex = /^[a-zA-Z0-9 \,\.\!\?\-\'\*]+$/;
             return (value && directorRegex.test(value)) ? {
                 isValid: true
             } : {
@@ -76,8 +76,7 @@ splat.Movie = Backbone.Model.extend({
             }
         },
         duration : function(value) {
-            var durationRegex = /^(\d\d?\d?)$/;
-            return (value && durationRegex.test(value)) ? {
+            return (!isNaN(value) && value >= 0 && value <= 999) ? {
                 isValid: true
             } : {
                 isValid: false,
@@ -117,6 +116,22 @@ splat.Movie = Backbone.Model.extend({
             return {
                 isValid: true
             }
+        },
+        freshTotal : function(value) {
+            return (!isNaN(value) && value >= 0)  ? {
+                isValid: true
+            } : {
+                isValid: false,
+                message: "You must enter non-negative integer."
+            };
+        },
+        freshVotes : function(value) {
+            return (!isNaN(value) && value >= 0)  ? {
+                isValid: true
+            } : {
+                isValid: false,
+                message: "You must enter non-negative integer."
+            };
         },
         trailer : function(value) {
             var urlRegex = /^(https?:\/\/[\w-]+(\.[\w-]+)+(:\d+)?(\/\S*)?)$/;

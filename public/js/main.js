@@ -16,12 +16,6 @@ splat.AppRouter = Backbone.Router.extend({
         "movies/:id": "editHandler",
         "*default": "home",
     },
-    /* Invoke close() on the currentView before replacing it with the
-       new view, to avoid memory leaks and ghost views.
-       Note that for composite views (views with subviews), must make sure
-       to close â€œchildâ€ views when the parent is closed.  The parent view
-       should keep track of its child views so it can call their respective
-       close() methods when its own close() method is invoked. */
     // When an instance of an AppRouter is declared, create a Header view
     initialize: function() {
         // instantiate a Header view
@@ -32,6 +26,12 @@ splat.AppRouter = Backbone.Router.extend({
         this.movies = new splat.Movies();
         this.moviesFetch = this.movies.fetch();
     },
+    /* Invoke close() on the currentView before replacing it with the
+       new view, to avoid memory leaks and ghost views.
+       Note that for composite views (views with subviews), must make sure
+       to close child's views when the parent is closed.  The parent view
+       should keep track of its child views so it can call their respective
+       close() methods when its own close() method is invoked. */
     showView: function(selector, view) {
         if (this.currentView) {
             this.currentView.close();

@@ -82,7 +82,7 @@ splat.MoviePoster = Backbone.View.extend({
             canvas.height = MAX_HEIGHT;
             var ctx = canvas.getContext("2d"); // get 2D rendering context
             ctx.drawImage(image,x,y, image.width, image.height); // render
-            var targetImgElt = $('#detailsImage')[0];
+            var targetImgElt = $('#detailsImage')[0]; 
             var imageSrc = canvas.toDataURL(type, quality);
             targetImgElt.src = imageSrc;
             self.model.set('poster', imageSrc);
