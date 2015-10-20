@@ -115,6 +115,10 @@ body {
     color: black;
 }
 
+.help-block{
+    margin-bottom: 0;
+}
+
 .thumbnails {
     left-margin: 0px;
     right-margin: 15px;
