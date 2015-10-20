@@ -19,6 +19,7 @@ splat.Details = Backbone.View.extend({
     },
     onClose: function() {
         // closes the sub-views before this view is unbinded and closed.
+        splat.utils.hideNotice();
         this.MovieFormView.close();
         this.MoviePosterView.close();
     },
