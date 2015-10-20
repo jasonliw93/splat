@@ -65,7 +65,7 @@ splat.MoviePoster = Backbone.View.extend({
     resize: function(sourceImg, type, quality) {
         var self = this;
         var type = type || "image/jpeg"; // default MIME image type
-        var quality = quality || 0.6; // tradeoff quality vs size
+        var quality = quality || 0.95; // tradeoff quality vs size
         var image = new Image(), MAX_HEIGHT = 300, MAX_WIDTH = 450, x = 0, y = 0;
         image.onload = function() {
             if (image.width / image.height > MAX_WIDTH / MAX_HEIGHT) {

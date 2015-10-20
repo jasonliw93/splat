@@ -1,6 +1,7 @@
 The CSS part of the assignment was not neccessarily difficult but it was the most time consuming.
 Mostly because you can always improve on the style of the app.
-Some of the styling modifications we made:
-1) Add Movie View: -Turned smallest screen size to single column view instead of double.
-                   -Made changes to help-block to make it inline with the input field.
-
+Some of the modifications we made:
+1) 'Add Movie' View: 
+a) Turned smallest screen size to single column view instead of double.
+b) Made changes to help-block to make it inline with the input field.
+c) Poster image resizing : we are keeping the same ratio and resizing image to 450px width and 300px height, instead of stretching.
