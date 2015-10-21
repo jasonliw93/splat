@@ -7,6 +7,7 @@ var splat = splat || {};
 // note View-name (MovieForm) matches name of template file MovieForm.html
 splat.MovieForm = Backbone.View.extend({
     initialize: function() {
+        //
         this.movieFormLoad = $.get('tpl/MovieForm.html');
         var self = this;
         this.model.on('invalid', function(model, error) {
@@ -14,6 +15,7 @@ splat.MovieForm = Backbone.View.extend({
         });
     },
     events: {
+        // events for users
         "click #moviesave": "save",
         "click #moviedel": "destroy",
         "change .form-group input": "change",
@@ -21,10 +23,12 @@ splat.MovieForm = Backbone.View.extend({
     },
     
     change: function(e) {
+        //change function
         splat.utils.hideNotice();
         var obj = {};
         var name = e.target.name
         var value = e.target.value
+        // checks if the attributes of the movie has been changed
         if (name == 'starring' || name == 'genre') {
             obj[name] = value.split(",").map(Function.prototype.call, String.prototype.trim);
         } else if (name == 'duration'){
@@ -32,15 +36,17 @@ splat.MovieForm = Backbone.View.extend({
         } else {
             obj[name] = value;
         }
+        // set the model to the changed values
         this.model.set(obj);
-        splat.utils.showNotice('Note!', 'Movie Attribute udated, to make changes permanent, click "Save Changes" button', 'alert-info');
+        splat.utils.showNotice('Note!', 'Movie Attribute updated, to make changes permanent, click "Save Changes" button', 'alert-info');
         var check = this.model.validateItem(name);
+        // checks if the new changes are valid
         check.isValid ?
             splat.utils.removeValidationError(name) : splat.utils.addValidationError(name, check.message);
     },
     save: function() {
         splat.utils.hideNotice();
-        
+        // creates the model for server
         if (this.model.isValid()){
             var self = this;
             this.collection.create(this.model, {
@@ -66,6 +72,7 @@ splat.MovieForm = Backbone.View.extend({
         }
     },
     destroy: function() {
+        // destroys model 
         splat.utils.hideNotice();
         this.model.destroy({
             wait: true, // don't destroy client model until server responds
