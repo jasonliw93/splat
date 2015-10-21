@@ -5,6 +5,7 @@ var splat = splat || {};
 
 splat.Movie = Backbone.Model.extend({
     idAttribute: "_id",
+    // default values for each attribute
     defaults: {
         title: "", // movie title    
         released: "", // release year
@@ -20,9 +21,13 @@ splat.Movie = Backbone.Model.extend({
         poster: "img/placeholder.png", // movie-poster image URL
         dated: new Date(), // date of movie posting
     },
+    
+    // validators for each attribute
     validators: {
         title : function(value) {
+            // regex for movie title
             var titleRegex = /^[a-zA-Z0-9 \,\.\!\?\-\'\*]+$/;
+            //checks if title is valid
             return (value && titleRegex.test(value)) ? {
                 isValid: true
             } : {
@@ -31,7 +36,9 @@ splat.Movie = Backbone.Model.extend({
             };
         },
         released : function(value) {
+            // regex for movie year
             var yearRegex = /^(19[1-9]\d|20[0-1][0-6])$/ //1910-2016
+            //checks if year is valid
             return (value && yearRegex.test(value)) ? {
                 isValid: true
             } : {
@@ -40,7 +47,9 @@ splat.Movie = Backbone.Model.extend({
             };
         },
         director : function(value) {
+            // regex for director
             var directorRegex = /^[a-zA-Z0-9 \,\.\!\?\-\'\*]+$/;
+            // checks if director input is valid
             return (value && directorRegex.test(value)) ? {
                 isValid: true
             } : {
@@ -49,7 +58,9 @@ splat.Movie = Backbone.Model.extend({
             };
         },
         rating : function(value) {
+            // regex for movie rating
             var ratingRegex = /^(G|PG|PG\-13|R|NC\-17|NR)$/;
+            // checks if rating is valid
             return (value && ratingRegex.test(value)) ? {
                 isValid: true
             } : {
@@ -58,14 +69,17 @@ splat.Movie = Backbone.Model.extend({
             };
         },
         starring : function(values) {
+            // regex for actor names
             var actorRegex = /^[a-zA-Z \-\']+$/;
             var notValid = {
                 isValid: false,
                 message: "You must enter atleast one actor's name. Only letters-spaces and \"-\", \"'\""
             };
+            // checks if there are actors
             if (!(values instanceof Array) || values.length == 0) {
                 return notValid;
             }
+            // checks if actors are valid 
             for (var index = 0; index < values.length; index++) {
                 if (!values[index] || !actorRegex.test(values[index])) {
                     return notValid;
@@ -76,6 +90,7 @@ splat.Movie = Backbone.Model.extend({
             }
         },
         duration : function(value) {
+            // checks if the duration is a number
             return (!isNaN(value) && value >= 0 && value <= 999) ? {
                 isValid: true
             } : {
@@ -84,14 +99,17 @@ splat.Movie = Backbone.Model.extend({
             };
         },
         genre : function(values) {
+            // regex for genre
             var genreRegex = /^[a-zA-Z \-\']+$/;
             var notValid = {
                 isValid: false,
                 message: "You must enter atleast one movie genre. Only letters-spaces and \"-\", \"'\""
             };
+            // checks if there are genres
             if (!(values instanceof Array) || values.length == 0) {
                 return notValid;
             }
+            // checks if genres are valid
             for (var index = 0; index < values.length; index++) {
                 if (!values[index] || !genreRegex.test(values[index])) {
                     return notValid;
@@ -102,12 +120,14 @@ splat.Movie = Backbone.Model.extend({
             }
         },
         synopsis : function(value) {
+            // regex for synopsis
             var wordRegex = /^[ \w\,\.\!\?\-\'\*]+$/;
             var notValid = {
                 isValid: false,
                 message: "You must enter a synopsis. Only letters-digits-spaces and \",\", \".\", \"!\", \"?\", \"-\", \"'\", \"*\" allowed."
             };
             var lines = value.split('\n')
+            // checks if its empty or only filled with symbols
             for (var index = 0; index < lines.length; index++) {
                 if (!wordRegex.test(lines[index])) {
                     return notValid;
@@ -118,6 +138,7 @@ splat.Movie = Backbone.Model.extend({
             }
         },
         freshTotal : function(value) {
+            // checks if freshtotal is a number
             return (!isNaN(value) && value >= 0)  ? {
                 isValid: true
             } : {
@@ -126,6 +147,7 @@ splat.Movie = Backbone.Model.extend({
             };
         },
         freshVotes : function(value) {
+            // checks if freshvotes is a number
             return (!isNaN(value) && value >= 0)  ? {
                 isValid: true
             } : {
@@ -134,6 +156,7 @@ splat.Movie = Backbone.Model.extend({
             };
         },
         trailer : function(value) {
+            // regex for trailer URL
             var urlRegex = /^(https?:\/\/[\w-]+(\.[\w-]+)+(:\d+)?(\/\S*)?)$/;
             return (!value || urlRegex.test(value)) ? {
                 isValid: true
@@ -143,6 +166,7 @@ splat.Movie = Backbone.Model.extend({
             };
         },
         dated : function(value) {
+            // checks if date is valid
             var d = new Date(value);
             return (value && d instanceof Date && !isNaN(d)) ? {
                 isValid: true
@@ -163,6 +187,7 @@ splat.Movie = Backbone.Model.extend({
     validate: function(attrs) {
         this.invalid = {};
         var isInvalid = false;
+        // checks if all attributes are valid
         for (var key in attrs) {
             if (this.validators[key]){
                 var check = this.validators[key](attrs[key])
