@@ -80,16 +80,19 @@ splat.MoviePoster = Backbone.View.extend({
                 image.height = MAX_HEIGHT;
                 x = (MAX_WIDTH - image.width) / 2;
             }
+            //creates a new "canvas" object
             var canvas = document.createElement("canvas");
             canvas.width = MAX_WIDTH;
             canvas.height = MAX_HEIGHT;
+            // ctx becomes an object with properties and methods for drawing on canvas
             var ctx = canvas.getContext("2d"); // get 2D rendering context
             ctx.drawImage(image,x,y, image.width, image.height); // render
             var targetImgElt = $('#detailsImage')[0]; 
             var imageSrc = canvas.toDataURL(type, quality);
             targetImgElt.src = imageSrc;
+            // set model
             self.model.set('poster', imageSrc);
-            splat.utils.showNotice('Note!', 'Movie Poster udated, to make changes permanent, click "Save Changes" button', 'alert-info');
+            splat.utils.showNotice('Note!', 'Movie Poster updated, to make changes permanent, click "Save Changes" button', 'alert-info');
         }
         image.src = sourceImg;
     },

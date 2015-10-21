@@ -19,6 +19,7 @@ splat.MovieForm = Backbone.View.extend({
         "change .form-group input": "change",
         "change .form-group textarea": "change",
     },
+    
     change: function(e) {
         splat.utils.hideNotice();
         var obj = {};

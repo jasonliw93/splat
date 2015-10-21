@@ -11,12 +11,13 @@ splat.MoviesView = Backbone.View.extend({
         this.movieThumbLoad = $.get('tpl/MovieThumb.html');
     },
     
-    //
+    // function to combine movie JSON data for rendering to HTML
     moviesTemplate: _.template([
         "<% movies.each(function(movie) { %>",
         "<%= movieTemplate(movie.toJSON()) %>",
         "<% }); %>",
     ].join('')),
+    
     render: function() {
         var self = this;
         this.movieThumbLoad.done(function(markup) {
