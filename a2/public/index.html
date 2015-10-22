@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- set charset to interpret file contents -->
+    <meta charset="UTF-8">
+    <!-- title displayed when browser tab is moused over -->
+    <title>Splat!</title>
+    <!-- ensure proper rendering and touch zooming -->
+    <link rel="icon" href="img/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS definitions -->
+
+    <!-- optional stylesheet theme included with Bootstrap -->
+    <link href="css/bootstrap-theme.css" rel="stylesheet">
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!-- your own customized style rules -->
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- HTML5 markup for view content, labelled with Bootstrap class names -->
+    <header class="header"></header>
+    <!-- full-width content container, spanning entire viewport -->
+    <main class="container-fluid">
+        <!-- row for use in Bootstrap grid layout -->
+        <div class="row" id="mainrow">
+            <div id="content">
+                <!-- implicitly a single column within row -->
+
+            </div>
+        </div>
+        <!-- row -->
+    </main>
+    <!-- container-fluid -->
+
+    <!-- load scripts last for better UI performance -->
+
+    <!-- library scripts you use -->
+    <script src="js/lib/jquery-min.js"></script>
+    <script src="js/lib/underscore-min.js" type="text/javascript"></script>
+    <script src="js/lib/backbone-min.js" type="text/javascript"></script>
+    <script src="js/lib/backbone.localStorage.js" type="text/javascript"></script>
+    <script src="js/lib/bootstrap-min.js" type="text/javascript"></script>
+    
+    <script src="js/views/header.js" type="text/javascript"></script>
+    <script src="js/views/home.js" type="text/javascript"></script>
+    <script src="js/views/about.js" type="text/javascript"></script>
+    <script src="js/views/movieform.js" type="text/javascript"></script>
+    <script src="js/views/movieposter.js" type="text/javascript"></script>
+    <script src="js/views/details.js" type="text/javascript"></script>
+    <script src="js/views/movies.js" type="text/javascript"></script>
+    <script src="js/models/movie.js" type="text/javascript"></script>
+    <script src="js/collections/movies.js" type="text/javascript"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/close.js"></script>
+    <script src="js/main.js"></script>
+    
+    <footer class="footer">
+        <div>
+            <p class="text-muted">&#169; Jason & Melody</p>
+        </div>
+    </footer>
+</body>
+
+</html>

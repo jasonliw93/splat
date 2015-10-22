@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>movie.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../doc-style.css" />
+  <script src="../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../", thisFile = "courses/courses/cscc09f15/liwyanch/a1//js/models/movie.js", defaultSidebar = true;
+  </script>
+  <script src="../../doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>movie.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>declare splat-app namespace if it doesn't already exist</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="kd">var</span> <span class="nx">splat</span> <span class="o">=</span> <span class="nx">splat</span> <span class="o">||</span> <span class="p">{};</span>
+
+<span class="nx">splat</span><span class="p">.</span><span class="nx">Movie</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">validators</span> <span class="o">=</span> <span class="p">{};</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<p>regex for input values</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="kd">var</span> <span class="nx">titleRegex</span> <span class="o">=</span> <span class="sr">/^[a-zA-Z0-9 \,\.\?\-\&#39;\*]+$/</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">actorRegex</span> <span class="o">=</span> <span class="sr">/^[a-zA-Z \-\&#39;]+$/</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">yearRegex</span> <span class="o">=</span> <span class="sr">/^(19[1-9]\d|20[0-1][0-6])$/</span> <span class="c1">//1910-2016</span>
+        <span class="kd">var</span> <span class="nx">ratingRegex</span> <span class="o">=</span> <span class="sr">/^(G|PG|PG\-13|R|NC\-17|NR)$/</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">durationRegex</span> <span class="o">=</span> <span class="sr">/^(\d\d?\d?)$/</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">urlRegex</span> <span class="o">=</span> <span class="sr">/^(https?:\/\/[\w-]+(\.[\w-]+)+(:\d+)?(\/\S*)?)$/</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">wordRegex</span> <span class="o">=</span> <span class="sr">/^[\w\d \,\.\?\-\&#39;\*]+$/</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="nx">titleRegex</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">value</span><span class="p">))</span> <span class="o">?</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+            <span class="p">}</span> <span class="o">:</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;You must enter a movie title. Only letters-digits-spaces and \&quot;,\&quot;, \&quot;.\&quot;, \&quot;!\&quot;, \&quot;?\&quot;, \&quot;-\&quot;, \&quot;&#39;\&quot;, \&quot;*\&quot; allowed&quot;</span>
+            <span class="p">};</span>
+        <span class="p">};</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>validator for release year</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">.</span><span class="nx">released</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="nx">yearRegex</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">value</span><span class="p">))</span> <span class="o">?</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+            <span class="p">}</span> <span class="o">:</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;You must enter a year between 1910 and 2016&quot;</span>
+            <span class="p">};</span>
+        <span class="p">};</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">.</span><span class="nx">director</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="nx">titleRegex</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">value</span><span class="p">))</span> <span class="o">?</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+            <span class="p">}</span> <span class="o">:</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;You must enter a director&#39;s name. Only letters-digits-spaces and \&quot;,\&quot;, \&quot;.\&quot;, \&quot;!\&quot;, \&quot;?\&quot;, \&quot;-\&quot;, \&quot;&#39;\&quot;, \&quot;*\&quot; allowed&quot;</span>
+            <span class="p">};</span>
+        <span class="p">};</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">.</span><span class="nx">rating</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="nx">ratingRegex</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">value</span><span class="p">))</span> <span class="o">?</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+            <span class="p">}</span> <span class="o">:</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;You must enter one of G, PG, PG-13, R, NC-17, NR.&quot;</span>
+            <span class="p">};</span>
+        <span class="p">};</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">.</span><span class="nx">starring</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">values</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">notValid</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;You must enter atleast one actor&#39;s name. Only letters-spaces and \&quot;-\&quot;, \&quot;&#39;\&quot;&quot;</span>
+            <span class="p">};</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">values</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nx">notValid</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">index</span> <span class="o">&lt;</span> <span class="nx">values</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">index</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">values</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span> <span class="o">||</span> <span class="o">!</span><span class="nx">actorRegex</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">values</span><span class="p">[</span><span class="nx">index</span><span class="p">]))</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="nx">notValid</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">.</span><span class="nx">duration</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="nx">durationRegex</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">value</span><span class="p">))</span> <span class="o">?</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+            <span class="p">}</span> <span class="o">:</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;You must enter a duration between 0 and 999.&quot;</span>
+            <span class="p">};</span>
+        <span class="p">};</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">.</span><span class="nx">genre</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">values</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">notValid</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="nx">isValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;You must enter atleast one movie genre. Only letters-spaces and \&quot;-\&quot;, \&quot;&#39;\&quot;&quot;</span>
+                <span class="p">};</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">values</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="nx">notValid</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">index</span> <span class="o">&lt;</span> <span class="nx">values</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">index</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">values</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span> <span class="o">||</span> <span class="o">!</span><span class="nx">actorRegex</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">values</span><span class="p">[</span><span class="nx">index</span><span class="p">]))</span> <span class="p">{</span>
+                        <span class="k">return</span> <span class="nx">notValid</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">return</span> <span class="p">{</span>
+                    <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">.</span><span class="nx">synopsis</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">notValid</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="nx">isValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;You must enter a synopsis. Only letters-digits-spaces and \&quot;,\&quot;, \&quot;.\&quot;, \&quot;!\&quot;, \&quot;?\&quot;, \&quot;-\&quot;, \&quot;&#39;\&quot;, \&quot;*\&quot; allowed.&quot;</span>
+                <span class="p">};</span>
+                <span class="kd">var</span> <span class="nx">lines</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">index</span> <span class="o">&lt;</span> <span class="nx">lines</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">index</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">wordRegex</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">lines</span><span class="p">[</span><span class="nx">index</span><span class="p">]))</span> <span class="p">{</span>
+                        <span class="k">return</span> <span class="nx">notValid</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">return</span> <span class="p">{</span>
+                    <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+                <span class="p">}</span>
+            <span class="p">};</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">.</span><span class="nx">trailer</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="nx">urlRegex</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">value</span><span class="p">))</span> <span class="o">?</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+            <span class="p">}</span> <span class="o">:</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;You must enter a valid video url&quot;</span>
+            <span class="p">};</span>
+        <span class="p">};</span>
+    <span class="p">},</span>
+    <span class="nx">idAttribute</span><span class="o">:</span> <span class="s2">&quot;_id&quot;</span><span class="p">,</span>
+    <span class="nx">defaults</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="c1">// movie title    </span>
+        <span class="nx">released</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="c1">// release year</span>
+        <span class="nx">director</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="c1">// movie&#39;s director</span>
+        <span class="nx">rating</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="c1">// MPAA movie rating: G, PG, PG-13, R, NC-17, NR</span>
+        <span class="nx">starring</span><span class="o">:</span> <span class="p">[],</span> <span class="c1">// array principal actors</span>
+        <span class="nx">duration</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">,</span> <span class="c1">// run-time in minutes</span>
+        <span class="nx">genre</span><span class="o">:</span> <span class="p">[],</span> <span class="c1">// genre terms, e.g. action, comedy, etc</span>
+        <span class="nx">synopsis</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="c1">// brief outline of the movie</span>
+        <span class="nx">freshTotal</span><span class="o">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="c1">// cumulative total of review fresh (1.0) votes</span>
+        <span class="nx">freshVotes</span><span class="o">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="c1">// number of review ratings</span>
+        <span class="nx">trailer</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="c1">// URL for trailer/movie-streaming</span>
+        <span class="nx">poster</span><span class="o">:</span> <span class="s2">&quot;img/placeholder.png&quot;</span><span class="p">,</span> <span class="c1">// movie-poster image URL</span>
+        <span class="nx">dated</span><span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(),</span> <span class="c1">// date of movie posting</span>
+    <span class="p">},</span>
+    <span class="nx">validateItem</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>if a validator is defined on this key
+test it, else defaults to valid</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">return</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">[</span><span class="nx">key</span><span class="p">])</span> <span class="o">?</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">[</span><span class="nx">key</span><span class="p">](</span><span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="o">:</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+            <span class="p">};</span>
+    <span class="p">},</span>
+    <span class="nx">validate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">attrs</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">invalid</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">attrs</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">check</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">validateItem</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">check</span><span class="p">.</span><span class="nx">isValid</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">invalid</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">check</span><span class="p">.</span><span class="nx">message</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">invalid</span><span class="p">).</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="s2">&quot;Fix validation errors and try again&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>
