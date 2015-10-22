@@ -17,15 +17,18 @@ splat.Details = Backbone.View.extend({
             model: this.model
         });
     },
+    // closes the sub-views before this view is unbinded and closed.
+    // function is run by the modified close function provided by Alan.
     onClose: function() {
-        // closes the sub-views before this view is unbinded and closed.
         splat.utils.hideNotice();
         this.MovieFormView.close();
         this.MoviePosterView.close();
     },
+    // render the View
     render: function() {
         // set the view element ($el) HTML content using its template
         this.$el.html(this.template());
+        // render the sub views
         this.$('#movieform').html(this.MovieFormView.render().el);
         this.$('#movieposter').html(this.MoviePosterView.render().el);
         return this; // support method chaining

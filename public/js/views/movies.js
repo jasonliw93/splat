@@ -17,7 +17,7 @@ splat.MoviesView = Backbone.View.extend({
         "<%= movieTemplate(movie.toJSON()) %>",
         "<% }); %>",
     ].join('')),
-    
+    // render View
     render: function() {
         var self = this;
         this.movieThumbLoad.done(function(markup) {

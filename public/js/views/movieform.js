@@ -7,29 +7,23 @@ var splat = splat || {};
 // note View-name (MovieForm) matches name of template file MovieForm.html
 splat.MovieForm = Backbone.View.extend({
     initialize: function() {
-        //
         this.movieFormLoad = $.get('tpl/MovieForm.html');
-        var self = this;
-        this.model.on('invalid', function(model, error) {
-            
-        });
     },
     events: {
-        // events for users
         "click #moviesave": "save",
         "click #moviedel": "destroy",
         "change .form-group input": "change",
         "change .form-group textarea": "change",
     },
-    
+    // handles change form fields event
     change: function(e) {
-        //change function
         splat.utils.hideNotice();
         var obj = {};
         var name = e.target.name
         var value = e.target.value
-        // checks if the attributes of the movie has been changed
+        // properly format string input depending on field name.
         if (name == 'starring' || name == 'genre') {
+            // split string then call trim on each value
             obj[name] = value.split(",").map(Function.prototype.call, String.prototype.trim);
         } else if (name == 'duration'){
             obj[name] = Number(value);
@@ -44,15 +38,17 @@ splat.MovieForm = Backbone.View.extend({
         check.isValid ?
             splat.utils.removeValidationError(name) : splat.utils.addValidationError(name, check.message);
     },
+    // save model to database
     save: function() {
         splat.utils.hideNotice();
-        // creates the model for server
+        // check if model is valid before adding to collection
         if (this.model.isValid()){
             var self = this;
+            // adds model to collection and save model to database
             this.collection.create(this.model, {
                 success: function(model, response) {
-                    // later, we'll navigate to the browse view upon success
                     wait: true,
+                    // navigate to the edit view upon success
                     splat.app.navigate('#movies/' + self.model.id, {
                         replace: true,
                         trigger: false
@@ -66,13 +62,14 @@ splat.MovieForm = Backbone.View.extend({
             });
         }else{
             splat.utils.showNotice('Error', this.model.validationError, 'alert-danger');
+            // add validation error for each invalid message in invalid object 
             for (var key in this.model.invalid) {
                 splat.utils.addValidationError(key, this.model.invalid[key]);
             }
         }
     },
+    // destroys model from database
     destroy: function() {
-        // destroys model 
         splat.utils.hideNotice();
         this.model.destroy({
             wait: true, // don't destroy client model until server responds

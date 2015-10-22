@@ -19,9 +19,8 @@ splat.Movie = Backbone.Model.extend({
         freshVotes: 0, // number of review ratings
         trailer: "", // URL for trailer/movie-streaming
         poster: "img/placeholder.png", // movie-poster image URL
-        dated: new Date(), // date of movie posting
+        dated: new Date(), // date of movie created
     },
-    
     // validators for each attribute
     validators: {
         title : function(value) {
@@ -75,11 +74,11 @@ splat.Movie = Backbone.Model.extend({
                 isValid: false,
                 message: "You must enter atleast one actor's name. Only letters-spaces and \"-\", \"'\""
             };
-            // checks if there are actors
+            // checks if starring is an array and there is atleast one actor
             if (!(values instanceof Array) || values.length == 0) {
                 return notValid;
             }
-            // checks if actors are valid 
+            // checks if there is an actor that is invalid in the array
             for (var index = 0; index < values.length; index++) {
                 if (!values[index] || !actorRegex.test(values[index])) {
                     return notValid;
@@ -105,11 +104,11 @@ splat.Movie = Backbone.Model.extend({
                 isValid: false,
                 message: "You must enter atleast one movie genre. Only letters-spaces and \"-\", \"'\""
             };
-            // checks if there are genres
+            // checks if genre is an array and there is atleast one genre
             if (!(values instanceof Array) || values.length == 0) {
                 return notValid;
             }
-            // checks if genres are valid
+            // checks if there is an invalid genre in the array
             for (var index = 0; index < values.length; index++) {
                 if (!values[index] || !genreRegex.test(values[index])) {
                     return notValid;
@@ -124,7 +123,7 @@ splat.Movie = Backbone.Model.extend({
             var wordRegex = /^[ \w\,\.\!\?\-\'\*]+$/;
             var notValid = {
                 isValid: false,
-                message: "You must enter a synopsis. Only letters-digits-spaces and \",\", \".\", \"!\", \"?\", \"-\", \"'\", \"*\" allowed."
+                message: "You must enter a synopsis. Only letters-digits-spaces and \",\", \".\", \"!\", \"?\", \"-\", \"'\", \"*\" allowed. No blank lines."
             };
             var lines = value.split('\n')
             // checks if its empty or only filled with symbols
@@ -166,8 +165,9 @@ splat.Movie = Backbone.Model.extend({
             };
         },
         dated : function(value) {
-            // checks if date is valid
-            var d = new Date(value);
+            // convert to date object if dated is a date string
+            var d = new Date(value); 
+            // checks if dated is valid (valid dates have number value)
             return (value && d instanceof Date && !isNaN(d)) ? {
                 isValid: true
             } : {
@@ -176,6 +176,7 @@ splat.Movie = Backbone.Model.extend({
             };
         }
     },
+    // validate a single model field given by key
     validateItem: function(key) {
         // if a validator is defined on this key
         // test it, else defaults to valid
@@ -184,14 +185,20 @@ splat.Movie = Backbone.Model.extend({
                 isValid: true
             };
     },
+    // name:value pairs where name is the field name and value is the invalid message
+    invalid : {},
+    // validates all the attributes given by attrs
+    // called by model save
     validate: function(attrs) {
+        // remove any previous invalid messages
         this.invalid = {};
         var isInvalid = false;
-        // checks if all attributes are valid
+        // go through each attr key and check it's value
         for (var key in attrs) {
             if (this.validators[key]){
                 var check = this.validators[key](attrs[key])
                 if (!check.isValid){
+                    // add invalid message to invalid object
                     this.invalid[key] = check.message;
                     isInvalid = true
                 }

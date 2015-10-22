@@ -14,8 +14,8 @@ splat.MoviePoster = Backbone.View.extend({
         "dragover #detailsImage": "dragoverHandler",
         "drop #detailsImage": "dropHandler",
     },
+    // handles event when user selects image
     selectImage: function(event) {
-        // set object attribute for image uploader
         this.pictureFile = event.target.files[0];
         // if the file type is image, read it
         if (this.pictureFile.type.indexOf('image/') == 0) {
@@ -32,9 +32,9 @@ splat.MoviePoster = Backbone.View.extend({
         var reader = new FileReader();
         // callback for when read operation is finished
         reader.onload = function(event) {
-            self.resize(reader.result);
+            // resize the image and set the image on callback.
+            self.resize(reader.result, type, 0.95, self.setImage);
         };
-
         reader.readAsDataURL(pictureFile); // read image file
 
     },
@@ -47,24 +47,23 @@ splat.MoviePoster = Backbone.View.extend({
         // field - so use originalEvent
         event.originalEvent.dataTransfer.dropEffect = 'copy';
     },
+    // handles event when user drags and drops a picture file
     dropHandler: function(event) {
         event.currentTarget.className = '';
         event.stopPropagation();
         event.preventDefault();
         var ev = event.originalEvent;
-        // set object attribute for use by uploadPicture
         this.pictureFile = ev.dataTransfer.files[0];
         // only process image files
         if (this.pictureFile.type.indexOf('image/') == 0) {
-            // Read image file and display in img tag
             this.imageRead(this.pictureFile, this.pictureFile.type);
         } else { // else display notification error
             splat.utils.showNotice('Error', "Please select a valid image file", 'alert-danger');
         }
     },
-    // Resize sourceImg, returning result as a DataURL value. Type,
-    // quality are optional params for image-type and quality setting
-    resize: function(sourceImg, type, quality) {
+    // Resize sourceImg and call callback function on resized sourceImg when complete. 
+    // Type, quality are optional params for image-type and quality setting
+    resize: function(sourceImg, type, quality, callback) {
         var self = this;
         var type = type || "image/jpeg"; // default MIME image type
         var quality = quality || 0.95; // tradeoff quality vs size
@@ -87,14 +86,16 @@ splat.MoviePoster = Backbone.View.extend({
             // ctx becomes an object with properties and methods for drawing on canvas
             var ctx = canvas.getContext("2d"); // get 2D rendering context
             ctx.drawImage(image,x,y, image.width, image.height); // render
-            var targetImgElt = $('#detailsImage')[0]; 
-            var imageSrc = canvas.toDataURL(type, quality);
-            targetImgElt.src = imageSrc;
-            // set model
-            self.model.set('poster', imageSrc);
-            splat.utils.showNotice('Note!', 'Movie Poster updated, to make changes permanent, click "Save Changes" button', 'alert-info');
+            callback.call(self, canvas.toDataURL(type, quality));
         }
         image.src = sourceImg;
+    },
+    // set sourceImg as model poster and display image. 
+    setImage: function(sourceImg){
+        var targetImgElt = $('#detailsImage')[0]; 
+        targetImgElt.src = sourceImg;
+        this.model.set('poster', sourceImg);
+        splat.utils.showNotice('Note!', 'Movie Poster updated, to make changes permanent, click "Save Changes" button', 'alert-info');
     },
     // render the View
     render: function() {
