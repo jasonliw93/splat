@@ -86,15 +86,33 @@ splat.MoviePoster = Backbone.View.extend({
             // ctx becomes an object with properties and methods for drawing on canvas
             var ctx = canvas.getContext("2d"); // get 2D rendering context
             ctx.drawImage(image,x,y, image.width, image.height); // render
-            callback.call(self, canvas.toDataURL(type, quality));
+            callback.call(self, canvas.toDataURL(type, quality), type);
         }
         image.src = sourceImg;
     },
     // set sourceImg as model poster and display image. 
-    setImage: function(sourceImg){
-        var targetImgElt = $('#detailsImage')[0]; 
-        targetImgElt.src = sourceImg;
-        this.model.set('poster', sourceImg);
+    setImage: function(sourceImg, type){
+        //this.model.set('poster', sourceImg);
+        var blobBin = atob(sourceImg.split(',')[1]);
+        var array = [];
+        for(var i = 0; i < blobBin.length; i++) {
+            array.push(blobBin.charCodeAt(i));
+        }
+        this.imageFile = new Blob([new Uint8Array(array)], {type: type});
+        var formdata = new FormData();
+        formdata.append("image", this.imageFile);
+        var self = this;
+        $.ajax({
+           url: "uploadImage",
+           type: "POST",
+           data: formdata,
+           processData: false,
+           contentType: false,
+        }).done(function(imageURL){
+            self.model.set('poster', imageURL);
+            var targetImgElt = $('#detailsImage')[0]; 
+            targetImgElt.src = imageURL;
+        });
         splat.utils.showNotice('Note!', 'Movie Poster updated, to make changes permanent, click "Save Changes" button', 'alert-info');
     },
     // render the View

@@ -9,6 +9,7 @@ splat.MoviesView = Backbone.View.extend({
     // render the View
     initialize: function() {
         this.movieThumbLoad = $.get('tpl/MovieThumb.html');
+        
     },
     
     // function to combine movie JSON data for rendering to HTML
@@ -19,14 +20,26 @@ splat.MoviesView = Backbone.View.extend({
     ].join('')),
     // render View
     render: function() {
+        this.collectionFetch = this.collection.fetch();
         var self = this;
         this.movieThumbLoad.done(function(markup) {
             // apply to model, inject to Details view
             self.movieTemplate = _.template(markup);
+            
+            self.collectionFetch.done(function(coll, resp){
+                self.$el.html(self.moviesTemplate({
+                    movies: self.collection,
+                    movieTemplate: self.movieTemplate
+                }));
+            }).fail(function(coll, resp) {
+                alert("Fetch movies failed!");
+            });
+            /*
             self.$el.html(self.moviesTemplate({
                 movies: self.collection,
                 movieTemplate: self.movieTemplate
             }));
+            */
         });
         return this; // support method chaining
     }

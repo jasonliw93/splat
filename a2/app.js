@@ -9,6 +9,7 @@
  * the value returned by require(), in this case e.g. splat.api
  * The convention is use the same name for variable and module.
  */
+
 var http = require('http'),   // ADD CODE
     // NOTE, use the version of "express" linked to the assignment handout
     express = require('express'), //require('./node_modules/express'),   // ADD CODE
@@ -23,7 +24,7 @@ var http = require('http'),   // ADD CODE
     methodOverride = require("method-override"),
     directory = require("serve-index"),
     errorHandler = require("errorhandler"),
-    basicAuth = require("basic-auth-connect"),  // optional, for HTTP auth
+    //basicAuth = require("basic-auth-connect"),  // optional, for HTTP auth
 
     // config is an object module, that defines app-config attribues,
     // such as "port", DB parameters
@@ -47,13 +48,13 @@ app.use(logger('dev'));  // 'default', 'short', 'tiny', 'dev'
 app.use(compression());
 
 // parse HTTP request body
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: 500000}));
 app.use(bodyParser.urlencoded({
-        extended: true
+    extended: true
 }));
 
 // set file-upload directory for poster images
-app.use(multer({dest: __dirname + '/public/img/uploads/'}));
+app.use(multer({dest: __dirname + '/public/img/uploads/'}).single('image'));
 
 // checks req.body for HTTP method overrides
 app.use(methodOverride());
@@ -69,6 +70,12 @@ app.get('/', splat.api);
 
 // Retrieve a single movie by its id attribute
 app.get('/movies/:id', splat.getMovie);
+app.get('/movies', splat.getMovies);
+app.post('/movies', splat.addMovie);
+app.put('/movies/:id', splat.editMovie);
+app.delete('/movies/:id', splat.deleteMovie);
+app.post('/uploadImage', splat.uploadImage);
+
 
 // ADD CODE to support other routes listed on assignment handout
 
@@ -80,7 +87,6 @@ app.use(errorHandler({ dumpExceptions:true, showStack:true }));
 
 // Default-route middleware, in case none of above match
 app.use(function (req, res) {
-	// ADD CODE
 });
 
 
