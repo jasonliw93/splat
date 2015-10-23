@@ -12,7 +12,7 @@
 
 var http = require('http'),   // ADD CODE
     // NOTE, use the version of "express" linked to the assignment handout
-    express = require('express'), //require('./node_modules/express'),   // ADD CODE
+    express = require('./node_modules/express'),   // ADD CODE
     fs = require("fs"),
     path = require("path"),
     url = require("url"),
@@ -48,13 +48,13 @@ app.use(logger('dev'));  // 'default', 'short', 'tiny', 'dev'
 app.use(compression());
 
 // parse HTTP request body
-app.use(bodyParser.json({limit: 500000}));
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 
 // set file-upload directory for poster images
-app.use(multer({dest: __dirname + '/public/img/uploads/'}).single('image'));
+app.use(multer({dest: __dirname + '/public/img/uploads/'}));
 
 // checks req.body for HTTP method overrides
 app.use(methodOverride());
