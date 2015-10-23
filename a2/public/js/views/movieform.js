@@ -7,7 +7,7 @@ var splat = splat || {};
 // note View-name (MovieForm) matches name of template file MovieForm.html
 splat.MovieForm = Backbone.View.extend({
     initialize: function() {
-        this.movieFormLoad = $.get('tpl/MovieForm.html');
+        //this.movieFormLoad = $.get('tpl/MovieForm.html');
     },
     events: {
         "click #moviesave": "save",
@@ -107,12 +107,7 @@ splat.MovieForm = Backbone.View.extend({
     // render the View
     render: function() {
         // set the view element ($el) HTML content using its template
-        var self = this;
-        this.movieFormLoad.done(function(markup) {
-            self.movieFormTemplate = _.template(markup);
-            self.$el.html(self.movieFormTemplate(self.model.toJSON()));
-            // apply to model, inject to Details view
-        });
+        this.$el.html(this.template(this.model.toJSON()));
         return this; // support method chaining
     }
 

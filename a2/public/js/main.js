@@ -112,10 +112,12 @@ splat.AppRouter = Backbone.Router.extend({
             // get movies and instantiate Details view
             self.movie = self.movies.get(id);
             self.reviews = new splat.Reviews();
+
             self.reviewsFetch = self.reviews.fetch();
             self.reviewsFetch.done(function(coll, resp) {
+                console.log(self.reviews);
                 self.reviewsView = new splat.ReviewsView({
-                    movieId: id,
+                    movieId : id,
                     collection: self.reviews,
                 });
                 self.showView('#content', self.reviewsView);
@@ -133,7 +135,7 @@ splat.AppRouter = Backbone.Router.extend({
 // template loading is complete, instantiate a Backbone router
 // with history.
 
-splat.utils.loadTemplates(['Home', 'Header', 'About', 'Details', 'ReviewsView'], function() {
+splat.utils.loadTemplates(['Home', 'Header', 'About', 'Details', 'ReviewsView', 'MovieForm', 'MoviePoster', 'Reviewer', 'ReviewThumbs'], function() {
     splat.app = new splat.AppRouter();
     Backbone.history.start();
 });

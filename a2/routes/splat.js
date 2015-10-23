@@ -34,7 +34,6 @@ exports.getMovies = function(req, res){
         if (err) {
             res.status(500).send("Sorry, unable to retrieve movies at this time");
         } else {
-            console.log(movies);
             res.status(200).send(movies);
         }
     });
@@ -93,7 +92,6 @@ exports.uploadImage = function(req, res) {
                     res.status(500).send("Sorry, unable to retrieve movie at this time (" 
                         +err.message+ ")" );
                 }else{
-                    console.log(movie.poster);
                     res.status(200).send(movie.poster);
                 }
             });
@@ -101,6 +99,23 @@ exports.uploadImage = function(req, res) {
             res.status(500).send("Sorry, unable to upload poster image at this time (" 
                 +err.message+ ")" );
 	}
+    });
+};
+
+exports.getReviews = function(req, res){
+    reviewModel.find({}, function(err, reviews) {
+        if (err) {
+            res.status(500).send("Sorry, unable to retrieve movies at this time");
+        } else {
+            res.status(200).send(reviews);
+        }
+    });
+};
+
+exports.addReview = function(req, res){    
+    var review = new reviewModel(req.body);
+    review.save(function (err, review) {
+        res.status(200).send(review);
     });
 };
 
@@ -132,5 +147,12 @@ var MovieSchema = new mongoose.Schema({
 // each title:director pair must be unique; duplicates are dropped
 //MovieSchema.index(...);  // ADD CODE
 
+var ReviewSchema = new mongoose.Schema({
+    rating: { type:Number, required: true},
+    reviewText: { type:String, required: true},
+    reviewName: { type:String, required: true},
+    reviewAffil: { type:String, required: true},
+})
 // Models
 var movieModel = mongoose.model('Movie', MovieSchema);
+var reviewModel = mongoose.model('Review', ReviewSchema);

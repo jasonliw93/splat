@@ -10,7 +10,6 @@ splat.Reviews = Backbone.Collection.extend({
 
     // save movie models under "splat" namespace,
     // since localStorage uses a flat namespace shared by all apps
-    localStorage: new Backbone.LocalStorage('reviews')
-    //url: "/reviews"
-
+    //localStorage: new Backbone.LocalStorage('reviews')
+    url: "/reviews"
 });
