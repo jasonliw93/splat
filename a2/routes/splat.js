@@ -34,7 +34,8 @@ exports.getMovies = function(req, res){
         if (err) {
             res.status(500).send("Sorry, unable to retrieve movies at this time");
         } else {
-            res.status(200).send(movies);    
+            console.log(movies);
+            res.status(200).send(movies);
         }
     });
 };

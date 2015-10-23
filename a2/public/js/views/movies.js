@@ -34,12 +34,6 @@ splat.MoviesView = Backbone.View.extend({
             }).fail(function(coll, resp) {
                 alert("Fetch movies failed!");
             });
-            /*
-            self.$el.html(self.moviesTemplate({
-                movies: self.collection,
-                movieTemplate: self.movieTemplate
-            }));
-            */
         });
         return this; // support method chaining
     }

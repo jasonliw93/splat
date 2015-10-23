@@ -14,6 +14,7 @@ splat.AppRouter = Backbone.Router.extend({
         "movies": "browse",
         "movies/add": "addHandler",
         "movies/:id": "editHandler",
+        "movies/:id/reviews" : "reviews",
         "*default": "home",
     },
     // When an instance of an AppRouter is declared, create a Header view
@@ -104,6 +105,27 @@ splat.AppRouter = Backbone.Router.extend({
         }).fail(function(coll, resp) {
             alert("Fetch movies failed!");
         });
+    },
+    reviews : function(id){
+        var self = this;
+        this.moviesFetch.done(function(coll, resp) {
+            // get movies and instantiate Details view
+            self.movie = self.movies.get(id);
+            self.reviews = new splat.Reviews();
+            self.reviewsFetch = self.reviews.fetch();
+            self.reviewsFetch.done(function(coll, resp) {
+                self.reviewsView = new splat.ReviewsView({
+                    movieId: id,
+                    collection: self.reviews,
+                });
+                self.showView('#content', self.reviewsView);
+            }).fail(function(coll, resp) {
+                alert("Fetch reviews failed!");
+            });
+            
+        }).fail(function(coll, resp) {
+            alert("Fetch movies failed!");
+        });
     }
 });
 
@@ -111,7 +133,7 @@ splat.AppRouter = Backbone.Router.extend({
 // template loading is complete, instantiate a Backbone router
 // with history.
 
-splat.utils.loadTemplates(['Home', 'Header', 'About', 'Details'], function() {
+splat.utils.loadTemplates(['Home', 'Header', 'About', 'Details', 'ReviewsView'], function() {
     splat.app = new splat.AppRouter();
     Backbone.history.start();
 });
