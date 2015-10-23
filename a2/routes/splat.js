@@ -31,73 +31,71 @@ exports.getMovie = function(req, res){
 };
 exports.getMovies = function(req, res){
     movieModel.find({}, function(err, movies) {
-    if (err) throw err;
-        // object of all the users
-    res.status(200).send(movies);
+        if (err) {
+            res.status(500).send("Sorry, unable to retrieve movies at this time");
+        } else {
+            res.status(200).send(movies);    
+        }
     });
 };
 exports.addMovie = function(req, res){    
-
     var movie = new movieModel(req.body);
-    console.log(movie);
     movie.save(function (err, movie) {
         res.status(200).send(movie);
     });
 };
 exports.editMovie = function(req, res){
-    movieModel.findById(req.params.id, function(err, movie) {
+    delete req.body._id;
+    movieModel.findByIdAndUpdate(req.params.id, req.body, function(err, movie){ 
         if (err) {
             res.status(500).send("Sorry, unable to retrieve movie at this time (" 
                 +err.message+ ")" );
         } else if (!movie) {
             res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
         } else {
-            movie.update(req.body, function (err, status) {
-                res.status(200).send(movie);
-            });
+            res.status(200).send(movie);
         }
     });
 };
 exports.deleteMovie = function(req, res){
-    movieModel.findById(req.params.id, function(err, movie) {
+    movieModel.findByIdAndRemove(req.params.id, function(err, movie) {
         if (err) {
             res.status(500).send("Sorry, unable to retrieve movie at this time (" 
                 +err.message+ ")" );
         } else if (!movie) {
             res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
         } else {
-            movie.remove(function (err, status) {
-                res.status(200).send(movie);
+            fs.unlink(__dirname + '/../public/' + movie.poster, function (err) {
+                if (err) throw err;
+                console.log('successfully deleted /tmp/hello');
             });
+            res.status(200).send(movie);
         }
     });
 };
 
-// upload an image file; returns image file-path on server
-/*
-{ fieldname: 'image',
-  originalname: 'blob',
-  encoding: '7bit',
-  mimetype: 'image/png',
-  destination: '/home/jason/cscc09/c09/a2/public/img/uploads/',
-  filename: '44a7af63b2ffd0173d4d2868ce6d41d0',
-  path: '/home/jason/cscc09/c09/a2/public/img/uploads/44a7af63b2ffd0173d4d2868ce6d41d0',
-  size: 85974 }
-*/
 exports.uploadImage = function(req, res) {
     // req.files is an object, attribute "file" is the HTML-input name attr
-    var filePath = req.file.path,  // ADD CODE to get file path
-        fileType = req.file.mimetype,  // ADD CODE to get MIME type
+    var filePath = req.files.image.path,  // ADD CODE to get file path
+        fileType = req.files.image.mimetype,  // ADD CODE to get MIME type
         // extract the MIME suffix for the user-selected file
         suffix = '.' + fileType.split('/')[1],// ADD CODE
         // imageURL is used as the value of a movie-model poster field 
         // id parameter is the movie's "id" attribute as a string value
-        imageURL = 'img/uploads/' + req.file.filename + suffix,
+        imageURL = 'img/uploads/' + req.params.id + suffix,
         // rename the image file to match the imageURL
         newPath = __dirname + '/../public/' + imageURL;
         fs.rename(filePath, newPath, function(err) {
         if (!err) {
-            res.status(200).send(imageURL);
+            movieModel.findByIdAndUpdate(req.params.id, {poster: imageURL}, function(err, movie){ 
+                if (err) {
+                    res.status(500).send("Sorry, unable to retrieve movie at this time (" 
+                        +err.message+ ")" );
+                }else{
+                    console.log(movie.poster);
+                    res.status(200).send(movie.poster);
+                }
+            });
         } else {
             res.status(500).send("Sorry, unable to upload poster image at this time (" 
                 +err.message+ ")" );
@@ -105,7 +103,7 @@ exports.uploadImage = function(req, res) {
     });
 };
 
-var mongoose = require('mongoose'); // MongoDB integration
+var mongoose = require('./../node_modules/mongoose'); // MongoDB integration
 
 // Connect to database, using credentials specified in your config module
 mongoose.connect('mongodb://' +config.dbuser+ ':' +config.dbpass+

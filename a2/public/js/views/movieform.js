@@ -53,6 +53,21 @@ splat.MovieForm = Backbone.View.extend({
                         replace: true,
                         trigger: false
                     });
+                    if (self.model.get('poster').indexOf('data\:image') == 0) {
+                        var formdata = new FormData();
+                        formdata.append("image", document.imageFile);
+                        $.ajax({
+                           url: "movies/" + self.model.id + "/image",
+                           type: "POST",
+                           data: formdata,
+                           processData: false,
+                           contentType: false,
+                        }).done(function(imageURL){
+                            self.model.set('poster', imageURL);
+                            var targetImgElt = $('#detailsImage')[0]; 
+                            targetImgElt.src = imageURL;
+                        });
+                    }
                     // notification panel, defined in section 2.6
                     splat.utils.showNotice('Success', "Movie has been saved", 'alert-success');
                 },

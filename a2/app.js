@@ -48,7 +48,9 @@ app.use(logger('dev'));  // 'default', 'short', 'tiny', 'dev'
 app.use(compression());
 
 // parse HTTP request body
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+    limit : 500000
+}));
 app.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -74,8 +76,7 @@ app.get('/movies', splat.getMovies);
 app.post('/movies', splat.addMovie);
 app.put('/movies/:id', splat.editMovie);
 app.delete('/movies/:id', splat.deleteMovie);
-app.post('/uploadImage', splat.uploadImage);
-
+app.post('/movies/:id/image', splat.uploadImage);
 
 // ADD CODE to support other routes listed on assignment handout
 

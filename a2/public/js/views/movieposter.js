@@ -33,7 +33,7 @@ splat.MoviePoster = Backbone.View.extend({
         // callback for when read operation is finished
         reader.onload = function(event) {
             // resize the image and set the image on callback.
-            self.resize(reader.result, type, 0.95, self.setImage);
+            self.resize(reader.result, undefined, undefined, self.setImage);
         };
         reader.readAsDataURL(pictureFile); // read image file
 
@@ -92,27 +92,15 @@ splat.MoviePoster = Backbone.View.extend({
     },
     // set sourceImg as model poster and display image. 
     setImage: function(sourceImg, type){
-        //this.model.set('poster', sourceImg);
+        this.model.set('poster', sourceImg);
+        var targetImgElt = $('#detailsImage')[0];
+        targetImgElt.src = sourceImg;
         var blobBin = atob(sourceImg.split(',')[1]);
         var array = [];
         for(var i = 0; i < blobBin.length; i++) {
             array.push(blobBin.charCodeAt(i));
         }
-        this.imageFile = new Blob([new Uint8Array(array)], {type: type});
-        var formdata = new FormData();
-        formdata.append("image", this.imageFile);
-        var self = this;
-        $.ajax({
-           url: "uploadImage",
-           type: "POST",
-           data: formdata,
-           processData: false,
-           contentType: false,
-        }).done(function(imageURL){
-            self.model.set('poster', imageURL);
-            var targetImgElt = $('#detailsImage')[0]; 
-            targetImgElt.src = imageURL;
-        });
+        document.imageFile = new Blob([new Uint8Array(array)], {type: type});
         splat.utils.showNotice('Note!', 'Movie Poster updated, to make changes permanent, click "Save Changes" button', 'alert-info');
     },
     // render the View
