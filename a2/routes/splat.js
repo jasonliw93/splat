@@ -4,7 +4,8 @@ var fs = require('fs'),
     // path is "../" since splat.js is in routes/ sub-dir
     config = require(__dirname + '/../config'),  // port#, other params
     express = require("express"),
-    url = require("url");
+    url = require("url"),
+    app = require(__dirname + '/../app');
 
 // Implemention of splat API handlers:
 
@@ -13,7 +14,7 @@ var fs = require('fs'),
 
 // heartbeat response for server API
 exports.api = function(req, res){
-  res.status(200).sendfile('public/index.html');
+  res.status(200).send('<h3>Eatz API is running!</h3>');
 };
 
 // retrieve an individual movie model, using it's id as a DB key
@@ -43,6 +44,9 @@ exports.addMovie = function(req, res){
     movie.save(function (err, movie) {
         res.status(200).send(movie);
     });
+    app.connections.movies.forEach(function(socket) {
+        socket.emit('update', 'add');
+    });
 };
 exports.editMovie = function(req, res){
     delete req.body._id;
@@ -54,6 +58,9 @@ exports.editMovie = function(req, res){
             res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
         } else {
             res.status(200).send(movie);
+            app.connections.movies.forEach(function(socket) {
+                socket.emit('update', 'edit');
+            });
         }
     });
 };
@@ -65,9 +72,9 @@ exports.deleteMovie = function(req, res){
         } else if (!movie) {
             res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
         } else {
-            fs.unlink(__dirname + '/../public/' + movie.poster, function (err) {
-                if (err) throw err;
-                console.log('successfully deleted /tmp/hello');
+            fs.unlink(__dirname + '/../public/img/uploads/' + movie.id + '.jpeg');
+            app.connections.movies.forEach(function(socket) {
+                socket.emit('update', 'delete');
             });
             res.status(200).send(movie);
         }
@@ -117,6 +124,9 @@ exports.addReview = function(req, res){
     review.save(function (err, review) {
         res.status(200).send(review);
     });
+    app.connections.reviews.forEach(function(socket) {
+        socket.emit('update', 'add');
+    });
 };
 
 var mongoose = require('./../node_modules/mongoose'); // MongoDB integration
@@ -152,6 +162,7 @@ var ReviewSchema = new mongoose.Schema({
     reviewText: { type:String, required: true},
     reviewName: { type:String, required: true},
     reviewAffil: { type:String, required: true},
+    movieId: {type:String, required: true},
 })
 // Models
 var movieModel = mongoose.model('Movie', MovieSchema);

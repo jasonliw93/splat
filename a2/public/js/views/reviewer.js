@@ -39,10 +39,12 @@ splat.Reviewer = Backbone.View.extend({
         });
 
     },
+
     // render the View
     render: function() {
         // set the view element ($el) HTML content using its template
         this.$el.html(this.template());
+        this.$('#rating').html(this.collection.getRating(this.movieId));
         return this; // support method chaining
     }
 });

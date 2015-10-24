@@ -13,7 +13,13 @@ python -m SimpleHTTPServer
 ```
 browse to http://0.0.0.0:8000/public
 
+Node.js:
+-------
+```
+nohup node app.js > log.txt 2>&1 & echo $! > nohup.pid
+kill `cat nohup.pid`
 
+```
 Fixing permission (for mathlab):
 --------------------------------
 ```
@@ -31,3 +37,5 @@ submit -c cscc09f15 -a a1s2 a1s2.tgz
 submit -c cscc09f15 -a a1 a1.tgz
 ```
 Note you can resubmit by using the -f flag; see man submit on mathlab.utsc for details on usage.
+
+

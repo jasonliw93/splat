@@ -115,7 +115,6 @@ splat.AppRouter = Backbone.Router.extend({
 
             self.reviewsFetch = self.reviews.fetch();
             self.reviewsFetch.done(function(coll, resp) {
-                console.log(self.reviews);
                 self.reviewsView = new splat.ReviewsView({
                     movieId : id,
                     collection: self.reviews,

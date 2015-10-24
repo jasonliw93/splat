@@ -2,9 +2,15 @@
 <!-- format for each category in movie form-->
 
     <!-- Labels and input boxes for movie form-->
+
     <div class="form-group">
-    <input type="radio" name="sex" value="1">Fresh
-    <input type="radio" name="sex" value="0">Rotten
+        <input type="radio" name="sex" value="1">Fresh
+        <input type="radio" name="sex" value="0" checked>Rotten
+        <span class="rating">
+            <b>currently rated :</b>
+            <img src="ratingimg"/>
+            <span id="rating"></span>
+        </span>
     </div>
     <div class="form-group">
         <label for="reviewText" class="control-label">Enter your review</label>
@@ -29,9 +35,6 @@
         </div>
     </div>
 
-
-
-<!-- Button for movie changes-->
 <input type="button" id="reviewsave" class="btn btn-success save" name="save" value="Review Movie" />
 <br></br>
 

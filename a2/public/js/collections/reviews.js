@@ -11,5 +11,13 @@ splat.Reviews = Backbone.Collection.extend({
     // save movie models under "splat" namespace,
     // since localStorage uses a flat namespace shared by all apps
     //localStorage: new Backbone.LocalStorage('reviews')
-    url: "/reviews"
+    url: "/reviews",
+    getRating : function(id){
+    	var fresh = 0.0;
+        var reviews = this.where({movieId : id});
+    	reviews.forEach(function (model){
+    		fresh += model.get('rating');
+    	});
+    	return fresh / reviews.length;
+    }
 });

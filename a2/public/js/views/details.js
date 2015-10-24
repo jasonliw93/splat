@@ -8,11 +8,11 @@ var splat = splat || {};
 splat.Details = Backbone.View.extend({
     // render the View
     initialize: function() {
-        this.MovieFormView = new splat.MovieForm({
+        this.movieFormView = new splat.MovieForm({
             collection: this.collection,
             model: this.model
         });
-        this.MoviePosterView = new splat.MoviePoster({
+        this.moviePosterView = new splat.MoviePoster({
             collection: this.collection,
             model: this.model
         });
@@ -21,16 +21,16 @@ splat.Details = Backbone.View.extend({
     // function is run by the modified close function provided by Alan.
     onClose: function() {
         splat.utils.hideNotice();
-        this.MovieFormView.close();
-        this.MoviePosterView.close();
+        this.movieFormView.close();
+        this.moviePosterView.close();
     },
     // render the View
     render: function() {
         // set the view element ($el) HTML content using its template
         this.$el.html(this.template());
         // render the sub views
-        this.$('#movieform').html(this.MovieFormView.render().el);
-        this.$('#movieposter').html(this.MoviePosterView.render().el);
+        this.$('#movieform').html(this.movieFormView.render().el);
+        this.$('#movieposter').html(this.moviePosterView.render().el);
         return this; // support method chaining
     }
 
