@@ -23,10 +23,20 @@ splat.AppRouter = Backbone.Router.extend({
         this.headerView = new splat.Header();
         // insert the rendered Header view element into the document DOM
         $('.header').html(this.headerView.render().el);
-
+        this.reviews = new splat.Reviews();
         this.movies = new splat.Movies();
         // fetches the movies
         this.moviesFetch = this.movies.fetch();
+        this.reviewsFetch = this.reviews.fetch();
+        var moviestream = new EventSource('/stream/movie');
+        var reviewstream = new EventSource('/stream/review');
+        var self = this;
+        moviestream.onmessage = function(data) {
+            self.moviesFetch = self.movies.fetch();
+        }
+        reviewstream.onmessage = function(data) {
+            self.reviewsFetch = self.reviews.fetch();
+        }
     },
     /* Invoke close() on the currentView before replacing it with the
        new view, to avoid memory leaks and ghost views.
@@ -111,9 +121,6 @@ splat.AppRouter = Backbone.Router.extend({
         this.moviesFetch.done(function(coll, resp) {
             // get movies and instantiate Details view
             self.movie = self.movies.get(id);
-            self.reviews = new splat.Reviews();
-
-            self.reviewsFetch = self.reviews.fetch();
             self.reviewsFetch.done(function(coll, resp) {
                 self.reviewsView = new splat.ReviewsView({
                     movieId : id,

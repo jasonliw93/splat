@@ -9,16 +9,6 @@ splat.ReviewThumbs = Backbone.View.extend({
     // render the View
     initialize: function(options) {
         this.movieId = options.movieId;
-        this.collectionFetch = this.collection.fetch();
-        var socket = io.connect('http://mathlab.utsc.utoronto.ca:41260');
-        socket.emit('subscribe', 'reviews');
-        var self = this;
-        socket.on('update', function(data) {
-            console.log(data);
-            self.collectionFetch = self.collection.fetch();
-            self.render();
-        });
-        //this.reviewThumbLoad = $.get('tpl/.html');
     },
     moviesTemplate: _.template([
         "<% reviews.forEach(function(review) { %>",
@@ -28,15 +18,10 @@ splat.ReviewThumbs = Backbone.View.extend({
     // render View
     render: function() {
         var self = this;
-        self.collectionFetch.done(function(coll, resp){      
-            self.$el.html(self.moviesTemplate({
-                reviews: self.collection.where({movieId : self.movieId}),
-                reviewTemplate: self.template
-            }));
-        }).fail(function(coll, resp) {
-            alert("Fetch reviews failed!");
-        });
-
+        self.$el.html(self.moviesTemplate({
+            reviews: self.collection,
+            reviewTemplate: self.template
+        }));
         return this; // support method chaining
     }
 

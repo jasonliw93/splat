@@ -39,12 +39,15 @@ app.set('port', process.env.PORT || config.port);
 
 // activate basic HTTP authentication (to protect your solution files)
 //app.use(basicAuth('username', 'password'));  // REPLACE username/password
-app.use(basicAuth(config.username, config.password));
+//app.use(basicAuth(config.username, config.password));
+
 // change param value to control level of logging  ... ADD CODE
 app.use(logger('dev'));  // 'default', 'short', 'tiny', 'dev'
 
+// MUST BE PLACED BEFORE compression otherwise it will not work
+
 // use compression (gzip) to reduce size of HTTP responses
-app.use(compression());
+//app.use(compression());
 
 // parse HTTP request body
 app.use(bodyParser.json({
@@ -78,6 +81,7 @@ app.delete('/movies/:id', splat.deleteMovie);
 app.post('/movies/:id/image', splat.uploadImage);
 app.get('/reviews', splat.getReviews);
 app.post('/reviews', splat.addReview);
+app.get('/stream/:model', splat.getStream);
 // ADD CODE to support other routes listed on assignment handout
 
 // location of app's static content ... may need to ADD CODE
@@ -88,7 +92,6 @@ app.use(errorHandler({ dumpExceptions:true, showStack:true }));
 
 // Default-route middleware, in case none of above match
 app.use(function (req, res) {
-    console.log(req.body);
 });
 
 // Start HTTP server
@@ -98,7 +101,7 @@ server.listen(app.get('port'), function () {
     console.log("Express server listening on port %d in %s mode",
     		app.get('port'), config.env );
 });
-
+/*
 var io = require('socket.io')(server);
 
 exports.connections = {
@@ -110,4 +113,6 @@ io.on('connection', function(socket) {
     socket.on('subscribe', function(model) {
         exports.connections[model].push(socket);
     });
+
 });
+*/

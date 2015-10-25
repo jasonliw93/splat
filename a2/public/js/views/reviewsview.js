@@ -10,7 +10,6 @@ splat.ReviewsView = Backbone.View.extend({
     initialize: function(options) {
         this.movieId = options.movieId;
         this.reviewerView = new splat.Reviewer({
-            parent : this,
             movieId : this.movieId,
             collection : this.collection
         });
@@ -18,23 +17,24 @@ splat.ReviewsView = Backbone.View.extend({
             movieId : this.movieId,
             collection : this.collection
         });
+        var self = this;
+        this.listenTo(this.collection, 'sync', function(e,data){
+            this.reviewThumbsView.render();
+            $('#rating').html(this.collection.getRating(self.movieId));
+        });
     },
     onClose: function() {
         splat.utils.hideNotice();
         this.reviewerView.close();
         this.reviewThumbsView.close();
     },
-    load: function() {
-        this.$('#reviewer').html(this.reviewerView.render().el);
-        this.$('#reviewthumbs').html(this.reviewThumbsView.render().el);
-        this.reviewerView.delegateEvents();
-    },
     // render View
     render: function() {
         // set the view element ($el) HTML content using its template
         this.$el.html(this.template());
         // render the sub views
-        this.load();
+        this.$('#reviewer').html(this.reviewerView.render().el);
+        this.$('#reviewthumbs').html(this.reviewThumbsView.render().el);
         return this; // support method chaining
     }
 

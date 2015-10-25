@@ -8,7 +8,6 @@ var splat = splat || {};
 splat.Reviewer = Backbone.View.extend({
     initialize: function(options) {
         this.movieId = options.movieId;
-        this.parent = options.parent;
         //this.reviewFormLoad = $.get('tpl/.html');
     },
     events: {
@@ -29,9 +28,10 @@ splat.Reviewer = Backbone.View.extend({
         // adds model to collection and save model to database
         this.collection.create(obj, {
             // notification panel, defined in section 2.6
+            wait: true,
             success : function (model, response){
-                self.parent.load();
                 splat.utils.showNotice('Success', "review has been saved", 'alert-success');
+                self.render();
             },
             error: function(model, response) {
                 splat.utils.requestFailed(response);
@@ -39,7 +39,6 @@ splat.Reviewer = Backbone.View.extend({
         });
 
     },
-
     // render the View
     render: function() {
         // set the view element ($el) HTML content using its template

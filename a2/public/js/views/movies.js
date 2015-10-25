@@ -9,17 +9,12 @@ splat.MoviesView = Backbone.View.extend({
     // render the View
     initialize: function() {
         this.movieThumbLoad = $.get('tpl/MovieThumb.html');
-        this.collectionFetch = this.collection.fetch();
-        var socket = io.connect('http://mathlab.utsc.utoronto.ca:41260');
-        socket.emit('subscribe', 'movies');
         var self = this;
-        socket.on('update', function(data) {
-            console.log(data);
-            self.collectionFetch = self.collection.fetch();
+        this.listenTo(this.collection, 'sync', function(e,data){
+            console.log(e,data);
             self.render();
         });
     },
-    
     // function to combine movie JSON data for rendering to HTML
     moviesTemplate: _.template([
         "<% movies.each(function(movie) { %>",
@@ -32,14 +27,10 @@ splat.MoviesView = Backbone.View.extend({
         this.movieThumbLoad.done(function(markup) {
             // apply to model, inject to Details view
             self.movieTemplate = _.template(markup);
-            self.collectionFetch.done(function(coll, resp){
                 self.$el.html(self.moviesTemplate({
                     movies: self.collection,
                     movieTemplate: self.movieTemplate
                 }));
-            }).fail(function(coll, resp) {
-                alert("Fetch movies failed!");
-            });
         });
         return this; // support method chaining
     }

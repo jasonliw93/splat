@@ -5,7 +5,10 @@ var fs = require('fs'),
     config = require(__dirname + '/../config'),  // port#, other params
     express = require("express"),
     url = require("url"),
-    app = require(__dirname + '/../app');
+    openConnections = {
+        movie: [],
+        review: []
+    };
 
 // Implemention of splat API handlers:
 
@@ -44,9 +47,7 @@ exports.addMovie = function(req, res){
     movie.save(function (err, movie) {
         res.status(200).send(movie);
     });
-    app.connections.movies.forEach(function(socket) {
-        socket.emit('update', 'add');
-    });
+    writeStream('movie');
 };
 exports.editMovie = function(req, res){
     delete req.body._id;
@@ -57,10 +58,8 @@ exports.editMovie = function(req, res){
         } else if (!movie) {
             res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
         } else {
+            writeStream('movie');
             res.status(200).send(movie);
-            app.connections.movies.forEach(function(socket) {
-                socket.emit('update', 'edit');
-            });
         }
     });
 };
@@ -73,9 +72,7 @@ exports.deleteMovie = function(req, res){
             res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
         } else {
             fs.unlink(__dirname + '/../public/img/uploads/' + movie.id + '.jpeg');
-            app.connections.movies.forEach(function(socket) {
-                socket.emit('update', 'delete');
-            });
+            writeStream('movie');
             res.status(200).send(movie);
         }
     });
@@ -124,9 +121,50 @@ exports.addReview = function(req, res){
     review.save(function (err, review) {
         res.status(200).send(review);
     });
-    app.connections.reviews.forEach(function(socket) {
-        socket.emit('update', 'add');
+    writeStream('review');
+};
+
+function writeStream(model){
+    console.log("write stream");
+    var i = 0;
+    openConnections[model].forEach(function(resp) {
+        console.log("write to " + i);
+        resp.write('data: sync\n\n'); // Note the extra newline
+        i += 1;
     });
+};
+
+exports.getStream = function (req, res) {
+// set timeout as high as possible
+    //req.socket.setTimeout(Infinity);
+    // send headers for event-stream connection
+    // see spec for more information
+    //console.log(req.headers);
+    //console.log(req.route.stack);
+    res.writeHead(200, {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive'
+    });
+    res.write('\n');
+    // push this res object to our global variable
+    openConnections[req.params.model].push(res);
+    // When the request is closed, e.g. the browser window
+    // is closed. We search through the open connections
+    // array and remove this connection.
+    
+    req.on("close", function() {
+        var stream = openConnections[req.params.model];
+        var toRemove;
+        for (var j =0 ; j < stream.length ; j++) {
+            if (stream[j] == res) {
+                toRemove =j;
+                break;
+            }
+        }
+        stream.splice(j,1);
+    });
+    
 };
 
 var mongoose = require('./../node_modules/mongoose'); // MongoDB integration
@@ -167,3 +205,6 @@ var ReviewSchema = new mongoose.Schema({
 // Models
 var movieModel = mongoose.model('Movie', MovieSchema);
 var reviewModel = mongoose.model('Review', ReviewSchema);
+
+// MUST BE PLACED BEFORE compression otherwise it will not work
+
