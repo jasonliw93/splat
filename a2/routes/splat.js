@@ -123,7 +123,7 @@ var mongoose = require('mongoose'); // MongoDB integration
 
 // Connect to database, using credentials specified in your config module
 mongoose.connect('mongodb://' +config.dbuser+ ':' +config.dbpass+
-               '@10.15.2.164/' + config.dbname);
+               '@' + config.dbhost + '/' + config.dbname);
 //mongoose.connect('mongodb://localhost:27017/splat')
 // Schemas
 var MovieSchema = new mongoose.Schema({
