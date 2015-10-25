@@ -12,7 +12,7 @@
 
 var http = require('http'),   // ADD CODE
     // NOTE, use the version of "express" linked to the assignment handout
-    express = require('./node_modules/express'),   // ADD CODE
+    express = require('express'),   // ADD CODE
     fs = require("fs"),
     path = require("path"),
     url = require("url"),

@@ -119,7 +119,7 @@ exports.getReviews = function(req, res){
         }
     });
 };
-var mongoose = require('./../node_modules/mongoose'); // MongoDB integration
+var mongoose = require('mongoose'); // MongoDB integration
 
 // Connect to database, using credentials specified in your config module
 mongoose.connect('mongodb://' +config.dbuser+ ':' +config.dbpass+
