@@ -81,7 +81,7 @@ app.delete('/movies/:id', splat.deleteMovie);
 app.post('/movies/:id/image', splat.uploadImage);
 app.get('/reviews', splat.getReviews);
 app.post('/reviews', splat.addReview);
-app.get('/stream/:model', splat.getStream);
+app.get('/stream', splat.getStream);
 // ADD CODE to support other routes listed on assignment handout
 
 // location of app's static content ... may need to ADD CODE
@@ -101,18 +101,23 @@ server.listen(app.get('port'), function () {
     console.log("Express server listening on port %d in %s mode",
     		app.get('port'), config.env );
 });
-/*
-var io = require('socket.io')(server);
 
-exports.connections = {
-    movies : [],
-    reviews : []
-};
- 
+
+
+var io = require('socket.io')(server),
+    connections = {
+        movie: [],
+        review: []
+    };
+
 io.on('connection', function(socket) {
     socket.on('subscribe', function(model) {
-        exports.connections[model].push(socket);
+        connections[model].push(socket);
     });
-
 });
-*/
+
+exports.notify = function(model){
+    connections[model].forEach(function(socket) {
+        socket.emit('notify', model);
+    });
+};

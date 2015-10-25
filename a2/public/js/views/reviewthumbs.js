@@ -19,7 +19,7 @@ splat.ReviewThumbs = Backbone.View.extend({
     render: function() {
         var self = this;
         self.$el.html(self.moviesTemplate({
-            reviews: self.collection,
+            reviews: self.collection.where({movieId : self.movieId}),
             reviewTemplate: self.template
         }));
         return this; // support method chaining

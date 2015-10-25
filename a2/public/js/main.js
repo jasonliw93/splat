@@ -28,15 +28,29 @@ splat.AppRouter = Backbone.Router.extend({
         // fetches the movies
         this.moviesFetch = this.movies.fetch();
         this.reviewsFetch = this.reviews.fetch();
-        var moviestream = new EventSource('/stream/movie');
-        var reviewstream = new EventSource('/stream/review');
+        /*
+        var socket = io.connect('http://mathlab.utsc.utoronto.ca:41260');
+        socket.emit('subscribe', 'movie');
+        socket.emit('subscribe', 'review');
         var self = this;
-        moviestream.onmessage = function(data) {
-            self.moviesFetch = self.movies.fetch();
+        socket.on('notify', function(data) {
+            if (data == 'review'){
+                self.reviewsFetch = self.reviews.fetch();
+            } else {
+                self.moviesFetch = self.movies.fetch();
+            }
+        });
+        */
+        var stream = new EventSource('/stream')
+        var self = this;
+        stream.onmessage = function(e) {
+            if (e.data == 'review'){
+                self.reviewsFetch = self.reviews.fetch();
+            } else if (e.data == 'movie') { 
+                self.moviesFetch = self.movies.fetch();
+            }
         }
-        reviewstream.onmessage = function(data) {
-            self.reviewsFetch = self.reviews.fetch();
-        }
+
     },
     /* Invoke close() on the currentView before replacing it with the
        new view, to avoid memory leaks and ghost views.

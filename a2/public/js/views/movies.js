@@ -9,11 +9,7 @@ splat.MoviesView = Backbone.View.extend({
     // render the View
     initialize: function() {
         this.movieThumbLoad = $.get('tpl/MovieThumb.html');
-        var self = this;
-        this.listenTo(this.collection, 'sync', function(e,data){
-            console.log(e,data);
-            self.render();
-        });
+        
     },
     // function to combine movie JSON data for rendering to HTML
     moviesTemplate: _.template([
@@ -31,6 +27,9 @@ splat.MoviesView = Backbone.View.extend({
                     movies: self.collection,
                     movieTemplate: self.movieTemplate
                 }));
+        });
+        this.listenTo(this.collection, 'sync', function(e,data){
+            self.render();
         });
         return this; // support method chaining
     }

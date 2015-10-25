@@ -20,8 +20,9 @@ splat.ReviewsView = Backbone.View.extend({
         var self = this;
         this.listenTo(this.collection, 'sync', function(e,data){
             this.reviewThumbsView.render();
-            $('#rating').html(this.collection.getRating(self.movieId));
+            $('#rating').html(this.collection.getRating(this.movieId));
         });
+        
     },
     onClose: function() {
         splat.utils.hideNotice();
