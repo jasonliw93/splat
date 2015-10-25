@@ -69,6 +69,7 @@ splat.MovieForm = Backbone.View.extend({
                         });
                     }
                     // notification panel, defined in section 2.6
+                    splat.utils.hideNotice();
                     splat.utils.showNotice('Success', "Movie has been saved", 'alert-success');
                 },
                 error: function(model, response) {
@@ -108,6 +109,17 @@ splat.MovieForm = Backbone.View.extend({
     render: function() {
         // set the view element ($el) HTML content using its template
         this.$el.html(this.template(this.model.toJSON()));
+        this.listenTo(this.model, 'change', function(e,data){
+            splat.utils.showNotice('Warning', "Movie has been changed since last opened", 'alert-warning');
+        });
+        this.listenTo(this.model, 'remove', function(e,data){
+            splat.app.navigate('#movies', {
+                    replace: true,
+                    trigger: true
+                });
+            splat.utils.showNotice('Error', "Movie has been removed since last opened", 'alert-warning');
+        });
+
         return this; // support method chaining
     }
 

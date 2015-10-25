@@ -7,12 +7,13 @@ var splat = splat || {};
 splat.utils = {
     // shows a fade in notice
     showNotice: function(noticeType, noticeText, cssStyle) {
-        $('#notification-panel').addClass("alert");
         $('#notification-panel').stop();
         $('#notification-panel').css("opacity", "1.0");
+        $('#notification-panel').removeClass();
+        $('#notification-panel').addClass("alert");
+        $('#notification-panel').addClass(cssStyle);
         $('#alert-type').html(noticeType);
         $('#alert-text').html(noticeText);
-        $('#notification-panel').addClass(cssStyle);
         $('#notification-panel').show();
         $('#notification-panel').fadeOut(5000);
     },

@@ -103,7 +103,7 @@ server.listen(app.get('port'), function () {
 });
 
 
-
+/*
 var io = require('socket.io')(server),
     connections = {
         movie: [],
@@ -121,3 +121,4 @@ exports.notify = function(model){
         socket.emit('notify', model);
     });
 };
+*/
