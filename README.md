@@ -6,26 +6,21 @@ Docker (on mathlab) :
 ```
 docker -i public -x js/lib,docs -u -o public/docs -I
 ```
-Running webserver:
-------------------
-```
-python -m SimpleHTTPServer
-```
-browse to http://0.0.0.0:8000/public
 
 Node.js:
 -------
+Setup:
 ```
-nohup node app.js > log.txt 2>&1 & echo $! > nohup.pid
-kill `cat nohup.pid`
+cd a2
+cp config.js.prod config.js
+ln -s /courses/courses/cscc09f15/rosselet/asn/node_modules node_modules
+```
 
+Run in background:
 ```
-Fixing permission (for mathlab):
---------------------------------
+nohup node app.js > log.txt 2>&1 & echo $! > pid
+kill `cat pid`
 ```
-sh permission.sh
-```
-browse to https://mathlab.utsc.utoronto.ca/courses/cscc09f15/_UTORID_/_PATH_TO_PUBLIC_
 
 Submit Instructions:
 -------------------
