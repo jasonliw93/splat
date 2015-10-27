@@ -1,0 +1,10 @@
+"use strict";
+
+exports.env = 'dev'
+exports.port = 8000;
+exports.dbuser = 'liwyanch';
+exports.dbpass = 'liwyanch';
+exports.dbname = 'liwyanch';
+exports.dbhost = 'localhost:27017';
+exports.username = 'jason';
+exports.password = '123456';

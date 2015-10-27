@@ -6,20 +6,21 @@ Docker (on mathlab) :
 ```
 docker -i public -x js/lib,docs -u -o public/docs -I
 ```
-Running webserver:
-------------------
-```
-python -m SimpleHTTPServer
-```
-browse to http://0.0.0.0:8000/public
 
+Node.js:
+-------
+Setup:
+```
+cd a2
+cp config.js.prod config.js
+ln -s /courses/courses/cscc09f15/rosselet/asn/node_modules node_modules
+```
 
-Fixing permission (for mathlab):
---------------------------------
+Run in background:
 ```
-sh permission.sh
+nohup node app.js > log.txt 2>&1 & echo $! > pid
+kill `cat pid`
 ```
-browse to https://mathlab.utsc.utoronto.ca/courses/cscc09f15/_UTORID_/_PATH_TO_PUBLIC_
 
 Submit Instructions:
 -------------------
@@ -31,3 +32,5 @@ submit -c cscc09f15 -a a1s2 a1s2.tgz
 submit -c cscc09f15 -a a1 a1.tgz
 ```
 Note you can resubmit by using the -f flag; see man submit on mathlab.utsc for details on usage.
+
+
