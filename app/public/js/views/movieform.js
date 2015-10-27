@@ -53,9 +53,10 @@ splat.MovieForm = Backbone.View.extend({
                         replace: true,
                         trigger: false
                     });
-                    if (self.model.get('poster').indexOf('data\:image') == 0) {
+                    var targetImgElt = $('#detailsImage')[0];
+                    if (targetImgElt.src.indexOf('data\:image') == 0) {
                         var formdata = new FormData();
-                        formdata.append("image", document.imageFile);
+                        formdata.append("image", splat.imageFile);
                         $.ajax({
                            url: "movies/" + self.model.id + "/image",
                            type: "POST",
@@ -64,13 +65,15 @@ splat.MovieForm = Backbone.View.extend({
                            contentType: false,
                         }).done(function(imageURL){
                             self.model.set('poster', imageURL);
-                            var targetImgElt = $('#detailsImage')[0]; 
                             targetImgElt.src = imageURL;
+                            splat.utils.hideNotice();
+                            splat.utils.showNotice('Success', "Movie has been saved", 'alert-success');
                         });
-                    }
+                    }else{
                     // notification panel, defined in section 2.6
-                    splat.utils.hideNotice();
-                    splat.utils.showNotice('Success', "Movie has been saved", 'alert-success');
+                        splat.utils.hideNotice();
+                        splat.utils.showNotice('Success', "Movie has been saved", 'alert-success');
+                    }
                 },
                 error: function(model, response) {
                     splat.utils.requestFailed(response);

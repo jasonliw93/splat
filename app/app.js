@@ -39,7 +39,7 @@ app.set('port', process.env.PORT || config.port);
 
 // activate basic HTTP authentication (to protect your solution files)
 //app.use(basicAuth('username', 'password'));  // REPLACE username/password
-//app.use(basicAuth(config.username, config.password));
+app.use(basicAuth(config.username, config.password));
 
 // change param value to control level of logging  ... ADD CODE
 app.use(logger('dev'));  // 'default', 'short', 'tiny', 'dev'
@@ -47,7 +47,7 @@ app.use(logger('dev'));  // 'default', 'short', 'tiny', 'dev'
 // MUST BE PLACED BEFORE compression otherwise it will not work
 
 // use compression (gzip) to reduce size of HTTP responses
-//app.use(compression());
+app.use(compression());
 
 // parse HTTP request body
 app.use(bodyParser.json({
