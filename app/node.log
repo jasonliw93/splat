@@ -1,0 +1,11 @@
+nohup: ignoring input
+
+module.js:340
+    throw err;
+          ^
+Error: Cannot find module '/courses/courses/cscc09f15/liwyanch/a2/a2/seapp.js'
+    at Function.Module._resolveFilename (module.js:338:15)
+    at Function.Module._load (module.js:280:25)
+    at Function.Module.runMain (module.js:497:10)
+    at startup (node.js:119:16)
+    at node.js:935:3

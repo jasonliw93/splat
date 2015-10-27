@@ -30,7 +30,7 @@ exports.getMovie = function(req, res){
     });
 };
 exports.getMovies = function(req, res){
-    movieModel.find({}, function(err, movies) {
+    movieModel.find(function(err, movies) {
         if (err) {
             res.status(500).send("Sorry, unable to retrieve movies at this time");
         } else {
