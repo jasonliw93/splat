@@ -11,15 +11,17 @@ Node.js:
 -------
 Setup:
 ```
-cd a2
-cp config.js.prod config.js
-ln -s /courses/courses/cscc09f15/rosselet/asn/node_modules node_modules
+make build
 ```
 
 Run in background:
 ```
-nohup node app.js > log.txt 2>&1 & echo $! > pid
-kill `cat pid`
+make start
+```
+
+Stop:
+```
+make stop
 ```
 
 Submit Instructions:
