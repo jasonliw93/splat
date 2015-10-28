@@ -45,9 +45,9 @@ app.use(basicAuth(config.username, config.password));
 app.use(logger('dev'));  // 'default', 'short', 'tiny', 'dev'
 
 // MUST BE PLACED BEFORE compression otherwise it will not work
-
+app.get('/stream', splat.getStream);
 // use compression (gzip) to reduce size of HTTP responses
-//app.use(compression());
+app.use(compression());
 
 // parse HTTP request body
 app.use(bodyParser.json({
@@ -81,7 +81,6 @@ app.delete('/movies/:id', splat.deleteMovie);
 app.post('/movies/:id/image', splat.uploadImage);
 app.get('/reviews', splat.getReviews);
 app.post('/reviews', splat.addReview);
-app.get('/stream', splat.getStream);
 // ADD CODE to support other routes listed on assignment handout
 
 // location of app's static content ... may need to ADD CODE

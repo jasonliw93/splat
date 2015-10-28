@@ -44,9 +44,12 @@ splat.AppRouter = Backbone.Router.extend({
         var stream = new EventSource('/stream')
         var self = this;
         stream.onmessage = function(e) {
+            console.log('stream : ' + e.data);
             if (e.data == 'review'){
                 self.reviewsFetch = self.reviews.fetch();
             } else if (e.data == 'movie') { 
+                self.moviesFetch = self.movies.fetch();
+            } else if (e.data == 'image success') {
                 self.moviesFetch = self.movies.fetch();
             }
         }

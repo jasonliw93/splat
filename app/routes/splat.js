@@ -43,6 +43,11 @@ exports.addMovie = function(req, res){
     movie.save(function (err, movie) {
         res.status(200).send(movie);
     });
+    if (req.body.poster.indexOf('upload.png') > 0){
+        writeStream('image upload');
+    }else{
+        writeStream('movie');
+    }
 };
 exports.editMovie = function(req, res){
     delete req.body._id;
@@ -53,8 +58,12 @@ exports.editMovie = function(req, res){
         } else if (!movie) {
             res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
         } else {
-            writeStream('movie');
             res.status(200).send(movie);
+            if (req.body.poster.indexOf('upload.png') > 0){
+                writeStream('image upload');
+            }else{
+                writeStream('movie');
+            }
         }
     });
 };
@@ -67,8 +76,8 @@ exports.deleteMovie = function(req, res){
             res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
         } else {
             fs.unlink(__dirname + '/../public/img/uploads/' + movie.id + '.jpeg');
-            writeStream('movie');
             res.status(200).send(movie);
+            writeStream('movie');
         }
     });
 };
@@ -93,8 +102,8 @@ exports.uploadImage = function(req, res) {
                     res.status(500).send("Sorry, unable to retrieve movie at this time (" 
                         +err.message+ ")" );
                 }else{
-                    writeStream('movie');
                     res.status(200).send(datedImageUrl);
+                    writeStream('image success');
                 }
             });
         } else {
