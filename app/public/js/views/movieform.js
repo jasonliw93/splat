@@ -7,7 +7,20 @@ var splat = splat || {};
 // note View-name (MovieForm) matches name of template file MovieForm.html
 splat.MovieForm = Backbone.View.extend({
     initialize: function() {
-        //this.movieFormLoad = $.get('tpl/MovieForm.html');
+        this.listenTo(this.model, 'change', function(model){
+            for (var i in model.changed) {
+                if ($(".form-group input[name=" + i + "]").val() != model.get(i)){
+                    splat.utils.showNotice('Warning', "Movie has been changed since last opened", 'alert-warning');
+                }
+            }
+        });
+        this.listenTo(this.model, 'remove', function(model){
+            splat.app.navigate('#movies', {
+                    replace: true,
+                    trigger: true
+                });
+            splat.utils.showNotice('Error', "Movie has been removed since last opened", 'alert-warning');
+        });
     },
     events: {
         "click #moviesave": "save",
@@ -112,17 +125,6 @@ splat.MovieForm = Backbone.View.extend({
     render: function() {
         // set the view element ($el) HTML content using its template
         this.$el.html(this.template(this.model.toJSON()));
-        this.listenTo(this.model, 'change', function(e,data){
-            splat.utils.showNotice('Warning', "Movie has been changed since last opened", 'alert-warning');
-        });
-        this.listenTo(this.model, 'remove', function(e,data){
-            splat.app.navigate('#movies', {
-                    replace: true,
-                    trigger: true
-                });
-            splat.utils.showNotice('Error', "Movie has been removed since last opened", 'alert-warning');
-        });
-
         return this; // support method chaining
     }
 

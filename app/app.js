@@ -47,7 +47,7 @@ app.use(logger('dev'));  // 'default', 'short', 'tiny', 'dev'
 // MUST BE PLACED BEFORE compression otherwise it will not work
 
 // use compression (gzip) to reduce size of HTTP responses
-app.use(compression());
+//app.use(compression());
 
 // parse HTTP request body
 app.use(bodyParser.json({

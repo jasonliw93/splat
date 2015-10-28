@@ -43,7 +43,6 @@ exports.addMovie = function(req, res){
     movie.save(function (err, movie) {
         res.status(200).send(movie);
     });
-    writeStream('movie');
 };
 exports.editMovie = function(req, res){
     delete req.body._id;
@@ -84,15 +83,18 @@ exports.uploadImage = function(req, res) {
         // id parameter is the movie's "id" attribute as a string value
         imageURL = 'img/uploads/' + req.params.id + suffix,
         // rename the image file to match the imageURL
-        newPath = __dirname + '/../public/' + imageURL;
+        newPath = __dirname + '/../public/' + imageURL,
+        datedImageUrl = imageURL + '?' + new Date().valueOf();
+
         fs.rename(filePath, newPath, function(err) {
         if (!err) {
-            movieModel.findByIdAndUpdate(req.params.id, {poster: imageURL}, function(err, movie){ 
+            movieModel.findByIdAndUpdate(req.params.id, {poster: datedImageUrl}, function(err, movie){ 
                 if (err) {
                     res.status(500).send("Sorry, unable to retrieve movie at this time (" 
                         +err.message+ ")" );
                 }else{
-                    res.status(200).send(movie.poster);
+                    writeStream('movie');
+                    res.status(200).send(datedImageUrl);
                 }
             });
         } else {
