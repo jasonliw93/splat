@@ -150,3 +150,7 @@ a div.thumbnail-text {
 #selectImage{
     display: none;
 }
+.dropdown-menu{
+    padding-left: 10px;
+}
+

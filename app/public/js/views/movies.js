@@ -9,7 +9,15 @@ splat.MoviesView = Backbone.View.extend({
     // render the View
     initialize: function() {
         this.movieThumbLoad = $.get('tpl/MovieThumb.html');
-        
+        var self = this;
+        splat.utils.watcher.on('ordering', function(data){
+            self.collection.comparator = function(model) {
+                return model.get(data).toLowerCase();;
+            }
+            // call the sort method
+            self.collection.sort();
+            self.render();
+        });
     },
     // function to combine movie JSON data for rendering to HTML
     moviesTemplate: _.template([

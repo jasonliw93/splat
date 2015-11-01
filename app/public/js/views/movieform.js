@@ -7,20 +7,23 @@ var splat = splat || {};
 // note View-name (MovieForm) matches name of template file MovieForm.html
 splat.MovieForm = Backbone.View.extend({
     initialize: function() {
-        this.listenTo(this.model, 'change', function(model){
-            for (var i in model.changed) {
-                if ($(".form-group input[name=" + i + "]").val() != model.get(i)){
-                    splat.utils.showNotice('Warning', "Movie has been changed since last opened", 'alert-warning');
+        this.newMovie = this.model.isNew();
+        if (!this.newMovie){
+            this.listenTo(this.model, 'change', function(model){
+                for (var i in model.changed) {
+                    if ($(".form-group input[name=" + i + "]").val() != model.get(i)){
+                        splat.utils.showNotice('Warning', "Movie has been changed since last opened", 'alert-warning');
+                    }
                 }
-            }
-        });
-        this.listenTo(this.model, 'remove', function(model){
-            splat.app.navigate('#movies', {
-                    replace: true,
-                    trigger: true
-                });
-            splat.utils.showNotice('Error', "Movie has been removed since last opened", 'alert-warning');
-        });
+            });
+            this.listenTo(this.model, 'remove', function(model){
+                splat.app.navigate('#movies', {
+                        replace: true,
+                        trigger: true
+                    });
+                splat.utils.showNotice('Error', "Movie has been removed since last opened", 'alert-warning');
+            });
+        }
     },
     events: {
         "click #moviesave": "save",
@@ -30,7 +33,6 @@ splat.MovieForm = Backbone.View.extend({
     },
     // handles change form fields event
     change: function(e) {
-        splat.utils.hideNotice();
         var obj = {};
         var name = e.target.name
         var value = e.target.value
@@ -53,19 +55,14 @@ splat.MovieForm = Backbone.View.extend({
     },
     // save model to database
     save: function() {
-        splat.utils.hideNotice();
         // check if model is valid before adding to collection
         if (this.model.isValid()){
             var self = this;
             // adds model to collection and save model to database
-            this.collection.create(this.model, {
+            this.model.collection.create(this.model, {
+                wait: true,
                 success: function(model, response) {
-                    wait: true,
                     // navigate to the edit view upon success
-                    splat.app.navigate('#movies/' + self.model.id, {
-                        replace: true,
-                        trigger: false
-                    });
                     var targetImgElt = $('#detailsImage')[0];
                     if (targetImgElt.src.indexOf('data\:image') == 0) {
                         var formdata = new FormData();
@@ -79,13 +76,11 @@ splat.MovieForm = Backbone.View.extend({
                         }).done(function(imageURL){
                             self.model.set('poster', imageURL);
                             targetImgElt.src = imageURL;
-                            splat.utils.hideNotice();
-                            splat.utils.showNotice('Success', "Movie has been saved", 'alert-success');
+                            self.afterSave();
                         });
                     }else{
                     // notification panel, defined in section 2.6
-                        splat.utils.hideNotice();
-                        splat.utils.showNotice('Success', "Movie has been saved", 'alert-success');
+                        self.afterSave();
                     }
                 },
                 error: function(model, response) {
@@ -100,14 +95,19 @@ splat.MovieForm = Backbone.View.extend({
             }
         }
     },
+    afterSave: function(isNew){
+        if (this.newMovie) {
+            splat.app.navigate('#movies/' + this.model.id, {replace:true, trigger:true});
+        };
+        splat.utils.showNotice('Success!', 'Movie saved', 'alert-success');
+    },
     // destroys model from database
     destroy: function() {
-        splat.utils.hideNotice();
         this.model.destroy({
             wait: true, // don't destroy client model until server responds
             success: function(model, response) {
                 // later, we'll navigate to the browse view upon success
-                splat.app.navigate('#', {
+                splat.app.navigate('#movies', {
                     replace: true,
                     trigger: true
                 });

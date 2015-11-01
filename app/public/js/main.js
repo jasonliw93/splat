@@ -28,19 +28,7 @@ splat.AppRouter = Backbone.Router.extend({
         // fetches the movies
         this.moviesFetch = this.movies.fetch();
         this.reviewsFetch = this.reviews.fetch();
-        /*
-        var socket = io.connect('http://mathlab.utsc.utoronto.ca:41260');
-        socket.emit('subscribe', 'movie');
-        socket.emit('subscribe', 'review');
-        var self = this;
-        socket.on('notify', function(data) {
-            if (data == 'review'){
-                self.reviewsFetch = self.reviews.fetch();
-            } else {
-                self.moviesFetch = self.movies.fetch();
-            }
-        });
-        */
+
         var stream = new EventSource('/stream')
         var self = this;
         stream.onmessage = function(e) {
@@ -108,10 +96,10 @@ splat.AppRouter = Backbone.Router.extend({
     },
     addHandler: function() {
         // get movies and instantiate Details view
-        this.movie = new splat.Movie();
+        var movie = new splat.Movie();
+        movie.collection = this.movies;
         this.detailsView = new splat.Details({
-            collection: this.movies,
-            model: this.movie
+            model: movie
         });
         // insert the rendered Home view element into the document DOM
         this.showView('#content', this.detailsView);
@@ -121,10 +109,10 @@ splat.AppRouter = Backbone.Router.extend({
         var self = this;
         this.moviesFetch.done(function(coll, resp) {
             // get movies and instantiate Details view
-            self.movie = self.movies.get(id);
+            var movie = self.movies.get(id);
+            //movie.reviews.url = '/movies/' + movie._id + '/reviews';
             self.detailsView = new splat.Details({
-                collection: self.movies,
-                model: self.movie
+                model: movie
             });
             // insert the rendered Detail view element into the document DOM
             self.showView('#content', self.detailsView);

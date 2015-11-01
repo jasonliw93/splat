@@ -6,7 +6,20 @@ var splat = splat || {};
 
 // note View-name (Header) matches name of template file Header.html
 splat.Header = Backbone.View.extend({
-
+    events:{
+        "click .dropdown-toggle" : "navigate",
+        "change .dropdown-menu input[type=radio]" : "sortChange",
+    },
+    navigate: function(){
+        splat.app.navigate('#movies', {
+            replace: true,
+            trigger: true
+        });
+    },
+    sortChange: function(e){
+        splat.utils.watcher.trigger('ordering', e.target.value);
+        $('.dropdown-toggle').trigger('click');
+    },
     // render the View
     render: function() {
         // set the view element ($el) HTML content using its template

@@ -6,6 +6,7 @@ var splat = splat || {};
 
 splat.utils = {
     // shows a fade in notice
+    watcher : _.extend({}, Backbone.Events),
     showNotice: function(noticeType, noticeText, cssStyle) {
         $('#notification-panel').stop();
         $('#notification-panel').css("opacity", "1.0");

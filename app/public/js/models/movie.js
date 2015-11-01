@@ -4,6 +4,10 @@
 var splat = splat || {};
 
 splat.Movie = Backbone.Model.extend({
+    initialize: function() {
+        // assuming Players a collection of players
+        this.set('reviews', new Reviews());
+    },
     idAttribute: "_id",
     // default values for each attribute
     defaults: {
