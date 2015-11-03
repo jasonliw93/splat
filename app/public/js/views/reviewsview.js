@@ -9,15 +9,15 @@ splat.ReviewsView = Backbone.View.extend({
     // render the View
     initialize: function(options) {
         this.reviewerView = new splat.Reviewer({
-            collection : this.collection
+            model : this.model
         });
         this.reviewThumbsView = new splat.ReviewThumbs({
-            collection : this.collection
+            model : this.model
         });
         var self = this;
-        this.listenTo(this.collection, 'sync', function(e,data){
+        this.listenTo(this.model.reviews, 'sync', function(e,data){
             this.reviewThumbsView.render();
-            $('#rating').html(this.collection.getRating());
+            $('#rating').html(this.model.get('freshVotes')/this.model.get('freshTotal'));
         });
         
     },

@@ -18,12 +18,17 @@ splat.Header = Backbone.View.extend({
     },
     sortChange: function(e){
         splat.utils.watcher.trigger('ordering', e.target.value);
+        this.$(".dropdown").removeClass('open');
         $('.dropdown-toggle').trigger('click');
     },
     // render the View
     render: function() {
         // set the view element ($el) HTML content using its template
         this.$el.html(this.template());
+        this.$(".dropdown").hover(
+            function(){ $(this).addClass('open') },
+            function(){ $(this).removeClass('open') }
+        );
         return this; // support method chaining
     },
     // makes the menu item given by menuItem active

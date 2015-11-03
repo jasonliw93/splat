@@ -115,10 +115,24 @@ exports.uploadImage = function(req, res) {
 
 exports.addReview = function(req, res){    
     var review = new reviewModel(req.body);
+    review.movieId = req.params.id;
     review.save(function (err, review) {
-        res.status(200).send(review);
+        movieModel.findById(req.params.id, function(err, movie){ 
+            if (err) {
+                res.status(500).send("Sorry, unable to retrieve movie at this time (" 
+                    +err.message+ ")" );
+            } else if (!movie) {
+                res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
+            } else {
+                movie.freshVotes += review.rating;
+                movie.freshTotal += 1;
+                movie.save(function (err, movie) {
+                    res.status(200).send(review);
+                });
+            }
+        });
     });
-    writeStream('review');
+    writeStream(req.params.id);
 };
 
 exports.getReviews = function(req, res){
@@ -168,7 +182,11 @@ var ReviewSchema = new mongoose.Schema({
 // Models
 var movieModel = mongoose.model('Movie', MovieSchema);
 var reviewModel = mongoose.model('Review', ReviewSchema);
-
+/*
+reviewModel.remove({}, function(err) { 
+   console.log('collection removed') 
+});
+*/
 // MUST BE PLACED BEFORE compression otherwise it will not work
 
 var openConnections = [];

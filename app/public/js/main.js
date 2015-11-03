@@ -33,12 +33,22 @@ splat.AppRouter = Backbone.Router.extend({
         stream.onmessage = function(e) {
             console.log('stream : ' + e.data);
             if (e.data == 'review'){
-                //self.reviewsFetch = self.reviews.fetch();
+                self.reviewsFetch = self.reviews.fetch();
             } else if (e.data == 'movie') { 
                 self.moviesFetch = self.movies.fetch();
             } else if (e.data == 'image success') {
                 self.moviesFetch = self.movies.fetch();
-            }
+            } else {
+                console.log(e.data);
+                var id = e.data;
+                self.moviesFetch = self.movies.fetch();
+                self.moviesFetch.done(function(coll, resp) {
+                    var movie = self.movies.get(id);
+                    movie.reviews.fetch();
+                }).fail(function(coll, resp) {
+                    alert("Fetch movies failed!");
+                });
+        }
         }
 
     },
@@ -131,7 +141,7 @@ splat.AppRouter = Backbone.Router.extend({
             var reviewsFetch = movie.reviews.fetch();
             reviewsFetch.done(function(coll, resp) {
                 self.reviewsView = new splat.ReviewsView({
-                    collection: movie.reviews,
+                    model: movie,
                 });
                 self.showView('#content', self.reviewsView);
             }).fail(function(coll, resp) {

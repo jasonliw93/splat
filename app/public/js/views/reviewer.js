@@ -22,11 +22,11 @@ splat.Reviewer = Backbone.View.extend({
             reviewName : $(".form-group input[name=reviewName]").val() ,
             reviewAffil : $(".form-group input[name=reviewAffil]").val() ,
             reviewText : $(".form-group textarea[name=reviewText]").val() ,
-            movieId : this.collection.movieId,
+            movieId : this.model.reviews.movieId,
         }
         var self = this;
         // adds model to collection and save model to database
-        this.collection.create(obj, {
+        this.model.reviews.create(obj, {
             // notification panel, defined in section 2.6
             wait: true,
             success : function (model, response){
@@ -43,7 +43,7 @@ splat.Reviewer = Backbone.View.extend({
     render: function() {
         // set the view element ($el) HTML content using its template
         this.$el.html(this.template());
-        this.$('#rating').html(this.collection.getRating());
+        this.$('#rating').html(this.model.get('freshVotes')/this.model.get('freshTotal'));
         return this; // support method chaining
     }
 });
