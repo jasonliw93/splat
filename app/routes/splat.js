@@ -122,7 +122,7 @@ exports.addReview = function(req, res){
 };
 
 exports.getReviews = function(req, res){
-    reviewModel.find({}, function(err, reviews) {
+    reviewModel.find({movieId : req.params.id}, function(err, reviews) {
         if (err) {
             res.status(500).send("Sorry, unable to retrieve movies at this time");
         } else {

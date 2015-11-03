@@ -8,18 +8,18 @@ var splat = splat || {};
 splat.ReviewThumbs = Backbone.View.extend({
     // render the View
     initialize: function(options) {
-        this.movieId = options.movieId;
+        //this.movieId = options.movieId;
     },
-    moviesTemplate: _.template([
-        "<% reviews.forEach(function(review) { %>",
+    reviewsTemplate: _.template([
+        "<% reviews.each(function(review) { %>",
         "<%= reviewTemplate(review.toJSON()) %>",
         "<% }); %>",
     ].join('')),
     // render View
     render: function() {
         var self = this;
-        self.$el.html(self.moviesTemplate({
-            reviews: self.collection.where({movieId : self.movieId}),
+        self.$el.html(self.reviewsTemplate({
+            reviews: self.collection,
             reviewTemplate: self.template
         }));
         return this; // support method chaining

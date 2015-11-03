@@ -23,18 +23,17 @@ splat.AppRouter = Backbone.Router.extend({
         this.headerView = new splat.Header();
         // insert the rendered Header view element into the document DOM
         $('.header').html(this.headerView.render().el);
-        this.reviews = new splat.Reviews();
         this.movies = new splat.Movies();
         // fetches the movies
         this.moviesFetch = this.movies.fetch();
-        this.reviewsFetch = this.reviews.fetch();
+        //this.reviewsFetch = this.reviews.fetch();
 
         var stream = new EventSource('/stream')
         var self = this;
         stream.onmessage = function(e) {
             console.log('stream : ' + e.data);
             if (e.data == 'review'){
-                self.reviewsFetch = self.reviews.fetch();
+                //self.reviewsFetch = self.reviews.fetch();
             } else if (e.data == 'movie') { 
                 self.moviesFetch = self.movies.fetch();
             } else if (e.data == 'image success') {
@@ -125,11 +124,14 @@ splat.AppRouter = Backbone.Router.extend({
         var self = this;
         this.moviesFetch.done(function(coll, resp) {
             // get movies and instantiate Details view
-            self.movie = self.movies.get(id);
-            self.reviewsFetch.done(function(coll, resp) {
+            var movie = self.movies.get(id);
+            if (!movie.reviews){
+                movie.reviews =  new splat.Reviews(id);
+            }
+            var reviewsFetch = movie.reviews.fetch();
+            reviewsFetch.done(function(coll, resp) {
                 self.reviewsView = new splat.ReviewsView({
-                    movieId : id,
-                    collection: self.reviews,
+                    collection: movie.reviews,
                 });
                 self.showView('#content', self.reviewsView);
             }).fail(function(coll, resp) {

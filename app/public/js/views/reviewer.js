@@ -7,7 +7,7 @@ var splat = splat || {};
 // note View-name (reviewForm) matches name of template file reviewForm.html
 splat.Reviewer = Backbone.View.extend({
     initialize: function(options) {
-        this.movieId = options.movieId;
+        //this.movieId = options.movieId;
         //this.reviewFormLoad = $.get('tpl/.html');
     },
     events: {
@@ -15,14 +15,14 @@ splat.Reviewer = Backbone.View.extend({
     },
     // save model to database
     save: function() {
-        splat.utils.hideNotice();
+        //splat.utils.hideNotice();
         // check if model is valid before adding to collection
         var obj = {
             rating : $(".form-group input[type=radio]:checked:first").val(),
             reviewName : $(".form-group input[name=reviewName]").val() ,
             reviewAffil : $(".form-group input[name=reviewAffil]").val() ,
             reviewText : $(".form-group textarea[name=reviewText]").val() ,
-            movieId : this.movieId,
+            movieId : this.collection.movieId,
         }
         var self = this;
         // adds model to collection and save model to database
@@ -43,7 +43,7 @@ splat.Reviewer = Backbone.View.extend({
     render: function() {
         // set the view element ($el) HTML content using its template
         this.$el.html(this.template());
-        this.$('#rating').html(this.collection.getRating(this.movieId));
+        this.$('#rating').html(this.collection.getRating());
         return this; // support method chaining
     }
 });

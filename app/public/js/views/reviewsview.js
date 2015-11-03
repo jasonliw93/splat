@@ -8,24 +8,20 @@ var splat = splat || {};
 splat.ReviewsView = Backbone.View.extend({
     // render the View
     initialize: function(options) {
-        this.movieId = options.movieId;
         this.reviewerView = new splat.Reviewer({
-            movieId : this.movieId,
             collection : this.collection
         });
         this.reviewThumbsView = new splat.ReviewThumbs({
-            movieId : this.movieId,
             collection : this.collection
         });
         var self = this;
         this.listenTo(this.collection, 'sync', function(e,data){
             this.reviewThumbsView.render();
-            $('#rating').html(this.collection.getRating(this.movieId));
+            $('#rating').html(this.collection.getRating());
         });
         
     },
     onClose: function() {
-        splat.utils.hideNotice();
         this.reviewerView.close();
         this.reviewThumbsView.close();
     },
