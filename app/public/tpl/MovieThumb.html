@@ -10,12 +10,17 @@
                     <source src="<%= trailer %>" type="video/mp4" />
                 </video>
                 <!-- Movie information-->
-                <div class="thumbnail-text">
-                    <b><%= title %></b> (<%= released %>)<br/>
-                    <b>Directed by: </b> <%= director %><br/>
-                    <b>Starring: </b> <%= starring.join(', ') %><br/>
-                    <b>Genres: </b> <%= genre.join(', ') %><br/>
-                    <b>Rating: </b> <%= rating %><br/>
+                <div class="row">
+                    <div class="thumbnail-swatch col-xs-3">
+                        <a href=""
+                    </div>
+                    <div class="thumbnail-text col-xs-9">
+                        <div><b><%= title %></b> (<%= released %>)</div>
+                        <div><b>Directed by: </b> <%= director %></div>
+                        <div><b>Starring: </b> <%= starring.join(', ') %></div>
+                        <div><b>Genres: </b> <%= genre.join(', ') %></div>
+                        <div><b>Runtime: </b><%= duration %>min <b>Rating: </b> <%= rating %></div>
+                    </div>
                 </div>
             </a>
         </div>

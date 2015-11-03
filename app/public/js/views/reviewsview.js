@@ -17,9 +17,18 @@ splat.ReviewsView = Backbone.View.extend({
         var self = this;
         this.listenTo(this.model.reviews, 'sync', function(e,data){
             this.reviewThumbsView.render();
-            $('#rating').html(this.model.get('freshVotes')/this.model.get('freshTotal'));
+            this.showScore();
         });
         
+    },
+    showScore: function(){
+        var freshTotal = this.model.get('freshTotal');
+        var freshVotes = this.model.get('freshVotes');
+        if (freshTotal){
+            this.$('#rating').html(freshVotes/freshTotal);
+        }else{
+            this.$('#rating').html('… no reviews yet');
+        }
     },
     onClose: function() {
         this.reviewerView.close();
@@ -32,6 +41,7 @@ splat.ReviewsView = Backbone.View.extend({
         // render the sub views
         this.$('#reviewer').html(this.reviewerView.render().el);
         this.$('#reviewthumbs').html(this.reviewThumbsView.render().el);
+        this.showScore();
         return this; // support method chaining
     }
 

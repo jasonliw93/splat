@@ -7,26 +7,28 @@ var splat = splat || {};
 // note View-name (reviewForm) matches name of template file reviewForm.html
 splat.Reviewer = Backbone.View.extend({
     initialize: function(options) {
-        //this.movieId = options.movieId;
-        //this.reviewFormLoad = $.get('tpl/.html');
+        
     },
     events: {
         "click #reviewsave": "save",
+        "change .form-group input": "change",
+        "change .form-group textarea": "change",
+    },
+    // save model to database
+    change: function(e) {
+        var obj = {};
+        // properly format string input depending on field name
+        obj[e.target.name] = e.target.value;
+        // set the model to the changed values
+        this.review.set(obj);
     },
     // save model to database
     save: function() {
         //splat.utils.hideNotice();
         // check if model is valid before adding to collection
-        var obj = {
-            rating : $(".form-group input[type=radio]:checked:first").val(),
-            reviewName : $(".form-group input[name=reviewName]").val() ,
-            reviewAffil : $(".form-group input[name=reviewAffil]").val() ,
-            reviewText : $(".form-group textarea[name=reviewText]").val() ,
-            movieId : this.model.reviews.movieId,
-        }
         var self = this;
         // adds model to collection and save model to database
-        this.model.reviews.create(obj, {
+        this.model.reviews.create(this.review, {
             // notification panel, defined in section 2.6
             wait: true,
             success : function (model, response){
@@ -42,8 +44,8 @@ splat.Reviewer = Backbone.View.extend({
     // render the View
     render: function() {
         // set the view element ($el) HTML content using its template
-        this.$el.html(this.template());
-        this.$('#rating').html(this.model.get('freshVotes')/this.model.get('freshTotal'));
+        this.review = new splat.Review();
+        this.$el.html(this.template(this.review.toJSON()));
         return this; // support method chaining
     }
 });

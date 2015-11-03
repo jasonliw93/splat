@@ -42,12 +42,13 @@ exports.addMovie = function(req, res){
     var movie = new movieModel(req.body);
     movie.save(function (err, movie) {
         res.status(200).send(movie);
+        if (movie.poster.indexOf('upload.png') > 0){
+            writeStream({model: "movie", movieId: movie.id, action: "upload image"});
+        }else{
+            writeStream({model: "movie", movieId: movie.id, action: "add"});
+        }
+
     });
-    if (req.body.poster.indexOf('upload.png') > 0){
-        writeStream('image upload');
-    }else{
-        writeStream('movie');
-    }
 };
 exports.editMovie = function(req, res){
     delete req.body._id;
@@ -60,9 +61,9 @@ exports.editMovie = function(req, res){
         } else {
             res.status(200).send(movie);
             if (req.body.poster.indexOf('upload.png') > 0){
-                writeStream('image upload');
+                writeStream({model: "movie", movieId: movie.id, action: "upload image"});
             }else{
-                writeStream('movie');
+                writeStream({model: "movie", movieId: movie.id, action: "update"});
             }
         }
     });
@@ -77,7 +78,7 @@ exports.deleteMovie = function(req, res){
         } else {
             fs.unlink(__dirname + '/../public/img/uploads/' + movie.id + '.jpeg');
             res.status(200).send(movie);
-            writeStream('movie');
+            writeStream({model: "movie", movieId: movie.id, action: "remove"});
         }
     });
 };
@@ -103,7 +104,7 @@ exports.uploadImage = function(req, res) {
                         +err.message+ ")" );
                 }else{
                     res.status(200).send(datedImageUrl);
-                    writeStream('image success');
+                    writeStream({model: "movie", movieId: movie.id, action: "image success"});
                 }
             });
         } else {
@@ -129,10 +130,11 @@ exports.addReview = function(req, res){
                 movie.save(function (err, movie) {
                     res.status(200).send(review);
                 });
+                writeStream({model: "review", movieId: req.params.id, action: "add"});
             }
         });
     });
-    writeStream(req.params.id);
+    
 };
 
 exports.getReviews = function(req, res){
@@ -220,6 +222,6 @@ exports.getStream = function (req, res) {
 function writeStream(data){
     openConnections.forEach(function(res) {
         res.write("id: " + new Date().valueOf() + "\n");
-        res.write("data: " + data + "\n\n");
+        res.write("data: " + JSON.stringify(data) + "\n\n");
     });
 }

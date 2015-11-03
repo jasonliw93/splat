@@ -31,24 +31,18 @@ splat.AppRouter = Backbone.Router.extend({
         var stream = new EventSource('/stream')
         var self = this;
         stream.onmessage = function(e) {
-            console.log('stream : ' + e.data);
-            if (e.data == 'review'){
-                self.reviewsFetch = self.reviews.fetch();
-            } else if (e.data == 'movie') { 
+            var data = JSON.parse(e.data);
+            if (data.model == 'movie') { 
                 self.moviesFetch = self.movies.fetch();
-            } else if (e.data == 'image success') {
-                self.moviesFetch = self.movies.fetch();
-            } else {
-                console.log(e.data);
-                var id = e.data;
+            } else if (data.model == 'review'){
                 self.moviesFetch = self.movies.fetch();
                 self.moviesFetch.done(function(coll, resp) {
-                    var movie = self.movies.get(id);
+                    var movie = self.movies.get(data.movieId);
                     movie.reviews.fetch();
                 }).fail(function(coll, resp) {
                     alert("Fetch movies failed!");
                 });
-        }
+            }
         }
 
     },
@@ -89,13 +83,9 @@ splat.AppRouter = Backbone.Router.extend({
     browse: function() {
         var self = this;
         this.moviesFetch.done(function(coll, resp) {
-            // If the Browse view doesn't exist, instantiate one\
-            if (!self.moviesView){
-                //gets the movies
-                self.moviesView = new splat.MoviesView({
-                    collection: self.movies
-                });
-            }
+            self.moviesView = new splat.MoviesView({
+                collection: self.movies
+            });
             // insert the rendered Browse view element into the document DOM
             self.showView('#content', self.moviesView);
             self.headerView.selectMenuItem("Browse Movies");

@@ -133,14 +133,28 @@ body {
     background-color: black;
     width: 100%;
 }
+.thumbnail-swatch img{
+    position: relative;
+    width: 100%;
+}
 
-a div.thumbnail-text {
+.thumbnail-text{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap; 
     font-size: 80%;
     text-align: right;
     font-family: Arial;
     color: white;
 }
 
+.thumbnail-text div{
+    flex: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;   
+    margin: 0px;
+}
 #detailsImage {
     border:1px solid #9d9d9d;
     max-width: 100%;

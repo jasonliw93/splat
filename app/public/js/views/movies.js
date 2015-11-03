@@ -18,11 +18,15 @@ splat.MoviesView = Backbone.View.extend({
             self.collection.sort();
             self.render();
         });
+        this.listenTo(this.collection, 'sync', function(e,data){
+            self.render();
+        });
     },
     // function to combine movie JSON data for rendering to HTML
     moviesTemplate: _.template([
         "<% movies.each(function(movie) { %>",
         "<%= movieTemplate(movie.toJSON()) %>",
+        "<%= console.log(movie.toJSON()) %>",
         "<% }); %>",
     ].join('')),
     // render View
@@ -35,9 +39,6 @@ splat.MoviesView = Backbone.View.extend({
                     movies: self.collection,
                     movieTemplate: self.movieTemplate
                 }));
-        });
-        this.listenTo(this.collection, 'sync', function(e,data){
-            self.render();
         });
         return this; // support method chaining
     }
