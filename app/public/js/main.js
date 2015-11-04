@@ -148,7 +148,9 @@ splat.AppRouter = Backbone.Router.extend({
 // template loading is complete, instantiate a Backbone router
 // with history.
 
-splat.utils.loadTemplates(['Home', 'Header', 'About', 'Details', 'ReviewsView', 'MovieForm', 'MoviePoster', 'Reviewer', 'ReviewThumbs'], function() {
+splat.utils.loadTemplates(['Home', 'Header', 'About', 'Details', 
+    'MovieThumb', 'MovieForm', 'MovieFormActions', 'MoviePoster', 
+    'ReviewsView','Reviewer', 'ReviewThumbs'], function() {
     splat.app = new splat.AppRouter();
     Backbone.history.start();
 });

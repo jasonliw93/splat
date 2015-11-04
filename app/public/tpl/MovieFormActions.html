@@ -1,0 +1,27 @@
+<div class="row">
+	<div class="col-xs-3">
+		<% if (typeof _id !== "undefined") { %> 
+		<div id="review-swatch" class="review-swatch-container">
+			<a href="#movies/<%= _id %>/reviews">
+			  <img class="review-swatch-bg" src="<% if (freshVotes/freshTotal >= 0.5) { %> 
+			  http://dialectblog.com/wp-content/uploads/2011/10/Tomato.png
+			  <% } else { %>
+			  http://cliparts.co/cliparts/yTk/A5B/yTkA5BjAc.png
+			  <% } %>
+			  ">
+			  <div class="review-swatch-details"> 
+			    <%= (freshVotes/freshTotal*100).toFixed(1) %>% (<%=freshTotal%>)
+			    <span class="review-swatch-link">REVIEWS</span>
+			  </div>
+			</a>
+		</div>
+		<% } %> 
+	</div>
+	<!-- Button for movie changes-->
+	<div class="col-xs-9">
+		<div class="editActions">
+		    <input type="button" id="moviesave" class="btn btn-primary save" name="save" value="Save Changes" />
+		    <input type="button" id="moviedel" class="btn btn-danger delete" name="delete" value="Delete Movie" />
+		</div>
+	</div>
+</div>

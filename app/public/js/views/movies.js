@@ -8,7 +8,6 @@ var splat = splat || {};
 splat.MoviesView = Backbone.View.extend({
     // render the View
     initialize: function() {
-        this.movieThumbLoad = $.get('tpl/MovieThumb.html');
         var self = this;
         splat.utils.watcher.on('ordering', function(data){
             self.collection.comparator = function(model) {
@@ -26,21 +25,19 @@ splat.MoviesView = Backbone.View.extend({
     moviesTemplate: _.template([
         "<% movies.each(function(movie) { %>",
         "<%= movieTemplate(movie.toJSON()) %>",
-        "<%= console.log(movie.toJSON()) %>",
         "<% }); %>",
     ].join('')),
     // render View
     render: function() {
-        var self = this;
-        this.movieThumbLoad.done(function(markup) {
-            // apply to model, inject to Details view
-            self.movieTemplate = _.template(markup);
-                self.$el.html(self.moviesTemplate({
-                    movies: self.collection,
-                    movieTemplate: self.movieTemplate
-                }));
-        });
-        return this; // support method chaining
-    }
+        var movieThumbView = new splat.MovieThumb();
+        $(this.el).html(this.moviesTemplate({
+            movies: this.collection,
+            movieTemplate: movieThumbView.template
+            })
+        );
+
+    // support chaining
+        return this;
+    },
 
 });

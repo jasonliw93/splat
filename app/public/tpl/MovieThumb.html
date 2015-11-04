@@ -1,28 +1,42 @@
-<!-- Container for movie -->
-<div class="thumbnails col-lg-2 col-md-3 col-sm-4 col-xs-6">
-    <!-- Form for movie-->
-    <div class="thumbnail plain" title="Click here to edit item">
-        <!-- Allows interactive container for movie-->
-        <div class="thumbnail-container">
-            <a href="#movies/<%= _id %>" class="plain">
-                <!-- Source to get movie-->
-                <video preload="none" class="img-responsive" controls poster="<%= poster %>">
-                    <source src="<%= trailer %>" type="video/mp4" />
-                </video>
-                <!-- Movie information-->
-                <div class="row">
-                    <div class="thumbnail-swatch col-xs-3">
-                        <a href=""
-                    </div>
-                    <div class="thumbnail-text col-xs-9">
-                        <div><b><%= title %></b> (<%= released %>)</div>
-                        <div><b>Directed by: </b> <%= director %></div>
-                        <div><b>Starring: </b> <%= starring.join(', ') %></div>
-                        <div><b>Genres: </b> <%= genre.join(', ') %></div>
-                        <div><b>Runtime: </b><%= duration %>min <b>Rating: </b> <%= rating %></div>
-                    </div>
-                </div>
+<div class="thumbnails col-lg-2 col-md-3 col-sm-4 col-xs-6" accept-charset="UTF-8">
+  <div class="thumbnail plain" title="click thumbnail to review or edit movie">
+    <div class="moviedetails">  <!-- keep Reviews-link with details -->
+      <a href="#movies/<%= _id %>" class="plain">
+        <video class="img-responsive" controls poster="<%= poster %>"
+        preload="none">  <!-- none b/c value "metadata" stalls Chrome -->
+            <source src="<%= trailer %>" type="video/mp4"/>
+            <!-- fallback -->
+            Your browser does not support the <code>video</code> element.
+        </video>
+      </a>
+        <div class="row">
+          <div class="review-swatch-container col-xs-4">
+            <a href="#movies/<%= _id %>/reviews">
+              <img class="review-swatch-bg" src="<% if (freshVotes/freshTotal >= 0.5) { %> 
+              http://dialectblog.com/wp-content/uploads/2011/10/Tomato.png
+              <% } else { %>
+              http://cliparts.co/cliparts/yTk/A5B/yTkA5BjAc.png
+              <% } %>
+              ">
+              <div class="review-swatch-details"> 
+                <%= (freshVotes/freshTotal*100).toFixed(1) %>% (<%=freshTotal%>)</br>
+                <span class="review-swatch-link">REVIEWS</span>
+              </div>
             </a>
+
+
+          </div>
+          <a href="#movies/<%= _id %>" class="plain">
+          <div class="details col-xs-8">
+            <span><strong class="thumbtitle"><%= title %></strong>
+          (<%= released %>)</span><br/>
+            <span><strong>Directed by: </strong><%= director %></span><br/>
+            <span><strong>Starring: </strong><%= starring %></span><br/>
+            <span><strong>Genres: </strong><%= genre %> <strong>Rating:</strong> <%= rating %></span>
+          </div>
+          </a>
         </div>
+      </a>
     </div>
+  </div>
 </div>

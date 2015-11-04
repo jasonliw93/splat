@@ -105,14 +105,7 @@ splat.MoviePoster = Backbone.View.extend({
     },
     // render the View
     render: function() {
-        this.$el.html(this.template());
-        if (this.model.id){
-            this.$('#reviewLink').attr('href', '#movies/' + this.model.id + '/reviews');
-            this.$('#reviewLink').show();
-        } else {
-            this.$('#reviewLink').hide();
-        }
-        this.$('#detailsImage').attr("src", this.model.get('poster'));            
+        this.$el.html(this.template(this.model.toJSON()));
         return this; // support method chaining
     }
 });
