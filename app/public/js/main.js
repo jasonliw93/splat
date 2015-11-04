@@ -38,7 +38,9 @@ splat.AppRouter = Backbone.Router.extend({
                 self.moviesFetch = self.movies.fetch();
                 self.moviesFetch.done(function(coll, resp) {
                     var movie = self.movies.get(data.movieId);
-                    movie.reviews.fetch();
+                    if (movie.reviews){
+                        movie.reviews.fetch();
+                    }
                 }).fail(function(coll, resp) {
                     alert("Fetch movies failed!");
                 });

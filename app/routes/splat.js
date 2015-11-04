@@ -1,6 +1,7 @@
 "use strict";
 
 var fs = require('fs'),
+    path = require("path"),
     // path is "../" since splat.js is in routes/ sub-dir
     config = require(__dirname + '/../config'),  // port#, other params
     express = require("express"),
@@ -93,7 +94,7 @@ exports.uploadImage = function(req, res) {
         // id parameter is the movie's "id" attribute as a string value
         imageURL = 'img/uploads/' + req.params.id + suffix,
         // rename the image file to match the imageURL
-        newPath = __dirname + '/../public/' + imageURL,
+        newPath = __dirname + '../public/' + imageURL,
         datedImageUrl = imageURL + '?' + new Date().valueOf();
 
         fs.rename(filePath, newPath, function(err) {
@@ -146,6 +147,38 @@ exports.getReviews = function(req, res){
         }
     });
 };
+
+exports.playMovie = function(req, res){
+    var file = path.resolve(__dirname,"../public/img/video/small.mp4");
+    //console.log(file);
+    var range = req.headers.range;
+    //console.log(range);
+    var positions = range.replace(/bytes=/, "").split("-");
+    var start = parseInt(positions[0], 10);
+    fs.stat(file, function (err, stats) {
+        //console.log(stats);
+        if (err) {
+            throw err;
+        }
+        var total = stats.size;
+        var end = positions[1] ? parseInt(positions[1], 10) : total - 1;
+        var chunksize = (end - start) + 1;
+        res.statusCode = 206;
+        res.setHeader('Content-Range', 'bytes ' + start + '-' + end + '/' + total);
+        res.setHeader('Content-Length', chunksize);
+        res.setHeader('Accept-Ranges', 'bytes');
+        res.setHeader('Content-Type', 'video/mp4');
+
+        var stream = fs.createReadStream(file, { start: start, end: end })
+        .on("open", function() {
+          stream.pipe(res);
+        }).on("error", function(err) {
+          res.end(err);
+        });
+    });
+};
+
+
 var mongoose = require('mongoose'); // MongoDB integration
 
 // Connect to database, using credentials specified in your config module

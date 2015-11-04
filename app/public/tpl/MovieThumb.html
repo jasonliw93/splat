@@ -4,7 +4,7 @@
       <a href="#movies/<%= _id %>" class="plain">
         <video class="img-responsive" controls poster="<%= poster %>"
         preload="none">  <!-- none b/c value "metadata" stalls Chrome -->
-            <source src="<%= trailer %>" type="video/mp4"/>
+            <source src="/movies/<%= _id %>/video" type="video/mp4"/>
             <!-- fallback -->
             Your browser does not support the <code>video</code> element.
         </video>
