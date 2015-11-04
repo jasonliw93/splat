@@ -125,7 +125,7 @@ exports.addReview = function(req, res){
             } else if (!movie) {
                 res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
             } else {
-                movie.freshVotes += review.rating;
+                movie.freshVotes += review.freshness;
                 movie.freshTotal += 1;
                 movie.save(function (err, movie) {
                     res.status(200).send(review);
@@ -175,7 +175,7 @@ var MovieSchema = new mongoose.Schema({
 //MovieSchema.index(...);  // ADD CODE
 
 var ReviewSchema = new mongoose.Schema({
-    rating: { type:Number, required: true},
+    freshness: { type:Number, required: true},
     reviewText: { type:String, required: true},
     reviewName: { type:String, required: true},
     reviewAffil: { type:String, required: true},

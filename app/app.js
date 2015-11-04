@@ -70,7 +70,7 @@ app.use(methodOverride());
 // handler is invoked rather than static-content processor
 
 // Heartbeat test of server API
-//app.get('/', splat.api);
+app.get('/', splat.api);
 
 // Retrieve a single movie by its id attribute
 app.get('/movies/:id', splat.getMovie);

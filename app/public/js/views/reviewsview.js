@@ -25,9 +25,9 @@ splat.ReviewsView = Backbone.View.extend({
         var freshTotal = this.model.get('freshTotal');
         var freshVotes = this.model.get('freshVotes');
         if (freshTotal){
-            this.$('#rating').html(freshVotes/freshTotal);
+            this.$('#freshness').html(freshVotes/freshTotal);
         }else{
-            this.$('#rating').html('… no reviews yet');
+            this.$('#freshness').html('… no reviews yet');
         }
     },
     onClose: function() {

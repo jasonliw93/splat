@@ -4,12 +4,12 @@
     <!-- Labels and input boxes for movie form-->
 
     <div class="form-group">
-        <input type="radio" name="rating" value="1" <% if (rating) { %>  checked <% } %>>Fresh
-        <input type="radio" name="rating" value="0" <% if (!rating) { %>  checked <% } %>>Rotten
+        <input type="radio" name="freshness" value="1" <% if (freshness) { %>  checked <% } %>>Fresh
+        <input type="radio" name="freshness" value="0" <% if (!freshness) { %>  checked <% } %>>Rotten
         <span class="rating">
             <b>currently rated :</b>
             <img src="ratingimg"/>
-            <span id="rating"></span>
+            <span id="freshness"></span>
         </span>
     </div>
     <div class="form-group">
