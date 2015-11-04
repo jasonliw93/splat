@@ -7,6 +7,7 @@ var splat = splat || {};
 // note View-name (MovieForm) matches name of template file MovieForm.html
 splat.MovieFormActions = Backbone.View.extend({
     initialize: function() {
+        this.isNew = this.model.isNew();
         var self = this;
         this.listenTo(this.model, 'remove', function(model){
             splat.app.navigate('#movies', {
@@ -56,6 +57,8 @@ splat.MovieFormActions = Backbone.View.extend({
                         self.model.set('poster', imageURL);
                         targetImgElt.src = imageURL;
                         self.afterSave();
+                    }).fail(function(res){
+                        console.log(res);
                     });
                 }else{
                     // no image to upload
@@ -68,7 +71,7 @@ splat.MovieFormActions = Backbone.View.extend({
         });
     },
     afterSave: function(isNew){
-        if (this.model.isNew()) {
+        if (this.isNew) {
             splat.app.navigate('#movies/' + this.model.id, {replace:true, trigger:false});
             this.render();
         };

@@ -42,11 +42,14 @@ exports.getMovies = function(req, res){
 exports.addMovie = function(req, res){    
     var movie = new movieModel(req.body);
     movie.save(function (err, movie) {
-        res.status(200).send(movie);
-        if (movie.poster.indexOf('upload.png') > 0){
-            writeStream({model: "movie", movieId: movie.id, action: "upload image"});
+        if (err){
+            res.status(500).send("Sorry, unable to add movie at this time (" 
+                        +err.message+ ")" );
         }else{
-            writeStream({model: "movie", movieId: movie.id, action: "add"});
+            res.status(200).send(movie);
+            if (movie.poster.indexOf('upload.png') < 0){
+                writeStream({model: "movie", movieId: movie.id, action: "add"});
+            }
         }
 
     });
@@ -61,9 +64,7 @@ exports.editMovie = function(req, res){
             res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
         } else {
             res.status(200).send(movie);
-            if (req.body.poster.indexOf('upload.png') > 0){
-                writeStream({model: "movie", movieId: movie.id, action: "upload image"});
-            }else{
+            if (req.body.poster.indexOf('upload.png') < 0){
                 writeStream({model: "movie", movieId: movie.id, action: "update"});
             }
         }
@@ -94,7 +95,7 @@ exports.uploadImage = function(req, res) {
         // id parameter is the movie's "id" attribute as a string value
         imageURL = 'img/uploads/' + req.params.id + suffix,
         // rename the image file to match the imageURL
-        newPath = __dirname + '../public/' + imageURL,
+        newPath = __dirname + '/../public/' + imageURL,
         datedImageUrl = imageURL + '?' + new Date().valueOf();
 
         fs.rename(filePath, newPath, function(err) {
@@ -103,15 +104,18 @@ exports.uploadImage = function(req, res) {
                 if (err) {
                     res.status(500).send("Sorry, unable to retrieve movie at this time (" 
                         +err.message+ ")" );
-                }else{
+                }else if (!movie) {
+                    res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
+                }
+                else{
                     res.status(200).send(datedImageUrl);
-                    writeStream({model: "movie", movieId: movie.id, action: "image success"});
+                    writeStream({model: "movie", movieId: movie.id, action: "image upload"});
                 }
             });
         } else {
             res.status(500).send("Sorry, unable to upload poster image at this time (" 
                 +err.message+ ")" );
-	}
+	   }
     });
 };
 
@@ -119,21 +123,31 @@ exports.addReview = function(req, res){
     var review = new reviewModel(req.body);
     review.movieId = req.params.id;
     review.save(function (err, review) {
-        movieModel.findById(req.params.id, function(err, movie){ 
-            if (err) {
-                res.status(500).send("Sorry, unable to retrieve movie at this time (" 
-                    +err.message+ ")" );
-            } else if (!movie) {
-                res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
-            } else {
-                movie.freshVotes += review.freshness;
-                movie.freshTotal += 1;
-                movie.save(function (err, movie) {
-                    res.status(200).send(review);
-                });
-                writeStream({model: "review", movieId: req.params.id, action: "add"});
-            }
-        });
+         if (err){
+            res.status(500).send("Sorry, unable to add review at this time (" 
+                        +err.message+ ")" );
+        }else{
+            movieModel.findById(req.params.id, function(err, movie){ 
+                if (err) {
+                    res.status(500).send("Sorry, unable to retrieve movie at this time (" 
+                        +err.message+ ")" );
+                } else if (!movie) {
+                    res.status(404).send("Sorry, the movie doesn't exist; try reselecting from Browse view");
+                } else {
+                    movie.freshVotes += review.freshness;
+                    movie.freshTotal += 1;
+                    movie.save(function (err, movie) {
+                         if (err){
+                            res.status(500).send("Sorry, unable to update movie at this time (" 
+                                        +err.message+ ")" );
+                        }else{
+                            res.status(200).send(review);
+                            writeStream({model: "review", movieId: req.params.id, action: "add"});
+                        }
+                    });
+                }
+            });
+        }
     });
     
 };
@@ -141,7 +155,7 @@ exports.addReview = function(req, res){
 exports.getReviews = function(req, res){
     reviewModel.find({movieId : req.params.id}, function(err, reviews) {
         if (err) {
-            res.status(500).send("Sorry, unable to retrieve movies at this time");
+            res.status(500).send("Sorry, unable to retrieve reviews at this time");
         } else {
             res.status(200).send(reviews);
         }
@@ -158,23 +172,24 @@ exports.playMovie = function(req, res){
     fs.stat(file, function (err, stats) {
         //console.log(stats);
         if (err) {
-            throw err;
-        }
-        var total = stats.size;
-        var end = positions[1] ? parseInt(positions[1], 10) : total - 1;
-        var chunksize = (end - start) + 1;
-        res.statusCode = 206;
-        res.setHeader('Content-Range', 'bytes ' + start + '-' + end + '/' + total);
-        res.setHeader('Content-Length', chunksize);
-        res.setHeader('Accept-Ranges', 'bytes');
-        res.setHeader('Content-Type', 'video/mp4');
+            res.status(500).send("Sorry, unable to retrieve video at this time");
+        }else{
+            var total = stats.size;
+            var end = positions[1] ? parseInt(positions[1], 10) : total - 1;
+            var chunksize = (end - start) + 1;
+            res.statusCode = 206;
+            res.setHeader('Content-Range', 'bytes ' + start + '-' + end + '/' + total);
+            res.setHeader('Content-Length', chunksize);
+            res.setHeader('Accept-Ranges', 'bytes');
+            res.setHeader('Content-Type', 'video/mp4');
 
-        var stream = fs.createReadStream(file, { start: start, end: end })
-        .on("open", function() {
-          stream.pipe(res);
-        }).on("error", function(err) {
-          res.end(err);
-        });
+            var stream = fs.createReadStream(file, { start: start, end: end })
+            .on("open", function() {
+              stream.pipe(res);
+            }).on("error", function(err) {
+              res.end(err);
+            });
+        }
     });
 };
 
@@ -205,7 +220,7 @@ var MovieSchema = new mongoose.Schema({
 
 // Constraints
 // each title:director pair must be unique; duplicates are dropped
-//MovieSchema.index(...);  // ADD CODE
+MovieSchema.index({ title: 1, director: 1 }, { unique: true });  // ADD CODE
 
 var ReviewSchema = new mongoose.Schema({
     freshness: { type:Number, required: true},
@@ -222,7 +237,6 @@ reviewModel.remove({}, function(err) {
    console.log('collection removed') 
 });
 */
-// MUST BE PLACED BEFORE compression otherwise it will not work
 
 var openConnections = [];
 

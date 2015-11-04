@@ -6,11 +6,10 @@
         <div class="thumbnail-container">
             <!-- Movie information-->
             <div class="thumbnail-text">
-                <b>Rating: </b> <%= freshness %><br/>
+                <img src="<% if (freshness) { %> /img/fresh.gif <% } else { %> /img/rotten.gif <% } %> ">
                 <b>Text: </b> <%= reviewText %><br/>
-                <b>Name: </b> <%= reviewName %><br/>
+                <img src="/img/critic.gif"><b>Name: </b> <%= reviewName %><br/>
                 <b>Affiliation: </b> <%= reviewAffil %><br/>
-                <b>Movie ID: </b> <%= movieId %><br/>
             </div>
         </div>
     </div>

@@ -4,11 +4,11 @@
     <!-- Labels and input boxes for movie form-->
 
     <div class="form-group">
-        <input type="radio" name="freshness" value="1" <% if (freshness) { %>  checked <% } %>>Fresh
-        <input type="radio" name="freshness" value="0" <% if (!freshness) { %>  checked <% } %>>Rotten
-        <span class="rating">
+        <input type="radio" name="freshness" value="1" <% if (freshness) { %>  checked <% } %>>Fresh<img src="/img/fresh.gif">
+        <input type="radio" name="freshness" value="0" <% if (!freshness) { %>  checked <% } %>>Rotten<img src="/img/rotten.gif">
+        <span class="score">
             <b>currently rated :</b>
-            <img src="ratingimg"/>
+            <img id="freshnessimg"/>
             <span id="freshness"></span>
         </span>
     </div>

@@ -44,6 +44,8 @@ splat.AppRouter = Backbone.Router.extend({
                 }).fail(function(coll, resp) {
                     alert("Fetch movies failed!");
                 });
+            } else {
+                console.log(e.data);
             }
         }
 
