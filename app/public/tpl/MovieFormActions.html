@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col-xs-3">
 		<% if (typeof _id !== "undefined") { %> 
-		<div id="review-swatch" class="review-swatch-container">
+		<div class="review-swatch-container">
 			<a href="#movies/<%= _id %>/reviews">
 			  <img class="review-swatch-bg" 
 			  src="<%= getReviewImage(freshVotes,freshTotal) %>">

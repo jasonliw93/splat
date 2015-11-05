@@ -203,7 +203,7 @@ mongoose.connect('mongodb://' +config.dbuser+ ':' +config.dbpass+
 // Schemas
 var MovieSchema = new mongoose.Schema({
     title: { type: String, required: true },
-    released: { type: String, required: true},
+    released: { type: Number, required: true},
     director: { type: String, required: true },
     starring: { type: [String], required: true },
     rating: { type: String, required: true },

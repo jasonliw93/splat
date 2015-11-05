@@ -8,7 +8,7 @@ splat.Movie = Backbone.Model.extend({
     // default values for each attribute
     defaults: {
         title: "", // movie title    
-        released: "", // release year
+        released: undefined, // release year
         director: "", // movie's director
         rating: "", // MPAA movie rating: G, PG, PG-13, R, NC-17, NR
         starring: [], // array principal actors
