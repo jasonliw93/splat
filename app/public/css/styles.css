@@ -190,3 +190,16 @@ body {
     min-height: 220px;
     margin-bottom: 10px;
 }
+.panel{
+    color: black;
+    border: 2px solid green;
+    padding: 5px;
+    margin-bottom:10px;
+
+}
+.score{
+    color: red;
+    font-size: 150%;
+    font-style: italic;
+    padding-left: 50px;
+}

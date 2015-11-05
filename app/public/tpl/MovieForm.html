@@ -35,7 +35,8 @@
     <div class="form-group">
         <label for="starring" class="col-xs-3 control-label">Starring</label>
         <div class="col-xs-9">
-            <input type="text" class="col-xs-12" placeholder="e.g. Steve Martin, John Belushi" name="starring" value="<%= starring.join(', ') %>" />
+            <input type="text" class="col-xs-12" placeholder="e.g. Steve Martin, John Belushi" name="starring" 
+            value="<%= formatArray(starring) %>" />
             <span class="help-block col-xs-12"></span>
         </div>
     </div>
@@ -49,7 +50,8 @@
     <div class="form-group">
         <label for="genre" class="col-xs-3 control-label">Genre(s)</label>
         <div class="col-xs-9">
-            <input type="text" class="col-xs-12" placeholder="e.g. comedy, thriller, action" name="genre" value="<%= genre.join(', ') %>" />
+            <input type="text" class="col-xs-12" placeholder="e.g. comedy, thriller, action" name="genre" 
+            value="<%= formatArray(genre) %>" />
             <span class="help-block col-xs-12"></span>
         </div>
     </div>

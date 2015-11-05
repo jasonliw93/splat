@@ -220,7 +220,7 @@ var MovieSchema = new mongoose.Schema({
 
 // Constraints
 // each title:director pair must be unique; duplicates are dropped
-MovieSchema.index({ title: 1, director: 1 }, { unique: true });  // ADD CODE
+//MovieSchema.index({ title: 1, director: 1 }, { unique: true });  // ADD CODE
 
 var ReviewSchema = new mongoose.Schema({
     freshness: { type:Number, required: true},

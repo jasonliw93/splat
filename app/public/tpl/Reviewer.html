@@ -3,11 +3,11 @@
 
     <!-- Labels and input boxes for movie form-->
 
-    <div class="form-group">
+    <div class="form-group panel panel-default">
         <input type="radio" name="freshness" value="1" <% if (freshness) { %>  checked <% } %>>Fresh<img src="/img/fresh.gif">
         <input type="radio" name="freshness" value="0" <% if (!freshness) { %>  checked <% } %>>Rotten<img src="/img/rotten.gif">
         <span class="score">
-            <b>currently rated :</b>
+            <b>  currently rated :</b>
             <img id="freshnessimg"/>
             <span id="freshness"></span>
         </span>

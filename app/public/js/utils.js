@@ -45,6 +45,21 @@ splat.utils = {
         formGroup.removeClass('has-error');
         $('.help-block', formGroup).html('');
     },
+    templateHelpers : {
+        getReviewImage: function(freshVotes, freshTotal){            
+            if (freshVotes/freshTotal >= 0.5) { 
+                return '/img/fresh.gif';
+            }else{
+                return '/img/rotten.gif';
+            }
+        },
+        getReviewText: function(freshVotes, freshTotal){            
+            return (freshVotes/freshTotal*100).toFixed(1) + '% (' + freshTotal+ ')';
+        },
+        formatArray: function(array){
+            return array.join(', ');
+        }
+    },
     // Asynchronously load templates located in separate .html files using
     // jQuery "deferred" mechanism, an implementation of Promises.  Note we
     // depend on template file names matching corresponding View file names,
@@ -63,6 +78,7 @@ splat.utils = {
          * @param {[integer]} index:  position of view template within views array
          * @param {[String]} view:  root name (w/o .html) of view template file
          */
+        var self = this;
         $.each(views, function(index, view) {
             // If an associated Backbone view is defined, set its template function
             if (splat[view]) {
@@ -75,7 +91,9 @@ splat.utils = {
                  */
                 deferreds.push($.get('tpl/' + view + '.html', function(data) {
                     // Set template function on associated Backbone view.
-                    splat[view].prototype.template = _.template(data);
+                    splat[view].prototype.template = function(x){
+                        return _.template(data)(_.extend(x, self.templateHelpers));
+                    }
                 }));
 
                 // No Backbone view file is defined; cannot set template function.

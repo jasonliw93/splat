@@ -1,11 +1,11 @@
 default: start
 build:
-	cd app && cp config.js.prod config.js &&\
+	cd app && make build &&\
 	ln -s /courses/courses/cscc09f15/rosselet/asn/node_modules node_modules
 clean: stop
-	cd app && rm node.log config.js node_modules
+	cd app && make clean
 start:
-	cd app && nohup node app.js > node.log 2>&1 & echo SERVER STARTED
+	cd app && make start
 stop:
 	@foo=`ps xau | sed -e 1d | grep -v grep | \
 	grep 'node app.js' | awk '{print $$2}'` ; \
