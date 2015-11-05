@@ -45,7 +45,7 @@ app.use(basicAuth(config.username, config.password));
 app.use(logger('dev'));  // 'default', 'short', 'tiny', 'dev'
 
 // MUST BE PLACED BEFORE compression otherwise it will not work
-app.get('/stream', splat.getStream);
+app.get('/sse', splat.sse);
 // use compression (gzip) to reduce size of HTTP responses
 app.use(compression());
 

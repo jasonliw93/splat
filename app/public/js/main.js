@@ -23,7 +23,7 @@ splat.AppRouter = Backbone.Router.extend({
         // fetches the movies
         this.moviesFetch = this.movies.fetch();
         
-        var stream = new EventSource('/stream')
+        var stream = new EventSource('/sse')
         var self = this;
         stream.onmessage = function(e) {
             var data = JSON.parse(e.data);
@@ -40,7 +40,7 @@ splat.AppRouter = Backbone.Router.extend({
                     alert("Fetch movies failed!");
                 });
             } else {
-                console.log(e.data);
+                console.log(data,e.data);
             }
         }
         

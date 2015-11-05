@@ -5,8 +5,7 @@ var fs = require('fs'),
     // path is "../" since splat.js is in routes/ sub-dir
     config = require(__dirname + '/../config'),  // port#, other params
     express = require("express"),
-    url = require("url"),
-    app = require(__dirname + '/../app');
+    url = require("url");
 // Implemention of splat API handlers:
 
 // "exports" is used to make the associated name visible
@@ -48,7 +47,7 @@ exports.addMovie = function(req, res){
         }else{
             res.status(200).send(movie);
             if (movie.poster.indexOf('upload.png') < 0){
-                writeStream({model: "movie", movieId: movie.id, action: "add"});
+                broadcast({model: "movie", movieId: movie.id, action: "add"});
             }
         }
 
@@ -65,7 +64,7 @@ exports.editMovie = function(req, res){
         } else {
             res.status(200).send(movie);
             if (req.body.poster.indexOf('upload.png') < 0){
-                writeStream({model: "movie", movieId: movie.id, action: "update"});
+                broadcast({model: "movie", movieId: movie.id, action: "update"});
             }
         }
     });
@@ -80,7 +79,7 @@ exports.deleteMovie = function(req, res){
         } else {
             fs.unlink(__dirname + '/../public/img/uploads/' + movie.id + '.jpeg');
             res.status(200).send(movie);
-            writeStream({model: "movie", movieId: movie.id, action: "remove"});
+            broadcast({model: "movie", movieId: movie.id, action: "remove"});
         }
     });
 };
@@ -109,7 +108,7 @@ exports.uploadImage = function(req, res) {
                 }
                 else{
                     res.status(200).send(datedImageUrl);
-                    writeStream({model: "movie", movieId: movie.id, action: "image upload"});
+                    broadcast({model: "movie", movieId: movie.id, action: "image upload"});
                 }
             });
         } else {
@@ -142,7 +141,7 @@ exports.addReview = function(req, res){
                                         +err.message+ ")" );
                         }else{
                             res.status(200).send(review);
-                            writeStream({model: "review", movieId: req.params.id, action: "add"});
+                            broadcast({model: "review", movieId: req.params.id, action: "add"});
                         }
                     });
                 }
@@ -240,7 +239,7 @@ reviewModel.remove({}, function(err) {
 
 var openConnections = [];
 
-exports.getStream = function (req, res) {
+exports.sse = function (req, res) {
     // set timeout as high as possible
     req.socket.setTimeout(Number.MAX_SAFE_INTEGER || Infinity);
     res.statusCode = 200;
@@ -266,7 +265,8 @@ exports.getStream = function (req, res) {
     });
 };
 
-function writeStream(data){
+function broadcast(data){
+    
     openConnections.forEach(function(res) {
         res.write("id: " + new Date().valueOf() + "\n");
         res.write("data: " + JSON.stringify(data) + "\n\n");
