@@ -2,8 +2,8 @@
   <div class="thumbnail plain col-xs-12" title="click thumbnail to review or edit movie">
     <div class="moviedetails">  <!-- keep Reviews-link with details -->
       <a href="#movies/<%= _id %>" class="plain">
-        <div class="aspect-ratio-15-10">
-        <video class="img-responsive" controls poster="<%= poster %>"
+        <div class="video-container">
+        <video class="trailer" controls poster="<%= poster %>"
         preload="none">  <!-- none b/c value "metadata" stalls Chrome -->
             <source src="/movies/<%= _id %>/video" type="video/mp4"/>
             <!-- fallback -->
@@ -23,11 +23,12 @@
       </a>
       <a href="#movies/<%= _id %>">
         <div class="details col-xs-8">
-          <span><strong><%= title %></strong>
-          (<%= released %>)</span><br/>
-          <span><strong>Directed by: </strong><%= director %></span><br/>
-          <span><strong>Starring: </strong><%= formatArray(starring) %></span><br/>
-          <span><strong>Genres: </strong><%= formatArray(genre) %> <strong>Rating:</strong> <%= rating %></span>
+          <p><strong><%= title %></strong>
+          (<%= released %>)</p>
+          <p><strong>Directed by: </strong><%= director %></p>
+          <p><strong>Starring: </strong><%= formatArray(starring) %></p>
+          <p><strong>Genres: </strong><%= formatArray(genre) %> </p>
+          <p><strong>Runtime:</strong> <%= duration %>min <strong> Rating:</strong> <%= rating %></p>
         </div>
       </a>
     </div>

@@ -19,15 +19,10 @@ splat.AppRouter = Backbone.Router.extend({
     },
     // When an instance of an AppRouter is declared, create a Header view
     initialize: function() {
-        // instantiate a Header view
-        this.headerView = new splat.Header();
-        // insert the rendered Header view element into the document DOM
-        $('.header').html(this.headerView.render().el);
         this.movies = new splat.Movies();
         // fetches the movies
         this.moviesFetch = this.movies.fetch();
-        //this.reviewsFetch = this.reviews.fetch();
-
+        
         var stream = new EventSource('/stream')
         var self = this;
         stream.onmessage = function(e) {
@@ -48,6 +43,11 @@ splat.AppRouter = Backbone.Router.extend({
                 console.log(e.data);
             }
         }
+        
+        // instantiate a Header view
+        this.headerView = new splat.Header();
+        // insert the rendered Header view element into the document DOM
+        $('.header').html(this.headerView.render().el);
 
     },
     /* Invoke close() on the currentView before replacing it with the
@@ -85,11 +85,14 @@ splat.AppRouter = Backbone.Router.extend({
         this.headerView.selectMenuItem("About");
     },
     browse: function() {
+        this.moviesFetch = this.movies.fetch();
         var self = this;
         this.moviesFetch.done(function(coll, resp) {
-            self.moviesView = new splat.MoviesView({
-                collection: self.movies
-            });
+            if (!self.moviesView){
+                self.moviesView = new splat.MoviesView({
+                    collection: self.movies
+                });
+            }
             // insert the rendered Browse view element into the document DOM
             self.showView('#content', self.moviesView);
             self.headerView.selectMenuItem("Browse Movies");
@@ -158,3 +161,17 @@ splat.utils.loadTemplates(['Home', 'Header', 'About', 'Details',
     splat.app = new splat.AppRouter();
     Backbone.history.start();
 });
+
+
+Backbone.View.prototype.close = function() {
+    /* When closing a view, give it a chance to perform it's own custom
+     * onClose processing, e.g. handle subview closes, then remove the
+     * view from the DOM and unbind events from it.  Based on approach
+     * suggested by D. Bailey (author of Marionette) */
+    if (this.onClose) {
+        this.onClose();
+    }
+    this.remove();
+    this.unbind(); // Note, implied by remove() in BB 1.0.0 and later
+
+};

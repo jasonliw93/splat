@@ -247,7 +247,7 @@ exports.getStream = function (req, res) {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
-
+    res.write("\n");
     // push this res object to our global variable
     openConnections.push(res);
     // When the request is closed, e.g. the browser window
