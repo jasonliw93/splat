@@ -8,19 +8,15 @@ splat.utils = {
     // shows a fade in notice
     watcher : _.extend({}, Backbone.Events),
     showNotice: function(noticeType, noticeText, cssStyle) {
-        $('#notification-panel').stop();
-        $('#notification-panel').css("opacity", "1.0");
-        $('#notification-panel').removeClass();
+        $('#notification-panel').removeClass("alert-danger alert-warning alert-success alert-info");
         $('#notification-panel').addClass("alert " + cssStyle);
-        $('#alert-type').html(noticeType);
-        $('#alert-text').html(noticeText);
-        $('#notification-panel').show().fadeOut(5000);
+        $('#notification-panel').html('<strong>' + noticeType + '</strong> ' + noticeText);
+        $('#notification-panel').stop(true,true).show().fadeOut(5000);
     },
     
     // hides the notice
     hideNotice: function() {
-        $('#notification-panel').hide();
-        $('#notification-panel').removeClass();
+        $('#notification-panel').stop(true,true).hide();
     },
     
     // alerts the user if the request between the server has failed in the console
