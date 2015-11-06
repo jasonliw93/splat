@@ -1,20 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- set charset to interpret file contents -->
-    <meta charset="UTF-8">
-    <!-- title displayed when browser tab is moused over -->
+    <meta charset="UTF-8"/>
     <title>Splat!</title>
-    <!-- ensure proper rendering and touch zooming -->
-    <link rel="icon" href="img/favicon.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bootstrap CSS definitions -->
-
-    <!-- optional stylesheet theme included with Bootstrap -->
-    <link href="css/bootstrap-theme.css" rel="stylesheet">
+    <!--ensure devices display responsive-bootstrap pages properly-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="css/bootstrap.css" rel="stylesheet">
-    <!-- your own customized style rules -->
+    <link href="css/bootstrap-theme.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
+    <link rel='shortcut icon' type='image/x-icon' href='img/favicon.ico' />
 </head>
 
 <body>
@@ -31,6 +25,10 @@
         </div>
         <!-- row -->
     </main>
+
+    <footer class="footer">
+        &copy; Jason & Melody</p>
+    </footer>
     <!-- container-fluid -->
 
     <!-- load scripts last for better UI performance -->
@@ -41,30 +39,29 @@
     <script src="js/lib/backbone-min.js" type="text/javascript"></script>
     <script src="js/lib/backbone.localStorage.js" type="text/javascript"></script>
     <script src="js/lib/bootstrap-min.js" type="text/javascript"></script>
-    <script src="js/views/header.js" type="text/javascript"></script>
-    <script src="js/views/home.js" type="text/javascript"></script>
-    <script src="js/views/about.js" type="text/javascript"></script>
-    <script src="js/views/movieform.js" type="text/javascript"></script>
-    <script src="js/views/movieposter.js" type="text/javascript"></script>
-    <script src="js/views/movieformactions.js" type="text/javascript"></script>
-    <script src="js/views/details.js" type="text/javascript"></script>
-    <script src="js/views/movie.js" type="text/javascript"></script>
-    <script src="js/views/movies.js" type="text/javascript"></script>
-    <script src="js/views/reviewer.js" type="text/javascript"></script>
-    <script src="js/views/reviewthumbs.js" type="text/javascript"></script>
-    <script src="js/views/reviewsview.js" type="text/javascript"></script>
+
+    <script src="js/utils.js" type="text/javascript"></script>
     <script src="js/models/movie.js" type="text/javascript"></script>
     <script src="js/models/review.js" type="text/javascript"></script>
     <script src="js/collections/movies.js" type="text/javascript"></script>
     <script src="js/collections/reviews.js" type="text/javascript"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/views/header.js" type="text/javascript"></script>
+    <script src="js/views/home.js" type="text/javascript"></script>
+    <script src="js/views/about.js" type="text/javascript"></script>
+    <script src="js/views/movie.js" type="text/javascript"></script>
+    <script src="js/views/movies.js" type="text/javascript"></script>
+
+    <script src="js/views/movieform.js" type="text/javascript"></script>
+    <script src="js/views/movieposter.js" type="text/javascript"></script>
+    <script src="js/views/movieformactions.js" type="text/javascript"></script>
+    <script src="js/views/details.js" type="text/javascript"></script>
     
-    <footer class="footer">
-        <div>
-            <p class="text-muted">&#169; Jason & Melody</p>
-        </div>
-    </footer>
+    <script src="js/views/reviewer.js" type="text/javascript"></script>
+    <script src="js/views/reviewthumbs.js" type="text/javascript"></script>
+    <script src="js/views/reviewsview.js" type="text/javascript"></script>
+
+    <script src="js/main.js" type="text/javascript"></script>
+
 </body>
 
 </html>

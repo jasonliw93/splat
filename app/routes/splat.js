@@ -202,7 +202,7 @@ mongoose.connect('mongodb://' +config.dbuser+ ':' +config.dbpass+
 // Schemas
 var MovieSchema = new mongoose.Schema({
     title: { type: String, required: true },
-    released: { type: Number, required: true},
+    released: { type: String, required: true},
     director: { type: String, required: true },
     starring: { type: [String], required: true },
     rating: { type: String, required: true },
@@ -219,7 +219,7 @@ var MovieSchema = new mongoose.Schema({
 
 // Constraints
 // each title:director pair must be unique; duplicates are dropped
-//MovieSchema.index({ title: 1, director: 1 }, { unique: true });  // ADD CODE
+MovieSchema.index({ title: 1, director: 1 }, { unique: true });  // ADD CODE
 
 var ReviewSchema = new mongoose.Schema({
     freshness: { type:Number, required: true},
@@ -231,17 +231,12 @@ var ReviewSchema = new mongoose.Schema({
 // Models
 var movieModel = mongoose.model('Movie', MovieSchema);
 var reviewModel = mongoose.model('Review', ReviewSchema);
-/*
-reviewModel.remove({}, function(err) { 
-   console.log('collection removed') 
-});
-*/
 
 var openConnections = [];
 
 exports.sse = function (req, res) {
     // set timeout as high as possible
-    req.socket.setTimeout(Number.MAX_SAFE_INTEGER || Infinity);
+    res.setTimeout(0);
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
@@ -252,7 +247,6 @@ exports.sse = function (req, res) {
     // When the request is closed, e.g. the browser window
     // is closed. We search through the open connections
     // array and remove this connection.
-    
     req.on("close", function() {
         var toRemove;
         for (var j =0 ; j < openConnections.length ; j++) {
@@ -263,10 +257,10 @@ exports.sse = function (req, res) {
         }
         openConnections.splice(j,1);
     });
+    
 };
 
 function broadcast(data){
-    
     openConnections.forEach(function(res) {
         res.write("id: " + new Date().valueOf() + "\n");
         res.write("data: " + JSON.stringify(data) + "\n\n");

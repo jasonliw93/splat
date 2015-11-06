@@ -25,6 +25,7 @@ splat.AppRouter = Backbone.Router.extend({
         
         var stream = new EventSource('/sse')
         var self = this;
+        
         stream.onmessage = function(e) {
             var data = JSON.parse(e.data);
             if (data.model == 'movie') { 

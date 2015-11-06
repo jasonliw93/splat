@@ -38,7 +38,6 @@ var app = express();  // Create Express app server
 app.set('port', process.env.PORT || config.port);
 
 // activate basic HTTP authentication (to protect your solution files)
-//app.use(basicAuth('username', 'password'));  // REPLACE username/password
 app.use(basicAuth(config.username, config.password));
 
 // change param value to control level of logging  ... ADD CODE
@@ -46,13 +45,12 @@ app.use(logger('dev'));  // 'default', 'short', 'tiny', 'dev'
 
 // MUST BE PLACED BEFORE compression otherwise it will not work
 app.get('/sse', splat.sse);
+
 // use compression (gzip) to reduce size of HTTP responses
 app.use(compression());
 
 // parse HTTP request body
-app.use(bodyParser.json({
-    limit : 500000
-}));
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -90,35 +88,8 @@ app.use(express.static(__dirname + "/public"));
 // return error details to client - use only during development
 app.use(errorHandler({ dumpExceptions:true, showStack:true }));
 
-// Default-route middleware, in case none of above match
-app.use(function (req, res) {
-});
-
 // Start HTTP server
-var server = http.createServer(app);
-
-server.listen(app.get('port'), function () {
+http.createServer(app).listen(app.get('port'), function () {
     console.log("Express server listening on port %d in %s mode",
-    		app.get('port'), config.env );
+            app.get('port'), config.env );
 });
-
-
-/*
-var io = require('socket.io')(server),
-    connections = {
-        movie: [],
-        review: []
-    };
-
-io.on('connection', function(socket) {
-    socket.on('subscribe', function(model) {
-        connections[model].push(socket);
-    });
-});
-
-exports.notify = function(model){
-    connections[model].forEach(function(socket) {
-        socket.emit('notify', model);
-    });
-};
-*/
