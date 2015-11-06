@@ -7,7 +7,6 @@ var splat = splat || {};
 // note View-name (MoviePoster) matches name of template file MoviePoster.html
 splat.MoviePoster = Backbone.View.extend({
     initialize: function() {
-        //this.moviePosterLoad = $.get('tpl/MoviePoster.html');
     },
     events: {
         "change #selectImage": "selectImage",

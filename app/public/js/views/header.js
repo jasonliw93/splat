@@ -7,7 +7,6 @@ var splat = splat || {};
 // note View-name (Header) matches name of template file Header.html
 splat.Header = Backbone.View.extend({
     initialize: function() {
-        
     },
     events:{
         "change .dropdown-menu input[type=radio]" : "dropdownChange",

@@ -6,7 +6,6 @@ var splat = splat || {};
 
 // note View-name (About) matches name of template file About.html
 splat.About = Backbone.View.extend({
-
     // render the View
     render: function() {
         // set the view element ($el) HTML content using its template

@@ -86,7 +86,6 @@ splat.AppRouter = Backbone.Router.extend({
         this.headerView.selectMenuItem("About");
     },
     browse: function() {
-        this.moviesFetch = this.movies.fetch();
         var self = this;
         this.moviesFetch.done(function(coll, resp) {
             if (!self.moviesView){

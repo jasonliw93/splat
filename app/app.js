@@ -88,6 +88,10 @@ app.use(express.static(__dirname + "/public"));
 // return error details to client - use only during development
 app.use(errorHandler({ dumpExceptions:true, showStack:true }));
 
+app.use(function (req, res, next) {
+    console.log(req);
+}); 
+
 // Start HTTP server
 http.createServer(app).listen(app.get('port'), function () {
     console.log("Express server listening on port %d in %s mode",

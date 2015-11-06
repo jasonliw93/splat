@@ -11,12 +11,10 @@ splat.utils = {
         $('#notification-panel').stop();
         $('#notification-panel').css("opacity", "1.0");
         $('#notification-panel').removeClass();
-        $('#notification-panel').addClass("alert");
-        $('#notification-panel').addClass(cssStyle);
+        $('#notification-panel').addClass("alert " + cssStyle);
         $('#alert-type').html(noticeType);
         $('#alert-text').html(noticeText);
-        $('#notification-panel').show();
-        $('#notification-panel').fadeOut(5000);
+        $('#notification-panel').show().fadeOut(5000);
     },
     
     // hides the notice
