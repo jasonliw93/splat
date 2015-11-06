@@ -91,6 +91,7 @@ splat.MoviePoster = Backbone.View.extend({
     },
     // set sourceImg as model poster and display image. 
     setImage: function(sourceImg, type){
+        // temporarily set poster image to fallback image in case upload fails
         this.model.set('poster', '/img/failedupload.png');
         var targetImgElt = $('#detailsImage')[0];
         targetImgElt.src = sourceImg;

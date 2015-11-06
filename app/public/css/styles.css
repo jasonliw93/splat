@@ -194,6 +194,9 @@ body {
     padding: 0;
     position: relative;
 }
+#movieformactions .review-swatch-container{
+    width: 50px;
+}
 .review-swatch-bg{ 
     width: 100%;
 }

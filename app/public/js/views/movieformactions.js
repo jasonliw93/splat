@@ -13,7 +13,7 @@ splat.MovieFormActions = Backbone.View.extend({
             splat.app.navigate('#movies', {
                     replace: true,
                     trigger: true
-                });
+            });
             splat.utils.showNotice('Error', "Movie has been removed since last opened", 'alert-warning');
         });
         this.listenTo(this.model, 'change:freshTotal', function(e,model){

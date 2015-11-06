@@ -7,16 +7,6 @@ var splat = splat || {};
 // note View-name (MovieForm) matches name of template file MovieForm.html
 splat.MovieForm = Backbone.View.extend({
     initialize: function() {
-        this.newMovie = this.model.isNew();
-        if (!this.newMovie){
-            this.listenTo(this.model, 'change', function(model){
-                for (var i in model.changed) {
-                    if ($(".form-group input[name=" + i + "]").val() != model.get(i)){
-                        splat.utils.showNotice('Warning', "Movie has been changed since last opened", 'alert-warning');
-                    }
-                }
-            });
-        }
     },
     events: {
         "change .form-group input": "change",

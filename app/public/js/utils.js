@@ -52,6 +52,13 @@ splat.utils = {
         },
         formatArray: function(array){
             return array.join(', ');
+        },
+        getTrailer: function(id, trailer){
+            if (trailer){
+                return trailer;
+            }else{
+                return 'movies/' + id + '/video';
+            }
         }
     },
     // Asynchronously load templates located in separate .html files using
