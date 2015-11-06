@@ -193,11 +193,9 @@ body {
 .review-swatch-container{
     padding: 0;
     position: relative;
-    max-width: 75px;
 }
 .review-swatch-bg{ 
     width: 100%;
-    
 }
 .review-swatch-details{
     position: absolute;
