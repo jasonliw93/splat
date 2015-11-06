@@ -24,7 +24,6 @@ splat.Details = Backbone.View.extend({
         this.movieFormView.close();
         this.movieFormActionsView.close();
         this.moviePosterView.close();
-        this.model.set(this.model.previousAttributes());
         splat.utils.hideNotice();
     },
     // render the View
