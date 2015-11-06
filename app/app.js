@@ -88,9 +88,10 @@ app.use(express.static(__dirname + "/public"));
 // return error details to client - use only during development
 app.use(errorHandler({ dumpExceptions:true, showStack:true }));
 
-app.use(function (req, res, next) {
-    console.log(req);
-}); 
+app.use(function (req, res) {
+    console.log('%s %s', req.method, req.url);
+    res.status(404).end();
+});
 
 // Start HTTP server
 http.createServer(app).listen(app.get('port'), function () {
