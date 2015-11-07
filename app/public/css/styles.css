@@ -195,7 +195,8 @@ body {
     position: relative;
 }
 #movieformactions .review-swatch-container{
-    width: 50px;
+    width: 75px;
+    height: 75px;
 }
 .review-swatch-bg{ 
     width: 100%;
@@ -203,13 +204,11 @@ body {
 .review-swatch-details{
     position: absolute;
     font-weight: bold;
-    font-size:70%;
+    font-size:90%;
     color:white;
-    top: 20px;
-    left: 15px;
-}
-.review-swatch-link{
-    color: yellow;
+    top: 10px;
+    left: 10px;
+    padding-left: 5px;
 }
 
 .alert{
