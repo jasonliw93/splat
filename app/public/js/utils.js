@@ -42,9 +42,9 @@ splat.utils = {
     templateHelpers : {
         getReviewImage: function(freshVotes, freshTotal){            
             if (freshVotes/freshTotal >= 0.5) { 
-                return '/img/fresh.gif';
+                return '/img/fresh_lg.png';
             }else{
-                return '/img/rotten.gif';
+                return '/img/rotten_lg.png';
             }
         },
         getReviewText: function(freshVotes, freshTotal){            

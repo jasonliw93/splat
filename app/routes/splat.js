@@ -46,8 +46,6 @@ exports.addMovie = function(req, res){
                         +err.message+ ")" );
         }else{
             res.status(200).send(movie);
-            console.log(movie.poster);
-            console.log(movie.poster.indexOf('upload.png'));
             if (movie.poster.indexOf('upload.png') < 0){
                 broadcast({model: "movie", movieId: movie.id, action: "add"});
             }

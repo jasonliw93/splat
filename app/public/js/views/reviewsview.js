@@ -25,8 +25,12 @@ splat.ReviewsView = Backbone.View.extend({
         var freshTotal = this.model.get('freshTotal');
         var freshVotes = this.model.get('freshVotes');
         if (freshTotal){
-            this.$('#freshnessimg').attr('src', splat.utils.templateHelpers.getReviewImage(freshVotes,freshTotal));
-            this.$('#freshness').html(splat.utils.templateHelpers.getReviewText(freshVotes,freshTotal));
+            if (freshVotes/freshTotal >= 0.5) { 
+                this.$('#freshnessimg').attr('src','/img/fresh.gif');
+            }else{
+                this.$('#freshnessimg').attr('src','/img/rotten.gif');
+            }
+            this.$('#freshness').html((freshVotes/freshTotal*100).toFixed(1) + '% (' + freshTotal+ ')');
         }else{
             this.$('#freshness').html('… no reviews yet');
         }
