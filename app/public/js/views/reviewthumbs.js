@@ -8,7 +8,7 @@ var splat = splat || {};
 splat.ReviewThumbs = Backbone.View.extend({
     // render the View
     initialize: function(options) {
-        //this.movieId = options.movieId;
+        this.reviewThumbView = new splat.ReviewThumb();
     },
     reviewsTemplate: _.template([
         "<% reviews.each(function(review) { %>",
@@ -20,7 +20,7 @@ splat.ReviewThumbs = Backbone.View.extend({
         var self = this;
         self.$el.html(self.reviewsTemplate({
             reviews: self.model.reviews,
-            reviewTemplate: self.template
+            reviewTemplate: self.reviewThumbView.template
         }));
         return this; // support method chaining
     }

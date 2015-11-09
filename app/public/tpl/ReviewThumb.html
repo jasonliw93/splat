@@ -8,18 +8,13 @@
             <div class="review-text">
                 <div class="panel panel-default">
                 <img src="<% if (freshness) { %> /img/fresh.gif <% } else { %> /img/rotten.gif <% } %> ">
-                <%= reviewText %>
+                <q><%= reviewText %></q>
                 </div>
-                <div class="col-xs-2">
-                    <img src="/img/critic.gif">
-                </div>
-                <div class="col-xs-10">
-                    <i><%= reviewAffil %></i><br/>
-                </div>
-                <div class="col-xs-12">
-                    <i><%= reviewName %></i>
-                </div>
-                
+                <p>
+                    <img src="img/critic.gif" alt="Critic"/> <%= reviewAffil %> <br>
+                    <span><%= reviewName %></span>
+                </p>
+
             </div>
         </div>
     </div>

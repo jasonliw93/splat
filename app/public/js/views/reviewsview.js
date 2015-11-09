@@ -14,8 +14,7 @@ splat.ReviewsView = Backbone.View.extend({
         this.reviewThumbsView = new splat.ReviewThumbs({
             model : this.model
         });
-        var self = this;
-        this.listenTo(this.model.reviews, 'sync', function(e,data){
+        this.listenTo(this.model.reviews, 'sync', function(){
             this.reviewThumbsView.render();
             this.showScore();
         });

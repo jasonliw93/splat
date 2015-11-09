@@ -158,7 +158,7 @@ splat.AppRouter = Backbone.Router.extend({
 
 splat.utils.loadTemplates(['Home', 'Header', 'About', 'Details', 
     'MovieThumb', 'MovieForm', 'MovieFormActions', 'MoviePoster', 
-    'ReviewsView','Reviewer', 'ReviewThumbs'], function() {
+    'ReviewsView','Reviewer', 'ReviewThumb'], function() {
     splat.app = new splat.AppRouter();
     Backbone.history.start();
 });

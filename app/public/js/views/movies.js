@@ -9,18 +9,15 @@ splat.MoviesView = Backbone.View.extend({
     // render the View
     initialize: function() {
         this.movieThumbView = new splat.MovieThumb();
-        var self = this;
-        splat.utils.watcher.on('ordering', function(data){
-            self.collection.comparator = function(model) {
-                return model.get(data).toLowerCase();;
-            }
-            // call the sort method
-            self.collection.sort();
-            self.render();
+        this.listenTo(Backbone, 'orderevent', function(){
+            this.collection.comparator = function(movie) {
+                return movie.get(splat.order).toLowerCase();
+            };
+            // sort collection before rendering it - implicitly uses comparator
+            this.collection.sort();
+            this.render();
         });
-        this.listenTo(this.collection, 'sync', function(e,data){
-            self.render();
-        });
+        this.listenTo(this.collection, 'sync', this.render);
     },
     // function to combine movie JSON data for rendering to HTML
     moviesTemplate: _.template([

@@ -9,42 +9,27 @@ splat.Header = Backbone.View.extend({
     initialize: function() {
     },
     events:{
-        "change .dropdown-menu input[type=radio]" : "dropdownChange",
-        "mouseover .dropdown.active" : "showDropdown",
-        "mouseout .dropdown.active" : "hideDropdown",
-        "click .dropdown" : "showDropdown",
+        "change #orderForm" : "sortOrder",
+        "mouseover #orderdrop.active" : "showOrderForm",
+        "mouseout #orderdrop.active" : "hideOrderForm",
+        "click #orderdrop" : "showOrderForm",
     },
-    showDropdown: function(e){
-        this.$(".dropdown").addClass('open');
+    showOrderForm: function(){
+        this.$("#orderdrop").addClass('open');
     },
-    hideDropdown: function(e){
-        this.$(".dropdown").removeClass('open');
+    hideOrderForm: function(){
+        this.$("#orderdrop").removeClass('open');
     },
-    dropdownChange: function(e){
-        splat.utils.watcher.trigger('ordering', e.target.value);
-        this.$(".dropdown").removeClass('open');
-        splat.app.navigate('#movies', {
-            replace: true,
-            trigger: true
-        });
+    sortOrder: function(e){
+        e.stopPropagation();
+        splat.order = e.target.value;  // set app-level order field
+        Backbone.trigger('orderevent', e);
+        this.hideOrderForm();
     },
     // render the View
     render: function() {
         // set the view element ($el) HTML content using its template
         this.$el.html(this.template());
-        /*
-        var self = this;
-        
-        this.$(".dropdown").hover(
-          function() {
-            if (self.active === 'Browse Movies'){
-                $( this ).addClass( "open" );
-            }
-          }, function() {
-            $( this ).removeClass( "open" );
-          });
-        
-        */
         return this; // support method chaining
     },
     // makes the menu item given by menuItem active
