@@ -32,7 +32,7 @@ splat.MoviesView = Backbone.View.extend({
             movieTemplate: this.movieThumbView.template
             })
         );
-    // support chaining
+        // support chaining
         return this;
     },
 

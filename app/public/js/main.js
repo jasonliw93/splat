@@ -23,6 +23,7 @@ splat.AppRouter = Backbone.Router.extend({
         // fetches the movies
         this.moviesFetch = this.movies.fetch();
         
+
         var stream = new EventSource('/sse')
         var self = this;
         stream.onmessage = function(e) {
@@ -89,11 +90,9 @@ splat.AppRouter = Backbone.Router.extend({
         this.moviesFetch = this.movies.fetch();
         var self = this;
         this.moviesFetch.done(function(coll, resp) {
-            if (!self.moviesView){
-                self.moviesView = new splat.MoviesView({
-                    collection: self.movies
-                });
-            }
+            self.moviesView = new splat.MoviesView({
+                collection: self.movies
+            });
             // insert the rendered Browse view element into the document DOM
             self.showView('#content', self.moviesView);
             self.headerView.selectMenuItem("Browse Movies");
