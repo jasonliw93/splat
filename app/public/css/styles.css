@@ -41,7 +41,7 @@ body {
 
 /*Splash Format*/
 
-.home-hero img#splash {
+#splash {
     position: fixed;
     top: 0;
     left: 0;
@@ -86,7 +86,6 @@ body {
 .about-hero img#smiley {
     height: auto;
     width: 50%;
-    border-radius: 100%;
 }
 
 /*Font Colour for header in About page*/
@@ -213,4 +212,8 @@ body {
 
 .alert{
     display:none;
+}
+
+.review-text{
+    word-wrap: break-word;
 }
