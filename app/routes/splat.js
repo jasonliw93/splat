@@ -44,6 +44,7 @@ exports.addMovie = function(req, res){
     var movie = new movieModel(req.body);
     saveMovie(movie, res, 'add');
 };
+
 exports.editMovie = function(req, res){
     movieModel.findById(req.params.id, function(err, movie){ 
         if (err) {
@@ -58,7 +59,11 @@ exports.editMovie = function(req, res){
     });
 };
 
-function saveMovie(movie, res, action){
+// Helper function used to save the movie which 
+// checks if poster needs to be saved to file first
+// and send response to original request.
+function saveMovie(movie, res, action){    
+    // save function called after we check if we have to save poster to file
     var save = function() {
         movie.save(function (err, movie) {
             if (err){
@@ -70,17 +75,19 @@ function saveMovie(movie, res, action){
             }
         });
     };
-    if (movie.poster.indexOf('data\:image') == 0){
-        var regex = /^data:.+\/(.+);base64,(.*)$/;
-        var matches = movie.poster.match(regex);
-        var ext = matches[1];
-        var data = matches[2];
+    var regex = /^data:image\/(.+);base64,(.*)$/;
+    var match = movie.poster.match(regex);
+    if (match){
+        var ext = match[1];
+        var data = match[2];
         var buffer = new Buffer(data, 'base64');
         var imageURL = 'img/uploads/' + movie.id + "." + ext;
         var newPath = __dirname + '/../public/' + imageURL;
+        // write the data to file
         fs.writeFile(newPath, buffer, function (err) {
             if (err) 
                 return res.status(500).send("Sorry, error occured when uploading file");
+            // forces browser to reload the image if cached
             movie.poster = imageURL + '?' + new Date().valueOf();;
             save();
         });
@@ -102,39 +109,6 @@ exports.deleteMovie = function(req, res){
             broadcastEvent({model: "movie", movieId: movie.id, action: "remove"});
         }
     });
-};
-
-exports.uploadImage = function(req, res) {
-    // req.files is an object, attribute "file" is the HTML-input name attr
-    var filePath = req.files.image.path,  // ADD CODE to get file path
-        fileType = req.files.image.mimetype,  // ADD CODE to get MIME type
-        // extract the MIME suffix for the user-selected file
-        suffix = '.' + fileType.split('/')[1],// ADD CODE
-        // imageURL is used as the value of a movie-model poster field 
-        // id parameter is the movie's "id" attribute as a string value
-        imageURL = 'img/uploads/' + req.params.id + suffix,
-        // rename the image file to match the imageURL
-        newPath = __dirname + '/../public/' + imageURL,
-        datedImageUrl = imageURL + '?' + new Date().valueOf();
-
-        fs.rename(filePath, newPath, function(err) {
-            if (err) {
-                res.status(500).send("Sorry, unable to upload poster image at this time (" 
-                    +err.message+ ")" );
-            } else {
-                movieModel.findById(req.params.id, function(err, movie){ 
-                    if (err) {
-                        res.status(500).send("Sorry, unable to retrieve movie at this time (" 
-                            +err.message+ ")" );
-                    } else if (!movie) {
-                        res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
-                    } else {
-                        movie.poster = imageURL;
-                        saveMovie(movie, res, 'image upload');
-                    }
-                });
-    	   }
-        });
 };
 
 exports.addReview = function(req, res){    

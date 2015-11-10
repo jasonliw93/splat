@@ -22,9 +22,9 @@ splat.AppRouter = Backbone.Router.extend({
         this.movies = new splat.Movies();
         // fetches the movies
         this.moviesFetch = this.movies.fetch();
-        var stream = new EventSource('/events')
+        var eventStream = new EventSource('/events')
         var self = this;
-        stream.onmessage = function(e) {
+        eventStream.onmessage = function(e) {
             // parses the data from JSON to a model
             var data = JSON.parse(e.data);
             if (data.model == 'movie') { 
@@ -42,10 +42,9 @@ splat.AppRouter = Backbone.Router.extend({
                     splat.utils.requestFailed(resp);
                 });
             } else {
-                console.log(data,e.data);
+                console.log(data);
             }
         }
-        
         // instantiate a Header view
         this.headerView = new splat.Header();
         // insert the rendered Header view element into the document DOM
