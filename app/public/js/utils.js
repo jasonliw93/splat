@@ -22,7 +22,7 @@ splat.utils = {
     // alerts the user if the request between the server has failed in the console
     requestFailed: function(response) {
         console.log(response);
-        alert(response.responseText);
+        this.showNotice('Error', response.responseText, 'alert-danger');
     },
     
     // validation error notices

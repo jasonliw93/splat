@@ -48,7 +48,7 @@ exports.addMovie = function(req, res){
         }else{
             res.status(200).send(movie);
             if (movie.poster !== '/img/failedupload.png') {
-                broadcast({model: "movie", movieId: movie.id, action: "add"});
+                broadcastEvent({model: "movie", movieId: movie.id, action: "add"});
             }
         }
 
@@ -70,7 +70,7 @@ exports.editMovie = function(req, res){
                 }else{
                     res.status(200).send(movie);
                     if (movie.poster !== '/img/failedupload.png') {
-                        broadcast({model: "movie", movieId: movie.id, action: "add"});
+                        broadcastEvent({model: "movie", movieId: movie.id, action: "add"});
                     }
                 }
             });
@@ -87,7 +87,7 @@ exports.deleteMovie = function(req, res){
         } else {
             fs.unlink(__dirname + '/../public/img/uploads/' + movie.id + '.jpeg');
             res.status(200).send(movie);
-            broadcast({model: "movie", movieId: movie.id, action: "remove"});
+            broadcastEvent({model: "movie", movieId: movie.id, action: "remove"});
         }
     });
 };
@@ -116,7 +116,7 @@ exports.uploadImage = function(req, res) {
                 }
                 else{
                     res.status(200).send(datedImageUrl);
-                    broadcast({model: "movie", movieId: movie.id, action: "image upload"});
+                    broadcastEvent({model: "movie", movieId: movie.id, action: "image upload"});
                 }
             });
         } else {
@@ -149,7 +149,7 @@ exports.addReview = function(req, res){
                                         +err.message+ ")" );
                         }else{
                             res.status(200).send(review);
-                            broadcast({model: "review", movieId: req.params.id, action: "add"});
+                            broadcastEvent({model: "review", movieId: req.params.id, action: "add"});
                         }
                     });
                 }
@@ -170,7 +170,7 @@ exports.getReviews = function(req, res){
 };
 
 exports.playMovie = function(req, res){
-    var file = path.resolve(__dirname,"../public/img/video/small.mp4");
+    var file = path.resolve(__dirname,"../public/img/video/" + req.params.id + ".mp4");
     //console.log(file);
     var range = req.headers.range;
     //console.log(range);
@@ -179,7 +179,7 @@ exports.playMovie = function(req, res){
     fs.stat(file, function (err, stats) {
         //console.log(stats);
         if (err) {
-            res.status(500).send("Sorry, unable to retrieve video at this time");
+            res.status(404).send("Sorry, unable to retrieve video at this time");
         }else{
             var total = stats.size;
             var end = positions[1] ? parseInt(positions[1], 10) : total - 1;
@@ -206,7 +206,8 @@ var mongoose = require('mongoose'); // MongoDB integration
 // Connect to database, using credentials specified in your config module
 mongoose.connect('mongodb://' +config.dbuser+ ':' +config.dbpass+
                '@' + config.dbhost + '/' + config.dbname);
-//mongoose.connect('mongodb://localhost:27017/splat')
+
+
 // Schemas
 var MovieSchema = new mongoose.Schema({
     title: { type: String, required: true },
@@ -225,10 +226,6 @@ var MovieSchema = new mongoose.Schema({
     // ADD CODE for other Movie attributes
 });
 
-// Constraints
-// each title:director pair must be unique; duplicates are dropped
-MovieSchema.index({ title: 1, director: 1 }, { unique: true });  // ADD CODE
-
 var ReviewSchema = new mongoose.Schema({
     freshness: { type:Number, required: true},
     reviewText: { type:String, required: true},
@@ -236,13 +233,19 @@ var ReviewSchema = new mongoose.Schema({
     reviewAffil: { type:String, required: true},
     movieId: {type:String, required: true},
 })
+
+// Constraints
+// each title:director pair must be unique; duplicates are dropped
+MovieSchema.index({ title: 1, director: 1 }, { unique: true });  // ADD CODE
+
 // Models
 var movieModel = mongoose.model('Movie', MovieSchema);
 var reviewModel = mongoose.model('Review', ReviewSchema);
 
-var openConnections = [];
+// Server Sent Events
+var subscribers = [];
 
-exports.sse = function (req, res) {
+exports.subscribeEvents = function (req, res) {
     // set timeout as high as possible
     res.setTimeout(0);
     res.statusCode = 200;
@@ -251,25 +254,25 @@ exports.sse = function (req, res) {
     res.setHeader('Connection', 'keep-alive');
     res.write("\n");
     // push this res object to our global variable
-    openConnections.push(res);
+    subscribers.push(res);
     // When the request is closed, e.g. the browser window
     // is closed. We search through the open connections
     // array and remove this connection.
     req.on("close", function() {
         var toRemove;
-        for (var j =0 ; j < openConnections.length ; j++) {
-            if (openConnections[j] == res) {
+        for (var j =0 ; j < subscribers.length ; j++) {
+            if (subscribers[j] == res) {
                 toRemove =j;
                 break;
             }
         }
-        openConnections.splice(j,1);
+        subscribers.splice(j,1);
     });
     
 };
 
-function broadcast(data){
-    openConnections.forEach(function(res) {
+function broadcastEvent(data){
+    subscribers.forEach(function(res) {
         res.write("id: " + new Date().valueOf() + "\n");
         res.write("data: " + JSON.stringify(data) + "\n\n");
     });

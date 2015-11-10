@@ -43,14 +43,16 @@ app.use(basicAuth(config.username, config.password));
 // change param value to control level of logging  ... ADD CODE
 app.use(logger('dev'));  // 'default', 'short', 'tiny', 'dev'
 
-// MUST BE PLACED BEFORE compression otherwise it will not work
-app.get('/sse', splat.sse);
+// placed before compression otherwise it will not work
+app.get('/events', splat.subscribeEvents);
 
 // use compression (gzip) to reduce size of HTTP responses
 app.use(compression());
 
 // parse HTTP request body
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+    limit: 50000
+}));
 app.use(bodyParser.urlencoded({
     extended: true
 }));

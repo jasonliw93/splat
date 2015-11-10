@@ -24,11 +24,10 @@ splat.AppRouter = Backbone.Router.extend({
         this.moviesFetch = this.movies.fetch();
         
 
-        var stream = new EventSource('/sse')
+        var stream = new EventSource('/events')
         var self = this;
         stream.onmessage = function(e) {
             var data = JSON.parse(e.data);
-            console.log(data);
             if (data.model == 'movie') { 
                 self.moviesFetch = self.movies.fetch();
             } else if (data.model == 'review'){
@@ -39,7 +38,7 @@ splat.AppRouter = Backbone.Router.extend({
                         movie.reviews.fetch();
                     }
                 }).fail(function(coll, resp) {
-                    alert("Fetch movies failed!");
+                    splat.utils.requestFailed(resp);
                 });
             } else {
                 console.log(data,e.data);
@@ -97,7 +96,7 @@ splat.AppRouter = Backbone.Router.extend({
             self.showView('#content', self.moviesView);
             self.headerView.selectMenuItem("Browse Movies");
         }).fail(function(coll, resp) {
-            alert("Fetch movies failed!");
+            splat.utils.requestFailed(resp);
         });
     },
     addHandler: function() {
@@ -124,7 +123,7 @@ splat.AppRouter = Backbone.Router.extend({
             self.showView('#content', self.detailsView);
             self.headerView.selectMenuItem("Add Movie");
         }).fail(function(coll, resp) {
-            alert("Fetch movies failed!");
+            splat.utils.requestFailed(resp);
         });
     },
     reviews : function(id){
@@ -142,11 +141,11 @@ splat.AppRouter = Backbone.Router.extend({
                 });
                 self.showView('#content', self.reviewsView);
             }).fail(function(coll, resp) {
-                alert("Fetch reviews failed!");
+                splat.utils.requestFailed(resp);
             });
             
         }).fail(function(coll, resp) {
-            alert("Fetch movies failed!");
+            splat.utils.requestFailed(resp);
         });
     }
 });

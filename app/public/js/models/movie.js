@@ -157,6 +157,7 @@ splat.Movie = Backbone.Model.extend({
         trailer : function(value) {
             // regex for trailer URL
             var urlRegex = /^(https?:\/\/[\w-]+(\.[\w-]+)+(:\d+)?(\/\S*)?)$/;
+            //var urlRegex = /^(https?:\/\/\w+(\.\w+)*(\/[\w\.#]+)*\/?)?$/;
             return (!value || urlRegex.test(value)) ? {
                 isValid: true
             } : {

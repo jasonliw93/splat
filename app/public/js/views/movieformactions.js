@@ -16,9 +16,7 @@ splat.MovieFormActions = Backbone.View.extend({
             });
             splat.utils.showNotice('Error', "Movie has been removed since last opened", 'alert-warning');
         });
-        this.listenTo(this.model, 'change:freshTotal', function(e,model){
-            self.render();
-        });
+        this.listenTo(this.model, 'change:freshTotal', this.render);
     },
     events: {
         "click #moviesave": "beforeSave",
@@ -58,7 +56,7 @@ splat.MovieFormActions = Backbone.View.extend({
                         targetImgElt.src = imageURL;
                         self.afterSave();
                     }).fail(function(res){
-                        console.log(res);
+                        splat.utils.requestFailed(res);
                     });
                 }else{
                     // no image to upload
