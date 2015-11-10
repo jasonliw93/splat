@@ -24,7 +24,9 @@ splat.MovieForm = Backbone.View.extend({
            processData: false,
            contentType: false,
         }).done(function(res){
-            console.log(res);
+            var re = new RegExp(/^.*\//);
+            $('input[name=trailer]').val(location.origin + res);
+            self.model.set({trailer : location.origin + res});
         }).fail(function(res){
             splat.utils.requestFailed(res);
         });
