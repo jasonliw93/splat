@@ -100,7 +100,7 @@ splat.MoviePoster = Backbone.View.extend({
         for(var i = 0; i < blobBin.length; i++) {
             array.push(blobBin.charCodeAt(i));
         }
-        splat.imageFile = new Blob([new Uint8Array(array)], {type: type});
+        this.model.imageFile = new Blob([new Uint8Array(array)], {type: type});
         splat.utils.showNotice('Note!', 'Movie Poster updated, to make changes permanent, click "Save Changes" button', 'alert-info');
     },
     // render the View

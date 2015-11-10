@@ -46,7 +46,7 @@ splat.MovieFormActions = Backbone.View.extend({
                 var targetImgElt = $('#detailsImage')[0];
                 if (targetImgElt.src.indexOf('data\:image') == 0) {
                     var formdata = new FormData();
-                    formdata.append("image", splat.imageFile);
+                    formdata.append("image", self.model.imageFile);
                     $.ajax({
                        url: "movies/" + self.model.id + "/image",
                        type: "POST",

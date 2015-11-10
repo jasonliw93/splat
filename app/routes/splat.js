@@ -5,7 +5,8 @@ var fs = require('fs'),
     // path is "../" since splat.js is in routes/ sub-dir
     config = require(__dirname + '/../config'),  // port#, other params
     express = require("express"),
-    url = require("url");
+    url = require("url"),
+    _ = require("underscore");
 // Implemention of splat API handlers:
 
 // "exports" is used to make the associated name visible
@@ -46,7 +47,7 @@ exports.addMovie = function(req, res){
                         +err.message+ ")" );
         }else{
             res.status(200).send(movie);
-            if (movie.poster.indexOf('upload.png') < 0){
+            if (movie.poster !== '/img/failedupload.png') {
                 broadcast({model: "movie", movieId: movie.id, action: "add"});
             }
         }
@@ -54,18 +55,25 @@ exports.addMovie = function(req, res){
     });
 };
 exports.editMovie = function(req, res){
-    delete req.body._id;
-    movieModel.findByIdAndUpdate(req.params.id, req.body, function(err, movie){ 
+    movieModel.findById(req.params.id, function(err, movie){ 
         if (err) {
             res.status(500).send("Sorry, unable to retrieve movie at this time (" 
                 +err.message+ ")" );
         } else if (!movie) {
             res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
         } else {
-            res.status(200).send(movie);
-            if (req.body.poster.indexOf('upload.png') < 0){
-                broadcast({model: "movie", movieId: movie.id, action: "update"});
-            }
+            _.extend(movie, req.body);
+            movie.save(function (err, movie) {
+                if (err){
+                    res.status(500).send("Sorry, unable to add movie at this time (" 
+                                +err.message+ ")" );
+                }else{
+                    res.status(200).send(movie);
+                    if (movie.poster !== '/img/failedupload.png') {
+                        broadcast({model: "movie", movieId: movie.id, action: "add"});
+                    }
+                }
+            });
         }
     });
 };
