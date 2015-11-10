@@ -9,6 +9,8 @@ splat.MovieFormActions = Backbone.View.extend({
     initialize: function() {
         this.isNew = this.model.isNew();
         var self = this;
+        // listens to model to refrain users from changing an attribute
+        // a removed model
         this.listenTo(this.model, 'remove', function(model){
             splat.app.navigate('#movies', {
                     replace: true,
@@ -68,6 +70,7 @@ splat.MovieFormActions = Backbone.View.extend({
             }
         });
     },
+    // saves movie model
     afterSave: function(isNew){
         if (this.isNew) {
             splat.app.navigate('#movies/' + this.model.id, {replace:true, trigger:false});

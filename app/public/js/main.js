@@ -22,16 +22,17 @@ splat.AppRouter = Backbone.Router.extend({
         this.movies = new splat.Movies();
         // fetches the movies
         this.moviesFetch = this.movies.fetch();
-        
-
         var stream = new EventSource('/events')
         var self = this;
         stream.onmessage = function(e) {
+            // parses the data from JSON to a model
             var data = JSON.parse(e.data);
             if (data.model == 'movie') { 
+                // fetches the movies
                 self.moviesFetch = self.movies.fetch();
             } else if (data.model == 'review'){
                 self.moviesFetch = self.movies.fetch();
+                // fetches the movie and its reviews
                 self.moviesFetch.done(function(coll, resp) {
                     var movie = self.movies.get(data.movieId);
                     if (movie.reviews){
