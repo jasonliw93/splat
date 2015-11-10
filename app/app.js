@@ -58,7 +58,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 // set file-upload directory for poster images
-// app.use(multer({dest: __dirname + '/public/img/uploads/'}));
+app.use(multer({dest: __dirname + '/public/videos/'}));
 
 // checks req.body for HTTP method overrides
 app.use(methodOverride());
@@ -82,6 +82,7 @@ app.delete('/movies/:id', splat.deleteMovie);
 app.get('/movies/:id/reviews', splat.getReviews);
 app.post('/movies/:id/reviews', splat.addReview);
 app.get('/movies/:id/video', splat.playMovie);
+app.post('/movies/:id/video', splat.uploadVideo);
 // ADD CODE to support other routes listed on assignment handout
 
 // location of app's static content ... may need to ADD CODE

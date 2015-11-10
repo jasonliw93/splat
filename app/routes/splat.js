@@ -153,7 +153,26 @@ exports.getReviews = function(req, res){
         }
     });
 };
-
+exports.uploadVideo = function(req, res) {
+    // req.files is an object, attribute "file" is the HTML-input name attr
+    var filePath = req.files.video.path,  // ADD CODE to get file path
+        fileType = req.files.video.mimetype,  // ADD CODE to get MIME type
+        // extract the MIME suffix for the user-selected file
+        suffix = '.' + fileType.split('/')[1],// ADD CODE
+        // imageURL is used as the value of a movie-model poster field 
+        // id parameter is the movie's "id" attribute as a string value
+        videoURL = '/movies/' + req.params.id + '/video',
+        // rename the image file to match the imageURL
+        newPath = __dirname + '/../public/videos/' + req.params.id + suffix
+        fs.rename(filePath, newPath, function(err) {
+        if (!err) {
+            res.status(200).send(videoURL);
+        } else {
+            res.status(500).send("Sorry, unable to upload poster image at this time (" 
+                +err.message+ ")" );
+       }
+    });
+};
 exports.playMovie = function(req, res){
     var file = path.resolve(__dirname,"../public/videos/" + req.params.id + ".mp4");
     //console.log(file);

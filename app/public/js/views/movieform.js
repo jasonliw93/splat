@@ -11,6 +11,23 @@ splat.MovieForm = Backbone.View.extend({
     events: {
         "change .form-group input": "change",
         "change .form-group textarea": "change",
+        "change #selectVideo": "uploadVideo",
+    },
+    uploadVideo: function(){
+        var self = this;
+        var formdata = new FormData();
+        formdata.append("video", $('#selectVideo')[0].files[0]);
+        $.ajax({
+           url: "movies/" + self.model.id + "/video",
+           type: "POST",
+           data: formdata,
+           processData: false,
+           contentType: false,
+        }).done(function(res){
+            console.log(res);
+        }).fail(function(res){
+            splat.utils.requestFailed(res);
+        });
     },
     // handles change form fields event
     change: function(e) {
