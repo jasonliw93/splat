@@ -81,7 +81,7 @@ function saveMovie(movie, res, action){
         var ext = match[1];
         var data = match[2];
         var buffer = new Buffer(data, 'base64');
-        var imageURL = 'videos/' + movie.id + "." + ext;
+        var imageURL = 'img/uploads/' + movie.id + "." + ext;
         var newPath = __dirname + '/../public/' + imageURL;
         // write the data to file
         fs.writeFile(newPath, buffer, function (err) {
