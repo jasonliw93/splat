@@ -51,7 +51,7 @@ app.use(compression());
 
 // parse HTTP request body
 app.use(bodyParser.json({
-    limit: 50000
+    limit: 100000
 }));
 app.use(bodyParser.urlencoded({
     extended: true

@@ -39,20 +39,10 @@ exports.getMovies = function(req, res){
         }
     });
 };
+
 exports.addMovie = function(req, res){    
     var movie = new movieModel(req.body);
-    movie.save(function (err, movie) {
-        if (err){
-            res.status(500).send("Sorry, unable to add movie at this time (" 
-                        +err.message+ ")" );
-        }else{
-            res.status(200).send(movie);
-            if (movie.poster !== '/img/failedupload.png') {
-                broadcastEvent({model: "movie", movieId: movie.id, action: "add"});
-            }
-        }
-
-    });
+    saveMovie(movie, res, 'add');
 };
 exports.editMovie = function(req, res){
     movieModel.findById(req.params.id, function(err, movie){ 
@@ -63,20 +53,42 @@ exports.editMovie = function(req, res){
             res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
         } else {
             _.extend(movie, req.body);
-            movie.save(function (err, movie) {
-                if (err){
-                    res.status(500).send("Sorry, unable to add movie at this time (" 
-                                +err.message+ ")" );
-                }else{
-                    res.status(200).send(movie);
-                    if (movie.poster !== '/img/failedupload.png') {
-                        broadcastEvent({model: "movie", movieId: movie.id, action: "add"});
-                    }
-                }
-            });
+            saveMovie(movie, res, 'update');
         }
     });
 };
+
+function saveMovie(movie, res, action){
+    var save = function() {
+        movie.save(function (err, movie) {
+            if (err){
+                res.status(500).send("Sorry, unable to " + action + " movie at this time (" 
+                            +err.message+ ")" );
+            }else{
+                res.status(200).send(movie);
+                broadcastEvent({model: "movie", movieId: movie.id, action: action});
+            }
+        });
+    };
+    if (movie.poster.indexOf('data\:image') == 0){
+        var regex = /^data:.+\/(.+);base64,(.*)$/;
+        var matches = movie.poster.match(regex);
+        var ext = matches[1];
+        var data = matches[2];
+        var buffer = new Buffer(data, 'base64');
+        var imageURL = 'img/uploads/' + movie.id + "." + ext;
+        var newPath = __dirname + '/../public/' + imageURL;
+        fs.writeFile(newPath, buffer, function (err) {
+            if (err) 
+                return res.status(500).send("Sorry, error occured when uploading file");
+            movie.poster = imageURL + '?' + new Date().valueOf();;
+            save();
+        });
+    }else{
+        save();
+    }
+}
+
 exports.deleteMovie = function(req, res){
     movieModel.findByIdAndRemove(req.params.id, function(err, movie) {
         if (err) {
@@ -106,24 +118,23 @@ exports.uploadImage = function(req, res) {
         datedImageUrl = imageURL + '?' + new Date().valueOf();
 
         fs.rename(filePath, newPath, function(err) {
-        if (!err) {
-            movieModel.findByIdAndUpdate(req.params.id, {poster: datedImageUrl}, function(err, movie){ 
-                if (err) {
-                    res.status(500).send("Sorry, unable to retrieve movie at this time (" 
-                        +err.message+ ")" );
-                }else if (!movie) {
-                    res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
-                }
-                else{
-                    res.status(200).send(datedImageUrl);
-                    broadcastEvent({model: "movie", movieId: movie.id, action: "image upload"});
-                }
-            });
-        } else {
-            res.status(500).send("Sorry, unable to upload poster image at this time (" 
-                +err.message+ ")" );
-	   }
-    });
+            if (err) {
+                res.status(500).send("Sorry, unable to upload poster image at this time (" 
+                    +err.message+ ")" );
+            } else {
+                movieModel.findById(req.params.id, function(err, movie){ 
+                    if (err) {
+                        res.status(500).send("Sorry, unable to retrieve movie at this time (" 
+                            +err.message+ ")" );
+                    } else if (!movie) {
+                        res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
+                    } else {
+                        movie.poster = imageURL;
+                        saveMovie(movie, res, 'image upload');
+                    }
+                });
+    	   }
+        });
 };
 
 exports.addReview = function(req, res){    

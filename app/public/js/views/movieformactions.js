@@ -45,38 +45,18 @@ splat.MovieFormActions = Backbone.View.extend({
                 // navigate to the edit view upon success
                 var targetImgElt = $('#detailsImage')[0];
                 if (targetImgElt.src.indexOf('data\:image') == 0) {
-                    var formdata = new FormData();
-                    formdata.append("image", self.model.imageFile);
-                    $.ajax({
-                       url: "movies/" + self.model.id + "/image",
-                       type: "POST",
-                       data: formdata,
-                       processData: false,
-                       contentType: false,
-                    }).done(function(imageURL){
-                        self.model.set('poster', imageURL);
-                        targetImgElt.src = imageURL;
-                        self.afterSave();
-                    }).fail(function(res){
-                        splat.utils.requestFailed(res);
-                    });
-                }else{
-                    // no image to upload
-                    self.afterSave();
+                    self.model.set('poster', model.get('poster'));
+                    targetImgElt.src = model.get('poster');
                 }
+                if (self.isNew) {
+                    splat.app.navigate('#movies/' + this.model.id, {replace:true, trigger:false});
+                }
+                splat.utils.showNotice('Success!', 'Movie saved', 'alert-success');
             },
             error: function(model, response) {
                 splat.utils.requestFailed(response);
             }
         });
-    },
-    // saves movie model
-    afterSave: function(isNew){
-        if (this.isNew) {
-            splat.app.navigate('#movies/' + this.model.id, {replace:true, trigger:false});
-            this.render();
-        };
-        splat.utils.showNotice('Success!', 'Movie saved', 'alert-success');
     },
     // destroys model from database
     destroy: function() {
