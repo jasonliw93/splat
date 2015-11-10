@@ -81,7 +81,7 @@ function saveMovie(movie, res, action){
         var ext = match[1];
         var data = match[2];
         var buffer = new Buffer(data, 'base64');
-        var imageURL = 'img/uploads/' + movie.id + "." + ext;
+        var imageURL = 'videos/' + movie.id + "." + ext;
         var newPath = __dirname + '/../public/' + imageURL;
         // write the data to file
         fs.writeFile(newPath, buffer, function (err) {
@@ -155,7 +155,7 @@ exports.getReviews = function(req, res){
 };
 
 exports.playMovie = function(req, res){
-    var file = path.resolve(__dirname,"../public/img/video/" + req.params.id + ".mp4");
+    var file = path.resolve(__dirname,"../public/videos/" + req.params.id + ".mp4");
     //console.log(file);
     var range = req.headers.range;
     //console.log(range);
