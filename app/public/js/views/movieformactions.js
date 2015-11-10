@@ -49,7 +49,7 @@ splat.MovieFormActions = Backbone.View.extend({
                     targetImgElt.src = model.get('poster');
                 }
                 if (self.isNew) {
-                    splat.app.navigate('#movies/' + this.model.id, {replace:true, trigger:false});
+                    splat.app.navigate('#movies/' + self.model.id, {replace:true, trigger:false});
                 }
                 splat.utils.showNotice('Success!', 'Movie saved', 'alert-success');
             },
