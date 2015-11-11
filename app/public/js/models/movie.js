@@ -36,7 +36,7 @@ splat.Movie = Backbone.Model.extend({
         },
         released : function(value) {
             // regex for movie year
-            var yearRegex = /^(19[1-9]\d|20[0-1][0-6])$/ //1910-2016
+            var yearRegex = /^(19[1-9]\d|20(1[0-6]|0[0-9])$/ //1910-2016
             //checks if year is valid
             return (value && yearRegex.test(value)) ? {
                 isValid: true

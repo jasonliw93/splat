@@ -163,7 +163,7 @@ exports.uploadVideo = function(req, res) {
         // id parameter is the movie's "id" attribute as a string value
         videoURL = '/movies/' + req.params.id + '/video',
         // rename the image file to match the imageURL
-        newPath = __dirname + '/../public/videos/' + req.params.id + suffix
+        newPath = __dirname + '/../public/videos/' + req.params.id + suffix;
         fs.rename(filePath, newPath, function(err) {
         if (!err) {
             res.status(200).send(videoURL);
@@ -174,10 +174,9 @@ exports.uploadVideo = function(req, res) {
     });
 };
 exports.playMovie = function(req, res){
+    //console.log(req.headers);
     var file = path.resolve(__dirname,"../public/videos/" + req.params.id + ".mp4");
-    //console.log(file);
     var range = req.headers.range;
-    //console.log(range);
     var positions = range.replace(/bytes=/, "").split("-");
     var start = parseInt(positions[0], 10);
     fs.stat(file, function (err, stats) {
@@ -193,7 +192,6 @@ exports.playMovie = function(req, res){
             res.setHeader('Content-Length', chunksize);
             res.setHeader('Accept-Ranges', 'bytes');
             res.setHeader('Content-Type', 'video/mp4');
-
             var stream = fs.createReadStream(file, { start: start, end: end })
             .on("open", function() {
               stream.pipe(res);

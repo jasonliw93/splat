@@ -28,16 +28,18 @@ splat.MovieForm = Backbone.View.extend({
         if (!e.target.files.length){
             return
         }
-        //5mb limit
-        if (e.target.files[0].size > 5 * 1024 * 1024){ 
-            splat.utils.showNotice('Warning', 'Selected video is too large!', 'alert-warning');
+        if (e.target.files[0].size > 5 * 1024 * 1024){ //5mb limit
+            splat.utils.showNotice('Warning', 'Video is too large!', 'alert-warning');
+            return
+        }
+        if (e.target.files[0].type != "video/mp4"){ //mp4 only
+            splat.utils.showNotice('Warning', 'Video must be an mp4!', 'alert-warning');
             return
         }
         if (!this.model.id){
             splat.utils.showNotice('Warning', 'Please save the movie first', 'alert-warning');
             return
         }
-        console.log(e);
         var self = this;
         var formdata = new FormData();
         formdata.append("video", e.target.files[0]);
@@ -61,7 +63,6 @@ splat.MovieForm = Backbone.View.extend({
             $('input[name=trailer]').val(location.origin + res);
             self.model.set({trailer : location.origin + res});
         }).fail(function(res){
-            console.log(res);
             splat.utils.requestFailed(res);
         });
     
