@@ -41,6 +41,7 @@ splat.MoviesView = Backbone.View.extend({
         this.$(".trailer source").on('error', function(e){
             splat.utils.showNotice('Error', "Video not found", 'alert-danger');
         });
+        this.$('[data-toggle="tooltip"]').tooltip()
         // support chaining
         return this;
     },

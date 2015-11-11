@@ -80,11 +80,10 @@ function saveMovie(movie, res, action){
     if (match){
         var ext = match[1];
         var data = match[2];
-        var buffer = new Buffer(data, 'base64');
         var imageURL = 'img/uploads/' + movie.id + "." + ext;
         var newPath = __dirname + '/../public/' + imageURL;
         // write the data to file
-        fs.writeFile(newPath, buffer, function (err) {
+        fs.writeFile(newPath, data, 'base64', function (err) {
             if (err) 
                 return res.status(500).send("Sorry, error occured when uploading file");
             // forces browser to reload the image if cached

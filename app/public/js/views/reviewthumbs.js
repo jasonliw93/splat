@@ -19,7 +19,7 @@ splat.ReviewThumbs = Backbone.View.extend({
     render: function() {
         var self = this;
         self.$el.html(self.reviewsTemplate({
-            reviews: self.model.reviews,
+            reviews: self.collection,
             reviewTemplate: self.reviewThumbView.template
         }));
         return this; // support method chaining

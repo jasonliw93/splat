@@ -6,9 +6,6 @@ var splat = splat || {};
 
 // note View-name (reviewForm) matches name of template file reviewForm.html
 splat.Reviewer = Backbone.View.extend({
-    initialize: function(options) {
-        
-    },
     events: {
         "click #reviewsave": "save",
         "change .form-group input": "change",
@@ -28,7 +25,7 @@ splat.Reviewer = Backbone.View.extend({
         // check if model is valid before adding to collection
         var self = this;
         // adds model to collection and save model to database
-        this.model.reviews.create(this.review, {
+        this.collection.create(this.review, {
             // notification panel, defined in section 2.6
             wait: true,
             success : function (model, response){

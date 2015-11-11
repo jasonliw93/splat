@@ -9,20 +9,23 @@ splat.ReviewsView = Backbone.View.extend({
     // render the View
     initialize: function(options) {
         this.reviewerView = new splat.Reviewer({
-            model : this.model
+            collection : this.collection
         });
         this.reviewThumbsView = new splat.ReviewThumbs({
-            model : this.model
+            collection : this.collection
         });
-        this.listenTo(this.model.reviews, 'sync', function(){
+        this.listenTo(this.collection, 'all', function(e){
             this.reviewThumbsView.render();
             this.showScore();
         });
         
     },
     showScore: function(){
-        var freshTotal = this.model.get('freshTotal');
-        var freshVotes = this.model.get('freshVotes');
+        var freshVotes = 0;
+        this.collection.each(function (model){
+            freshVotes += model.get('freshness');
+        });
+        var freshTotal = this.collection.length;
         if (freshTotal){
             if (freshVotes/freshTotal >= 0.5) { 
                 this.$('#freshnessimg').attr('src','/img/fresh.gif');
@@ -48,5 +51,4 @@ splat.ReviewsView = Backbone.View.extend({
         this.showScore();
         return this; // support method chaining
     }
-
 });
