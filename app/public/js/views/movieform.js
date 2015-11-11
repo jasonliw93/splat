@@ -14,7 +14,7 @@ splat.MovieForm = Backbone.View.extend({
         "change #selectVideo": "uploadVideo",
     },
     progressHandling: function(e){
-        var percent = e.position/e.total * 100;
+        var percent = e.loaded/e.total * 100;
         if (percent == 100){
             $('input[name=trailer]').removeClass('hidden');
             $('.progress').addClass('hidden');
@@ -25,34 +25,42 @@ splat.MovieForm = Backbone.View.extend({
         }
     },
     uploadVideo: function(e){
-        if (e.target.files.length){
-            var self = this;
-            var formdata = new FormData();
-            formdata.append("video", e.target.files[0]);
-            $.ajax({
-               url: "movies/" + self.model.id + "/video",
-               type: "POST",
-               data: formdata,
-               processData: false,
-               contentType: false,
-                xhr: function() {  // custom xhr
-                    var myXhr = $.ajaxSettings.xhr();
-                    if(myXhr.upload){ // check if upload property exists
-                        $('input[name=trailer]').addClass('hidden');
-                        $('.progress').removeClass('hidden');
-                        myXhr.upload.addEventListener('progress', self.progressHandling, false); // for handling the progress of the upload
-                    }
-                    return myXhr;
-                },
-            }).done(function(res){
-                var re = new RegExp(/^.*\//);
-                $('input[name=trailer]').val(location.origin + res);
-                self.model.set({trailer : location.origin + res});
-            }).fail(function(res){
-                console.log(res);
-                splat.utils.requestFailed(res);
-            });
+        if (!e.target.files.length){
+            return
         }
+        //5mb limit
+        if (e.target.files[0].size > 5 * 1024 * 1024){ 
+            splat.utils.showNotice('Warning', 'Selected video is too large!', 'alert-warning');
+            return
+        }
+        console.log(e);
+        var self = this;
+        var formdata = new FormData();
+        formdata.append("video", e.target.files[0]);
+        $.ajax({
+           url: "movies/" + self.model.id + "/video",
+           type: "POST",
+           data: formdata,
+           processData: false,
+           contentType: false,
+            xhr: function() {  // custom xhr
+                var myXhr = $.ajaxSettings.xhr();
+                if(myXhr.upload){ // check if upload property exists
+                    $('input[name=trailer]').addClass('hidden');
+                    $('.progress').removeClass('hidden');
+                    myXhr.upload.addEventListener('progress', self.progressHandling, false); // for handling the progress of the upload
+                }
+                return myXhr;
+            },
+        }).done(function(res){
+            var re = new RegExp(/^.*\//);
+            $('input[name=trailer]').val(location.origin + res);
+            self.model.set({trailer : location.origin + res});
+        }).fail(function(res){
+            console.log(res);
+            splat.utils.requestFailed(res);
+        });
+    
     },
     // handles change form fields event
     change: function(e) {
