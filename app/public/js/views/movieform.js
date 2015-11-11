@@ -9,27 +9,50 @@ splat.MovieForm = Backbone.View.extend({
     initialize: function() {
     },
     events: {
-        "change .form-group input": "change",
+        "change .form-group input[type=text]": "change",
         "change .form-group textarea": "change",
         "change #selectVideo": "uploadVideo",
     },
-    uploadVideo: function(){
-        var self = this;
-        var formdata = new FormData();
-        formdata.append("video", $('#selectVideo')[0].files[0]);
-        $.ajax({
-           url: "movies/" + self.model.id + "/video",
-           type: "POST",
-           data: formdata,
-           processData: false,
-           contentType: false,
-        }).done(function(res){
-            var re = new RegExp(/^.*\//);
-            $('input[name=trailer]').val(location.origin + res);
-            self.model.set({trailer : location.origin + res});
-        }).fail(function(res){
-            splat.utils.requestFailed(res);
-        });
+    progressHandling: function(e){
+        var percent = e.position/e.total * 100;
+        if (percent == 100){
+            $('input[name=trailer]').removeClass('hidden');
+            $('.progress').addClass('hidden');
+            $('.progress-bar').css('width', '0%').attr('aria-valuenow', 0);
+            splat.utils.showNotice('Note!', 'Video has been uploaded', 'alert-info');
+        }else{
+            $('.progress-bar').css('width', percent+'%').attr('aria-valuenow', percent);
+        }
+    },
+    uploadVideo: function(e){
+        if (e.target.files.length){
+            var self = this;
+            var formdata = new FormData();
+            formdata.append("video", e.target.files[0]);
+            $.ajax({
+               url: "movies/" + self.model.id + "/video",
+               type: "POST",
+               data: formdata,
+               processData: false,
+               contentType: false,
+                xhr: function() {  // custom xhr
+                    var myXhr = $.ajaxSettings.xhr();
+                    if(myXhr.upload){ // check if upload property exists
+                        $('input[name=trailer]').addClass('hidden');
+                        $('.progress').removeClass('hidden');
+                        myXhr.upload.addEventListener('progress', self.progressHandling, false); // for handling the progress of the upload
+                    }
+                    return myXhr;
+                },
+            }).done(function(res){
+                var re = new RegExp(/^.*\//);
+                $('input[name=trailer]').val(location.origin + res);
+                self.model.set({trailer : location.origin + res});
+            }).fail(function(res){
+                console.log(res);
+                splat.utils.requestFailed(res);
+            });
+        }
     },
     // handles change form fields event
     change: function(e) {

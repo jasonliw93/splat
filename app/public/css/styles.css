@@ -217,3 +217,7 @@ body {
 .review-text{
     word-wrap: break-word;
 }
+
+.progress{
+    padding: 0px;
+}
