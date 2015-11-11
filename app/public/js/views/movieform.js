@@ -19,7 +19,7 @@ splat.MovieForm = Backbone.View.extend({
             $('input[name=trailer]').removeClass('hidden');
             $('.progress').addClass('hidden');
             $('.progress-bar').css('width', '0%').attr('aria-valuenow', 0);
-            splat.utils.showNotice('Note!', 'Video has been uploaded', 'alert-info');
+            splat.utils.showNotice('Note!', 'Video has been uploaded to server', 'alert-info');
         }else{
             $('.progress-bar').css('width', percent+'%').attr('aria-valuenow', percent);
         }
