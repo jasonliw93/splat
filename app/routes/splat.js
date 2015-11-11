@@ -14,7 +14,7 @@ var fs = require('fs'),
 
 // heartbeat response for server API
 exports.api = function(req, res){
-  res.status(200).send('<h3>Eatz API is running!</h3>');
+  res.status(200).send('<h3>Eatz API is running! </h3><a href="index.html">Splat</a>');
 };
 
 // retrieve an individual movie model, using it's id as a DB key
