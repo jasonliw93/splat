@@ -221,3 +221,8 @@ body {
 .progress{
     padding: 0px;
 }
+
+#notification-panel{
+    z-index: 99999999;
+    pointer-events: none;
+}

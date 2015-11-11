@@ -33,6 +33,10 @@ splat.MovieForm = Backbone.View.extend({
             splat.utils.showNotice('Warning', 'Selected video is too large!', 'alert-warning');
             return
         }
+        if (!this.model.id){
+            splat.utils.showNotice('Warning', 'Please save the movie first', 'alert-warning');
+            return
+        }
         console.log(e);
         var self = this;
         var formdata = new FormData();
