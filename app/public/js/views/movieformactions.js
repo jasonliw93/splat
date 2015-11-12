@@ -50,6 +50,7 @@ splat.MovieFormActions = Backbone.View.extend({
                     splat.app.navigate('#movies/' + self.model.id, {replace:true, trigger:false});
                 }
                 splat.utils.showNotice('Success!', 'Movie saved', 'alert-success');
+                self.render();
             },
             error: function(model, response) {
                 splat.utils.requestFailed(response);
