@@ -1,7 +1,7 @@
 default: start
 build:
 	cp config.js.base config.js &&\
-	ln -s /courses/courses/cscc09f15/rosselet/asn/node_modules node_modules
+	ln -s /courses/courses/cscc09f15/rosselet/asn/node_modules .
 clean: stop
 	rm node.log config.js node_modules
 start:
