@@ -86,9 +86,11 @@ splat.AppRouter = Backbone.Router.extend({
         this.headerView.selectMenuItem("About");
     },
     browse: function() {
+        // fetchs movie from database
         this.moviesFetch = this.movies.fetch();
         var self = this;
         this.moviesFetch.done(function(coll, resp) {
+            // puts movie in collection
             self.moviesView = new splat.MoviesView({
                 collection: self.movies
             });
@@ -134,6 +136,7 @@ splat.AppRouter = Backbone.Router.extend({
             if (!movie.reviews){
                 movie.reviews =  new splat.Reviews(id);
             }
+            // fetches the movie reviews and puts them into a collection
             var reviewsFetch = movie.reviews.fetch();
             reviewsFetch.done(function(coll, resp) {
                 self.reviewsView = new splat.ReviewsView({

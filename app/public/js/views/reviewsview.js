@@ -14,18 +14,21 @@ splat.ReviewsView = Backbone.View.extend({
         this.reviewThumbsView = new splat.ReviewThumbs({
             collection : this.collection
         });
+        // listens to all the connections to render
         this.listenTo(this.collection, 'all', function(e){
             this.reviewThumbsView.render();
             this.showScore();
         });
         
     },
+    // shows the overall score of the movie from the collection
     showScore: function(){
         var freshVotes = 0;
         this.collection.each(function (model){
             freshVotes += model.get('freshness');
         });
         var freshTotal = this.collection.length;
+        // displays certain gif according to score ratings
         if (freshTotal){
             if (freshVotes/freshTotal >= 0.5) { 
                 this.$('#freshnessimg').attr('src','/img/fresh.gif');
@@ -37,6 +40,7 @@ splat.ReviewsView = Backbone.View.extend({
             this.$('#freshness').html('… no reviews yet');
         }
     },
+    // closes the review
     onClose: function() {
         this.reviewerView.close();
         this.reviewThumbsView.close();

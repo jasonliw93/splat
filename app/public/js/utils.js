@@ -40,6 +40,7 @@ splat.utils = {
         $('.help-block', formGroup).html('');
     },
     templateHelpers : {
+        // gets the review image for given votes
         getReviewImage: function(freshVotes, freshTotal){            
             if (freshVotes/freshTotal >= 0.5) { 
                 return '/img/fresh_lg.png';
@@ -47,12 +48,14 @@ splat.utils = {
                 return '/img/rotten_lg.png';
             }
         },
+        // gets review rating for movie 
         getReviewText: function(freshVotes, freshTotal){            
             return (freshVotes/freshTotal*100).toFixed(1) + '% (' + freshTotal+ ')';
         },
         formatArray: function(array){
             return array.join(', ');
         },
+        // gets trailer
         getTrailer: function(id, trailer){
             if (trailer){
                 return trailer;

@@ -8,13 +8,17 @@ var splat = splat || {};
 splat.MovieForm = Backbone.View.extend({
     initialize: function() {
     },
+    // invoked events
     events: {
         "change .form-group input[type=text]": "change",
         "change .form-group textarea": "change",
         "change #selectVideo": "uploadVideo",
     },
+    // handles movie uploads by checking if it has been completely uploaded
     progressHandling: function(e){
         var percent = e.loaded/e.total * 100;
+        // if the movie has been uploaded completely, progress notification will be hidden
+        // and user will be notified 
         if (percent == 100){
             $('input[name=trailer]').removeClass('hidden');
             $('.progress').addClass('hidden');
@@ -24,7 +28,9 @@ splat.MovieForm = Backbone.View.extend({
             $('.progress-bar').css('width', percent+'%').attr('aria-valuenow', percent);
         }
     },
+    // uploads the video according to its size
     uploadVideo: function(e){
+        // error handler for video files that do not match the requirements
         if (!e.target.files.length){
             return
         }
@@ -40,6 +46,7 @@ splat.MovieForm = Backbone.View.extend({
             splat.utils.showNotice('Warning', 'Please save the movie first', 'alert-warning');
             return
         }
+        // requests to post the video onto the server
         var self = this;
         var formdata = new FormData();
         formdata.append("video", e.target.files[0]);

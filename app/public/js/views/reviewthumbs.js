@@ -10,6 +10,7 @@ splat.ReviewThumbs = Backbone.View.extend({
     initialize: function(options) {
         this.reviewThumbView = new splat.ReviewThumb();
     },
+    // updates the review template function
     reviewsTemplate: _.template([
         "<% reviews.each(function(review) { %>",
         "<%= reviewTemplate(review.toJSON()) %>",
