@@ -22,6 +22,9 @@ splat.AppRouter = Backbone.Router.extend({
         this.movies = new splat.Movies();
         // fetches the movies
         this.moviesFetch = this.movies.fetch();
+        // subscribe to events from the server
+        // sync the collections each time a change occurs
+        // so that all clients remain in sync
         var eventStream = new EventSource('/events')
         var self = this;
         eventStream.onmessage = function(e) {
@@ -31,11 +34,13 @@ splat.AppRouter = Backbone.Router.extend({
                 // fetches the movies
                 self.moviesFetch = self.movies.fetch();
             } else if (data.model == 'review'){
+                // fetches the movies first
                 self.moviesFetch = self.movies.fetch();
-                // fetches the movie and its reviews
                 self.moviesFetch.done(function(coll, resp) {
                     var movie = self.movies.get(data.movieId);
                     if (movie.reviews){
+                        // sync the reviews only if the client
+                        // previously fetched them
                         movie.reviews.fetch();
                     }
                 }).fail(function(coll, resp) {
@@ -131,7 +136,7 @@ splat.AppRouter = Backbone.Router.extend({
     reviews : function(id){
         var self = this;
         this.moviesFetch.done(function(coll, resp) {
-            // get movies and instantiate Details view
+            // get movie and add a review collection if needed
             var movie = self.movies.get(id);
             if (!movie.reviews){
                 movie.reviews =  new splat.Reviews(id);

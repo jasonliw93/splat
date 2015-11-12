@@ -38,8 +38,9 @@ var app = express();  // Create Express app server
 app.set('port', process.env.PORT || config.port);
 
 // activate basic HTTP authentication (to protect your solution files)
-app.use(basicAuth(config.username, config.password));
-
+if (config.httpauth){
+    app.use(basicAuth(config.username, config.password));
+}
 // change param value to control level of logging  ... ADD CODE
 app.use(logger('dev'));  // 'default', 'short', 'tiny', 'dev'
 
@@ -57,8 +58,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-// set file-upload directory for poster images
-//app.use(multer({dest: __dirname + '/public/videos/'}));
+// set file-upload directory for trailer videos
 var movieMulter = multer({
     dest: __dirname + '/public/videos/',
     limits: {
@@ -78,24 +78,28 @@ app.use(methodOverride());
 // Heartbeat test of server API
 app.get('/', splat.api);
 
-// Retrieve a single movie by its id attribute
+// route handlers for movie model
 app.get('/movies/:id', splat.getMovie);
 app.get('/movies', splat.getMovies);
 app.post('/movies', splat.addMovie);
 app.put('/movies/:id', splat.editMovie);
 app.delete('/movies/:id', splat.deleteMovie);
+
+// route handlers for review model
 app.get('/movies/:id/reviews', splat.getReviews);
 app.post('/movies/:id/reviews', splat.addReview);
+
+// route handlers for video upload and playback
 app.get('/movies/:id/video', splat.playMovie);
 app.post('/movies/:id/video', movieMulter, splat.uploadVideo);
-// ADD CODE to support other routes listed on assignment handout
 
-// location of app's static content ... may need to ADD CODE
+// location of app's static content
 app.use(express.static(__dirname + "/public"));
 
 // return error details to client - use only during development
 app.use(errorHandler({ dumpExceptions:true, showStack:true }));
 
+// log and close anything else
 app.use(function (req, res) {
     console.log('%s %s', req.method, req.url);
     res.status(404).end();

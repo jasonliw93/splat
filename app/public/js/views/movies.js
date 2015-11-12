@@ -13,15 +13,19 @@ splat.MoviesView = Backbone.View.extend({
     initialize: function() {
         this.movieThumbView = new splat.MovieThumb();
         this.listenTo(Backbone, 'orderevent', function(){
+            // set the comparator for the model used by sort
             this.collection.comparator = function(movie) {
                 return movie.get(splat.order).toLowerCase();
             };
             // sort collection before rendering it - implicitly uses comparator
             this.collection.sort();
+            // re render view
             this.render();
         });
+        // listens to collection sync to re-render
         this.listenTo(this.collection, 'sync', this.render);
     },
+    // handle play on video for whole video container
     playVideo: function(e){
         e.target.play();
     },

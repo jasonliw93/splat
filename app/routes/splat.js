@@ -31,6 +31,7 @@ exports.getMovie = function(req, res){
         }
     });
 };
+// retrives all movie models in collection
 exports.getMovies = function(req, res){
     movieModel.find(function(err, movies) {
         if (err) {
@@ -56,8 +57,28 @@ exports.editMovie = function(req, res){
         } else if (!movie) {
             res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
         } else {
+            // merge request fields with existing movie fields
             _.extend(movie, req.body);
             saveMovie(movie, res, 'update');
+        }
+    });
+};
+
+
+// deletes the movie if it exists
+exports.deleteMovie = function(req, res){
+    movieModel.findByIdAndRemove(req.params.id, function(err, movie) {
+        if (err) {
+            res.status(500).send("Sorry, unable to retrieve movie at this time (" 
+                +err.message+ ")" );
+        } else if (!movie) {
+            res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
+        } else {
+            // delete the image and video
+            fs.unlink(__dirname + '/../public/img/uploads/' + movie.id + '.jpeg');
+            fs.unlink(__dirname + '/../public/videos/' + movie.id + '.mp4');
+            res.status(200).send(movie);
+            broadcastEvent({model: "movie", movieId: movie.id, action: "remove"});
         }
     });
 };
@@ -78,10 +99,9 @@ function saveMovie(movie, res, action){
             }
         });
     };
-    // saves the movie poster onto the database by putting it into 
-    // the database directory
-    var regex = /^data:image\/(.+);base64,(.*)$/;
-    var match = movie.poster.match(regex);
+    var dataUrlRegex = /^data:image\/(.+);base64,(.*)$/;
+    var match = movie.poster.match(dataUrlRegex);
+    // if poster is dataURL, then save it to file and update poster field
     if (match){
         var ext = match[1];
         var data = match[2];
@@ -100,23 +120,8 @@ function saveMovie(movie, res, action){
     }
 }
 
-// deletes the movie if it exists
-exports.deleteMovie = function(req, res){
-    movieModel.findByIdAndRemove(req.params.id, function(err, movie) {
-        if (err) {
-            res.status(500).send("Sorry, unable to retrieve movie at this time (" 
-                +err.message+ ")" );
-        } else if (!movie) {
-            res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
-        } else {
-            fs.unlink(__dirname + '/../public/img/uploads/' + movie.id + '.jpeg');
-            res.status(200).send(movie);
-            broadcastEvent({model: "movie", movieId: movie.id, action: "remove"});
-        }
-    });
-};
-
-// adds a review to a movie
+// adds a review model to the collection 
+// and update corresponding movie freshvotes and freshtotals
 exports.addReview = function(req, res){    
     // creates a new review model
     var review = new reviewModel(req.body);
@@ -134,6 +139,7 @@ exports.addReview = function(req, res){
                 } else if (!movie) {
                     res.status(404).send("Sorry, the movie doesn't exist; try reselecting from Browse view");
                 } else {
+                    // update movie model if review save succesful
                     movie.freshVotes += review.freshness;
                     movie.freshTotal += 1;
                     movie.save(function (err, movie) {
@@ -152,7 +158,7 @@ exports.addReview = function(req, res){
     
 };
 
-// retrieves the movie reviews for a specific movie
+// retrieves the movie reviews for a specific movie id
 exports.getReviews = function(req, res){
     reviewModel.find({movieId : req.params.id}, function(err, reviews) {
         if (err) {
@@ -163,7 +169,7 @@ exports.getReviews = function(req, res){
     });
 };
 
-// uploads the video to the database
+// handles video upload to the server following multer middleware
 exports.uploadVideo = function(req, res) {
     // req.files is an object, attribute "file" is the HTML-input name attr
     var filePath = req.files.video.path,  // ADD CODE to get file path
@@ -185,7 +191,7 @@ exports.uploadVideo = function(req, res) {
     });
 };
 
-// plays the video that has been stored in the database
+// handles video playback of trailer video on server
 exports.playMovie = function(req, res){
     //console.log(req.headers);
     var file = path.resolve(__dirname,"../public/videos/" + req.params.id + ".mp4");
@@ -238,7 +244,6 @@ var MovieSchema = new mongoose.Schema({
     trailer: { type: String, required: false },
     poster: { type: String, required: true },
     dated: { type: Date, required: true},
-    // ADD CODE for other Movie attributes
 });
 
 var ReviewSchema = new mongoose.Schema({
@@ -258,7 +263,7 @@ var movieModel = mongoose.model('Movie', MovieSchema);
 var reviewModel = mongoose.model('Review', ReviewSchema);
 
 // Server Sent Events
-var subscribers = [];
+var subscribers = []; // array of active subscribers
 
 exports.subscribeEvents = function (req, res) {
     // set timeout as high as possible
@@ -286,6 +291,7 @@ exports.subscribeEvents = function (req, res) {
     
 };
 
+// Write data to each subscriber's stream
 function broadcastEvent(data){
     subscribers.forEach(function(res) {
         res.write("id: " + new Date().valueOf() + "\n");

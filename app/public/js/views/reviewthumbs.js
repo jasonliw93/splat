@@ -4,13 +4,12 @@
 // declare splat-app namespace if it doesn't already exist
 var splat = splat || {};
 
-// note View-name (Home) matches name of template file Home.html
 splat.ReviewThumbs = Backbone.View.extend({
     // render the View
     initialize: function(options) {
         this.reviewThumbView = new splat.ReviewThumb();
     },
-    // updates the review template function
+    // creates the review thumbs template function
     reviewsTemplate: _.template([
         "<% reviews.each(function(review) { %>",
         "<%= reviewTemplate(review.toJSON()) %>",

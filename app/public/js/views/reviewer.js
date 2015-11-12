@@ -30,6 +30,7 @@ splat.Reviewer = Backbone.View.extend({
             wait: true,
             success : function (model, response){
                 splat.utils.showNotice('Success', "review has been saved", 'alert-success');
+                // reset fields and create new review by re-render
                 self.render();
             },
             error: function(model, response) {

@@ -4,7 +4,7 @@
 // declare splat-app namespace if it doesn't already exist
 var splat = splat || {};
 
-// note View-name (MovieForm) matches name of template file MovieForm.html
+// note View-name (MovieFormActions) matches name of template file MovieForm.html
 splat.MovieFormActions = Backbone.View.extend({
     initialize: function() {
         this.isNew = this.model.isNew();
@@ -42,12 +42,10 @@ splat.MovieFormActions = Backbone.View.extend({
         this.model.collection.create(this.model, {
             wait: true,
             success: function(model, response) {
-                // navigate to the edit view upon success
+                // if image was uploaded replace dataURL to image link
                 var targetImgElt = $('#detailsImage')[0];
-                if (targetImgElt.src.indexOf('data\:image') == 0) {
-                    self.model.set('poster', model.get('poster'));
-                    targetImgElt.src = model.get('poster');
-                }
+                targetImgElt.src = model.get('poster');
+                // navigate to the edit view upon success
                 if (self.isNew) {
                     splat.app.navigate('#movies/' + self.model.id, {replace:true, trigger:false});
                 }

@@ -14,8 +14,8 @@ splat.ReviewsView = Backbone.View.extend({
         this.reviewThumbsView = new splat.ReviewThumbs({
             collection : this.collection
         });
-        // listens to all the connections to render
-        this.listenTo(this.collection, 'all', function(e){
+        // listens to collection sync to re-render
+        this.listenTo(this.collection, 'sync', function(e){
             this.reviewThumbsView.render();
             this.showScore();
         });
@@ -52,6 +52,7 @@ splat.ReviewsView = Backbone.View.extend({
         // render the sub views
         this.$('#reviewer').html(this.reviewerView.render().el);
         this.$('#reviewthumbs').html(this.reviewThumbsView.render().el);
+        // show the score
         this.showScore();
         return this; // support method chaining
     }

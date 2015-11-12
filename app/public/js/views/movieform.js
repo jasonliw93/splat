@@ -14,21 +14,7 @@ splat.MovieForm = Backbone.View.extend({
         "change .form-group textarea": "change",
         "change #selectVideo": "uploadVideo",
     },
-    // handles movie uploads by checking if it has been completely uploaded
-    progressHandling: function(e){
-        var percent = e.loaded/e.total * 100;
-        // if the movie has been uploaded completely, progress notification will be hidden
-        // and user will be notified 
-        if (percent == 100){
-            $('input[name=trailer]').removeClass('hidden');
-            $('.progress').addClass('hidden');
-            $('.progress-bar').css('width', '0%').attr('aria-valuenow', 0);
-            splat.utils.showNotice('Note!', 'Video has been uploaded to server', 'alert-info');
-        }else{
-            $('.progress-bar').css('width', percent+'%').attr('aria-valuenow', percent);
-        }
-    },
-    // uploads the video according to its size
+    // handles video select, validate before uploading to server
     uploadVideo: function(e){
         // error handler for video files that do not match the requirements
         if (!e.target.files.length){
@@ -46,29 +32,42 @@ splat.MovieForm = Backbone.View.extend({
             splat.utils.showNotice('Warning', 'Please save the movie first', 'alert-warning');
             return
         }
-        // requests to post the video onto the server
+        // upload video to server using ajax
         var self = this;
         var formdata = new FormData();
         formdata.append("video", e.target.files[0]);
         $.ajax({
-           url: "movies/" + self.model.id + "/video",
-           type: "POST",
-           data: formdata,
-           processData: false,
-           contentType: false,
+            url: "movies/" + self.model.id + "/video",
+            type: "POST",
+            data: formdata,
+            processData: false,
+            contentType: false,
             xhr: function() {  // custom xhr
                 var myXhr = $.ajaxSettings.xhr();
-                if(myXhr.upload){ // check if upload property exists
+                if(myXhr.upload){
+                    // replace input field with progress bar
                     $('input[name=trailer]').addClass('hidden');
                     $('.progress').removeClass('hidden');
-                    myXhr.upload.addEventListener('progress', self.progressHandling, false); // for handling the progress of the upload
+                    myXhr.upload.addEventListener('progress', function(e){
+                        // for handling the progress of the upload
+                        var percent = e.loaded/e.total * 100;
+                        // if the movie has been uploaded completely, 
+                        // progress notification will be hidden
+                        // and user will be notified 
+                        self.$('.progress-bar').css('width', 
+                            percent+'%').attr('aria-valuenow', percent);
+                        }); 
                 }
                 return myXhr;
             },
-        }).done(function(res){
-            var re = new RegExp(/^.*\//);
+        }).done(function(res) {
+            // hide progress bar again and show input field
+            $('.progress').addClass('hidden');
+            $('input[name=trailer]').removeClass('hidden');
+            // set the trailer input and model
             $('input[name=trailer]').val(location.origin + res);
             self.model.set({trailer : location.origin + res});
+            splat.utils.showNotice('Note!', 'Video has been uploaded to server', 'alert-info');
         }).fail(function(res){
             splat.utils.requestFailed(res);
         });

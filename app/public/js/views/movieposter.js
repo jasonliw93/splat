@@ -91,18 +91,9 @@ splat.MoviePoster = Backbone.View.extend({
     },
     // set sourceImg as model poster and display image. 
     setImage: function(sourceImg, type){
-        // temporarily set poster image to fallback image in case upload fails
         this.model.set('poster', sourceImg);
         var targetImgElt = $('#detailsImage')[0];
         targetImgElt.src = sourceImg;
-        /*
-        var blobBin = atob(sourceImg.split(',')[1]);
-        var array = [];
-        for(var i = 0; i < blobBin.length; i++) {
-            array.push(blobBin.charCodeAt(i));
-        }
-        this.model.imageFile = new Blob([new Uint8Array(array)], {type: type});
-        */
         splat.utils.showNotice('Note!', 'Movie Poster updated, to make changes permanent, click "Save Changes" button', 'alert-info');
     },
     // render the View

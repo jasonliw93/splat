@@ -5,8 +5,6 @@
 var splat = splat || {};
 
 splat.utils = {
-    // shows a fade in notice
-    watcher : _.extend({}, Backbone.Events),
     showNotice: function(noticeType, noticeText, cssStyle) {
         $('#notification-panel').removeClass("alert-danger alert-warning alert-success alert-info");
         $('#notification-panel').addClass("alert " + cssStyle);
@@ -39,6 +37,7 @@ splat.utils = {
         formGroup.removeClass('has-error');
         $('.help-block', formGroup).html('');
     },
+    // helpful functions attached to all templates to reduce duplication
     templateHelpers : {
         // gets the review image for given votes
         getReviewImage: function(freshVotes, freshTotal){            
@@ -95,6 +94,7 @@ splat.utils = {
                  */
                 deferreds.push($.get('tpl/' + view + '.html', function(data) {
                     // Set template function on associated Backbone view.
+                    // attach template helper functions to view template
                     splat[view].prototype.template = function(x){
                         return _.template(data)(_.extend(x, self.templateHelpers));
                     }
