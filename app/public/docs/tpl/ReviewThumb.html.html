@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ReviewThumb.html</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../", thisFile = "courses/courses/cscc09f15/liwyanch/a2/app//tpl/ReviewThumb.html", defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>ReviewThumb.html</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="c">&lt;!-- Container for movie --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;thumbnails col-lg-2 col-md-3 col-sm-4 col-xs-6&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- Form for movie--&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;review plain&quot;</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- Allows interactive container for movie--&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;review-container&quot;</span><span class="nt">&gt;</span>
+            <span class="c">&lt;!-- Movie information--&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;review-text&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;panel panel-default&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;&lt;% if (freshness) { %&gt; /img/fresh.gif &lt;% } else { %&gt; /img/rotten.gif &lt;% } %&gt; &quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;q&gt;</span><span class="err">&lt;</span>%= reviewText %&gt;<span class="nt">&lt;/q&gt;</span>
+                <span class="nt">&lt;/div&gt;</span>
+                <span class="nt">&lt;p&gt;</span>
+                    <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;img/critic.gif&quot;</span> <span class="na">alt=</span><span class="s">&quot;Critic&quot;</span><span class="nt">/&gt;</span> <span class="err">&lt;</span>%= reviewAffil %&gt; <span class="nt">&lt;br&gt;</span>
+                    <span class="nt">&lt;span&gt;</span><span class="err">&lt;</span>%= reviewName %&gt;<span class="nt">&lt;/span&gt;</span>
+                <span class="nt">&lt;/p&gt;</span>
+
+            <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

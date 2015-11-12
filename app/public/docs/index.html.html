@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="doc-style.css" />
   <script src="doc-filelist.js"></script>
   <script>
-    var relativeDir = "", thisFile = "courses/courses/cscc09f15/liwyanch/a1//index.html", defaultSidebar = true;
+    var relativeDir = "", thisFile = "courses/courses/cscc09f15/liwyanch/a2/app//index.html", defaultSidebar = true;
   </script>
   <script src="doc-script.js"></script>
 </head>
@@ -39,31 +39,23 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">&quot;en&quot;</span><span class="nt">&gt;</span>
-
 <span class="nt">&lt;head&gt;</span>
-    <span class="c">&lt;!-- set charset to interpret file contents --&gt;</span>
-    <span class="c">&lt;!-- ... ADD CODE ... --&gt;</span>
-    <span class="c">&lt;!-- title displayed when browser tab is moused over --&gt;</span>
-    <span class="c">&lt;!-- ... ADD CODE ... --&gt;</span>
-    <span class="c">&lt;!-- ensure proper rendering and touch zooming --&gt;</span>
-    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;icon&quot;</span> <span class="na">href=</span><span class="s">&quot;img/favicon.png&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;UTF-8&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content=</span><span class="s">&quot;width=device-width, initial-scale=1&quot;</span><span class="nt">&gt;</span>
-    <span class="c">&lt;!-- Bootstrap CSS definitions --&gt;</span>
-
-    <span class="c">&lt;!-- optional stylesheet theme included with Bootstrap --&gt;</span>
-    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;css/bootstrap-theme.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;UTF-8&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Splat!<span class="nt">&lt;/title&gt;</span>
+    <span class="c">&lt;!--ensure devices display responsive-bootstrap pages properly--&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content=</span><span class="s">&quot;width=device-width, initial-scale=1.0&quot;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;css/bootstrap.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;css/bootstrap-theme.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;css/styles.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
-    <span class="c">&lt;!-- your own customized style rules --&gt;</span>
-    <span class="c">&lt;!-- &lt;link href=&quot;... ADD CODE ...&quot; rel=&quot;stylesheet&quot;&gt; --&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&#39;shortcut icon&#39;</span> <span class="na">type=</span><span class="s">&#39;image/x-icon&#39;</span> <span class="na">href=</span><span class="s">&#39;img/favicon.png&#39;</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;/head&gt;</span>
 
 <span class="nt">&lt;body&gt;</span>
     <span class="c">&lt;!-- HTML5 markup for view content, labelled with Bootstrap class names --&gt;</span>
     <span class="nt">&lt;header</span> <span class="na">class=</span><span class="s">&quot;header&quot;</span><span class="nt">&gt;&lt;/header&gt;</span>
-
     <span class="c">&lt;!-- full-width content container, spanning entire viewport --&gt;</span>
+    <span class="c">&lt;!-- Background image--&gt;</span>
+    <span class="nt">&lt;img</span> <span class="na">id=</span><span class="s">&quot;splash&quot;</span> <span class="na">src=</span><span class="s">&#39;img/home_bg.jpg&#39;</span><span class="nt">&gt;</span>
     <span class="nt">&lt;main</span> <span class="na">class=</span><span class="s">&quot;container-fluid&quot;</span><span class="nt">&gt;</span>
         <span class="c">&lt;!-- row for use in Bootstrap grid layout --&gt;</span>
         <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row&quot;</span> <span class="na">id=</span><span class="s">&quot;mainrow&quot;</span><span class="nt">&gt;</span>
@@ -74,6 +66,10 @@
         <span class="nt">&lt;/div&gt;</span>
         <span class="c">&lt;!-- row --&gt;</span>
     <span class="nt">&lt;/main&gt;</span>
+
+    <span class="nt">&lt;footer</span> <span class="na">class=</span><span class="s">&quot;footer&quot;</span><span class="nt">&gt;</span>
+        <span class="ni">&amp;copy;</span> Jason <span class="err">&amp;</span> Melody<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;/footer&gt;</span>
     <span class="c">&lt;!-- container-fluid --&gt;</span>
 
     <span class="c">&lt;!-- load scripts last for better UI performance --&gt;</span>
@@ -84,27 +80,30 @@
     <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/lib/backbone-min.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
     <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/lib/backbone.localStorage.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
     <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/lib/bootstrap-min.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="c">&lt;!-- ... ADD CODE ... --&gt;</span>
 
-    <span class="c">&lt;!-- scripts you define --&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/utils.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/models/movie.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/models/review.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/collections/movies.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/collections/reviews.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
     <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/views/header.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
     <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/views/home.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
     <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/views/about.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/views/movie.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/views/movies.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+
     <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/views/movieform.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
     <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/views/movieposter.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/views/movieformactions.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
     <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/views/details.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/views/movies.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/models/movie.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/collections/movies.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/utils.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/close.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/main.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="c">&lt;!-- ... ADD CODE ... --&gt;</span>
-    <span class="nt">&lt;footer</span> <span class="na">class=</span><span class="s">&quot;footer&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;div&gt;</span>
-            <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;text-muted&quot;</span><span class="nt">&gt;</span><span class="ni">&amp;#169;</span> Jason <span class="err">&amp;</span> Melody<span class="nt">&lt;/p&gt;</span>
-        <span class="nt">&lt;/div&gt;</span>
-    <span class="nt">&lt;/footer&gt;</span>
+    
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/views/reviewer.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/views/review.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/views/reviewthumbs.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/views/reviewsview.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;js/main.js&quot;</span> <span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+
 <span class="nt">&lt;/body&gt;</span>
 
 <span class="nt">&lt;/html&gt;</span>

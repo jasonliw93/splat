@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "courses/courses/cscc09f15/liwyanch/a1//js/views/details.js", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "courses/courses/cscc09f15/liwyanch/a2/app//js/views/details.js", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
 </head>
@@ -62,7 +62,7 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
 </div>
-<p>note View-name (Home) matches name of template file Home.html</p>
+<p>note View-name (Details) matches name of template file Details.html</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">splat</span><span class="p">.</span><span class="nx">Details</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
@@ -79,20 +79,16 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">MovieFormView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">MovieForm</span><span class="p">({</span>
-            <span class="nx">collection</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">,</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">movieFormView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">MovieForm</span><span class="p">({</span>
             <span class="nx">model</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span>
         <span class="p">});</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">MoviePosterView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">MoviePoster</span><span class="p">({</span>
-            <span class="nx">collection</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">,</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">moviePosterView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">MoviePoster</span><span class="p">({</span>
+            <span class="nx">model</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span>
+        <span class="p">});</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">movieFormActionsView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">MovieFormActions</span><span class="p">({</span>
             <span class="nx">model</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span>
         <span class="p">});</span>
     <span class="p">},</span>
-    <span class="nx">onClose</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">MovieFormView</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">MoviePosterView</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
-    <span class="p">},</span>
-    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -102,12 +98,56 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
 </div>
+<p>closes the sub-views before this view is unbinded and closed.
+function is run by the modified close function provided by Alan.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">onClose</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">movieFormView</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">movieFormActionsView</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">moviePosterView</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+    <span class="p">},</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>render the View</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
 <p>set the view element ($el) HTML content using its template</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">());</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#movieform&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">MovieFormView</span><span class="p">.</span><span class="nx">render</span><span class="p">().</span><span class="nx">el</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#movieposter&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">MoviePosterView</span><span class="p">.</span><span class="nx">render</span><span class="p">().</span><span class="nx">el</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<p>render the sub views</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#movieposter&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">moviePosterView</span><span class="p">.</span><span class="nx">render</span><span class="p">().</span><span class="nx">el</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#movieform&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">movieFormView</span><span class="p">.</span><span class="nx">render</span><span class="p">().</span><span class="nx">el</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#movieformactions&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">movieFormActionsView</span><span class="p">.</span><span class="nx">render</span><span class="p">().</span><span class="nx">el</span><span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">;</span> <span class="c1">// support method chaining</span>
     <span class="p">}</span>
 

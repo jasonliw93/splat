@@ -28,10 +28,8 @@ Submit Instructions:
 -------------------
 
 ```
-tar cvzf a1.tgz public a1_docs.txt cover.pdf
-submit -c cscc09f15 -a a1s1 a1s1.tgz
-submit -c cscc09f15 -a a1s2 a1s2.tgz
-submit -c cscc09f15 -a a1 a1.tgz
+tar cvzf a2.tgz a2_docs.txt readme.txt app/public/ app/node_modules app/config.js app/app.js app/routes/splat.js
+submit -c cscc09f15 -a a2 a2.tgz
 ```
 Note you can resubmit by using the -f flag; see man submit on mathlab.utsc for details on usage.
 
