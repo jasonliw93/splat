@@ -19,6 +19,7 @@ exports.api = function(req, res){
 
 // retrieve an individual movie model, using it's id as a DB key
 exports.getMovie = function(req, res){
+    // retrieve a specific movie
     movieModel.findById(req.params.id, function(err, movie) {
         if (err) {
             res.status(500).send("Sorry, unable to retrieve movie at this time (" 
@@ -40,11 +41,13 @@ exports.getMovies = function(req, res){
     });
 };
 
+// creates a new movie model
 exports.addMovie = function(req, res){    
     var movie = new movieModel(req.body);
     saveMovie(movie, res, 'add');
 };
 
+// edits movie model if the model can be found
 exports.editMovie = function(req, res){
     movieModel.findById(req.params.id, function(err, movie){ 
         if (err) {
@@ -75,6 +78,8 @@ function saveMovie(movie, res, action){
             }
         });
     };
+    // saves the movie poster onto the database by putting it into 
+    // the database directory
     var regex = /^data:image\/(.+);base64,(.*)$/;
     var match = movie.poster.match(regex);
     if (match){
@@ -95,6 +100,7 @@ function saveMovie(movie, res, action){
     }
 }
 
+// deletes the movie if it exists
 exports.deleteMovie = function(req, res){
     movieModel.findByIdAndRemove(req.params.id, function(err, movie) {
         if (err) {
@@ -110,9 +116,12 @@ exports.deleteMovie = function(req, res){
     });
 };
 
+// adds a review to a movie
 exports.addReview = function(req, res){    
+    // creates a new review model
     var review = new reviewModel(req.body);
     review.movieId = req.params.id;
+    // saves the review
     review.save(function (err, review) {
          if (err){
             res.status(500).send("Sorry, unable to add review at this time (" 
@@ -143,6 +152,7 @@ exports.addReview = function(req, res){
     
 };
 
+// retrieves the movie reviews for a specific movie
 exports.getReviews = function(req, res){
     reviewModel.find({movieId : req.params.id}, function(err, reviews) {
         if (err) {
@@ -152,6 +162,8 @@ exports.getReviews = function(req, res){
         }
     });
 };
+
+// uploads the video to the database
 exports.uploadVideo = function(req, res) {
     // req.files is an object, attribute "file" is the HTML-input name attr
     var filePath = req.files.video.path,  // ADD CODE to get file path
@@ -172,6 +184,8 @@ exports.uploadVideo = function(req, res) {
        }
     });
 };
+
+// plays the video that has been stored in the database
 exports.playMovie = function(req, res){
     //console.log(req.headers);
     var file = path.resolve(__dirname,"../public/videos/" + req.params.id + ".mp4");
