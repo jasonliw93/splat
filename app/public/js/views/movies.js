@@ -15,6 +15,7 @@ splat.MoviesView = Backbone.View.extend({
         this.listenTo(Backbone, 'orderevent', this.sort);
         // listens to collection sync to re-render
         this.listenTo(this.collection, 'sync', this.render);
+        this.sort();
     },
     // handle play on video for whole video container
     playVideo: function(e){

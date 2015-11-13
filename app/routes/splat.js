@@ -258,7 +258,7 @@ var ReviewSchema = new mongoose.Schema({
 // each title:director pair must be unique; duplicates are dropped
 MovieSchema.index({ title: 1, director: 1 }, { unique: true });  // ADD CODE
 // no pair of reviews can have matching reviewName:reviewAffil pairs
-ReviewSchema.index({ reviewName: 1, reviewAfill: 1}, {unique: true});
+ReviewSchema.index({ reviewName: 1, reviewAfill: 1, movieId: 1}, {unique: true});
 // Models
 var movieModel = mongoose.model('Movie', MovieSchema);
 var reviewModel = mongoose.model('Review', ReviewSchema);
