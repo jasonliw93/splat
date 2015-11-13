@@ -10,12 +10,13 @@ splat.Header = Backbone.View.extend({
     },
     events:{
         "change #orderForm" : "sortOrder",
-        "mouseover #orderdrop.active" : "showOrderForm",
-        "mouseout #orderdrop.active" : "hideOrderForm",
-        "click #orderdrop" : "showOrderForm",
+        "mouseenter #orderdrop.active" : "showOrderForm",
+        "mouseleave #orderdrop.active" : "hideOrderForm",
+        "click #ordering" : "showOrderForm",
     },
     showOrderForm: function(){
         this.$("#orderdrop").addClass('open');
+        console.log('show');
     },
     hideOrderForm: function(){
         this.$("#orderdrop").removeClass('open');
@@ -24,7 +25,7 @@ splat.Header = Backbone.View.extend({
         e.stopPropagation();
         splat.order = e.target.value;  // set app-level order field
         Backbone.trigger('orderevent', e);
-        this.hideOrderForm();
+        this.hideOrderForm(e);
     },
     // render the View
     render: function() {

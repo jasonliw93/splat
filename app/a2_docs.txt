@@ -1,3 +1,5 @@
+NOTE: We are using 2 grace days to get the early submit bonus for A2.
+
 The process of saving the image to the server caused us the most trouble because there are no many different methods to do it...
 Some of the highlights:
 1) Make the app sync across all clients

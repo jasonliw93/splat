@@ -251,13 +251,14 @@ var ReviewSchema = new mongoose.Schema({
     reviewText: { type:String, required: true},
     reviewName: { type:String, required: true},
     reviewAffil: { type:String, required: true},
-    movieId: {type:String, required: true},
+    movieId: {type:mongoose.Schema.Types.ObjectId, required: true},
 })
 
 // Constraints
 // each title:director pair must be unique; duplicates are dropped
 MovieSchema.index({ title: 1, director: 1 }, { unique: true });  // ADD CODE
-
+// no pair of reviews can have matching reviewName:reviewAffil pairs
+ReviewSchema.index({ reviewName: 1, reviewAfill: 1}, {unique: true});
 // Models
 var movieModel = mongoose.model('Movie', MovieSchema);
 var reviewModel = mongoose.model('Review', ReviewSchema);
