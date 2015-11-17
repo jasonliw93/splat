@@ -59,9 +59,13 @@ app.use(bodyParser.urlencoded({
 }));
 
 // set file-upload directory for trailer videos
+<<<<<<< HEAD
 
+=======
+var imageMulter = multer({dest: __dirname + '/public/img/uploads/'});
+>>>>>>> origin/master
 var movieMulter = multer({
-    dest: __dirname + '/public/videos/',
+    dest: __dirname + '/public/videos/uploads/',
     limits: {
         files: 1,
         fileSize: 5 * 1024 * 1024

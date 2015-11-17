@@ -180,7 +180,7 @@ exports.uploadVideo = function(req, res) {
         // id parameter is the movie's "id" attribute as a string value
         videoURL = '/movies/' + req.params.id + '/video',
         // rename the image file to match the imageURL
-        newPath = __dirname + '/../public/videos/' + req.params.id + suffix;
+        newPath = __dirname + '/../public/videos/uploads/' + req.params.id + suffix;
         fs.rename(filePath, newPath, function(err) {
         if (!err) {
             res.status(200).send(videoURL);
@@ -194,7 +194,7 @@ exports.uploadVideo = function(req, res) {
 // handles video playback of trailer video on server
 exports.playMovie = function(req, res){
     //console.log(req.headers);
-    var file = path.resolve(__dirname,"../public/videos/" + req.params.id + ".mp4");
+    var file = path.resolve(__dirname,"../public/videos/uploads/" + req.params.id + ".mp4");
     var range = req.headers.range;
     var positions = range.replace(/bytes=/, "").split("-");
     var start = parseInt(positions[0], 10);
