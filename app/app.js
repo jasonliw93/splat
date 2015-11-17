@@ -10,7 +10,7 @@
  * The convention is use the same name for variable and module.
  */
 
-var http = require('http'),   // ADD CODE
+var https = require('https'),   // ADD CODE
     // NOTE, use the version of "express" linked to the assignment handout
     express = require('express'),   // ADD CODE
     fs = require("fs"),
@@ -106,8 +106,13 @@ app.use(function (req, res) {
     res.status(404).end();
 });
 
+var options = {
+    key: fs.readFileSync('key.pem'),  // RSA private-key
+    cert: fs.readFileSync('cert.pem')  // RSA public-key certificate
+};
+
 // Start HTTP server
-http.createServer(app).listen(app.get('port'), function () {
+https.createServer(options, app).listen(app.get('port'), function () {
     console.log("Express server listening on port %d in %s mode",
             app.get('port'), config.env );
 });
