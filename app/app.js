@@ -52,6 +52,14 @@ app.get('/index.html', function(req, res) {
     res.render('index.html', {csrftoken: req.csrfToken()});
 });
 
+app.use(function(err, req, res, next) { 
+    if (err.code == 'EBADCSRFTOKEN'){
+        res.status(403).send('reload the app to get a fresh CSRF token value');
+    }else{
+        next();
+    }
+});
+
 // Configure app server
 
 // use PORT environment variable, or local config file value
