@@ -25,12 +25,32 @@ var https = require('https'),   // ADD CODE
     directory = require("serve-index"),
     errorHandler = require("errorhandler"),
     basicAuth = require("basic-auth-connect"),  // optional, for HTTP auth
+    csrf = require('csurf'),
     // config is an object module, that defines app-config attribues,
     // such as "port", DB parameters
     config = require("./config"),
     splat = require('./routes/splat.js');  // route handlers ... ADD CODE
 
 var app = express();  // Create Express app server
+
+app.use(session({
+  secret: 'My super session secret',
+  cookie: {
+    httpOnly: true,
+    secure: true
+  }
+}));
+
+app.use(csrf());
+
+// Setup for rendering csurf token into index.html at app-startup
+app.engine('.html', require('ejs').__express);
+app.set('views', __dirname + '/public');
+// When client-side requests index.html, perform template substitution on it
+app.get('/index.html', function(req, res) {
+    // req.csrfToken() returns a fresh random CSRF token value
+    res.render('index.html', {csrftoken: req.csrfToken()});
+});
 
 // Configure app server
 

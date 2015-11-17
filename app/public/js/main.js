@@ -26,6 +26,7 @@ splat.AppRouter = Backbone.Router.extend({
         // subscribe to events from the server
         // sync the collections each time a change occurs
         // so that all clients remain in sync
+        
         var eventStream = new EventSource('/events')
         var self = this;
         eventStream.onmessage = function(e) {
@@ -51,6 +52,7 @@ splat.AppRouter = Backbone.Router.extend({
                 console.log(data);
             }
         }
+        
         // instantiate a Header view
         this.headerView = new splat.Header();
         // insert the rendered Header view element into the document DOM
@@ -182,4 +184,12 @@ Backbone.View.prototype.close = function() {
     this.remove();
     this.unbind(); // Note, implied by remove() in BB 1.0.0 and later
 
+};
+
+Backbone.ajax = function() {
+    // Invoke $.ajaxSetup in the context of Backbone.$
+    Backbone.$.ajaxSetup.call(Backbone.$, {beforeSend: function(jqXHR){
+        jqXHR.setRequestHeader("X-CSRF-Token", splat.csrftoken);
+    }});
+    return Backbone.$.ajax.apply(Backbone.$, arguments);
 };

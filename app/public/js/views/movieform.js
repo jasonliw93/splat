@@ -42,6 +42,9 @@ splat.MovieForm = Backbone.View.extend({
             data: formdata,
             processData: false,
             contentType: false,
+            beforeSend: function(jqXHR){
+                jqXHR.setRequestHeader("X-CSRF-Token", splat.csrftoken);
+            },
             xhr: function() {  // custom xhr
                 var myXhr = $.ajaxSettings.xhr();
                 if(myXhr.upload){
@@ -65,8 +68,9 @@ splat.MovieForm = Backbone.View.extend({
             $('.progress').addClass('hidden');
             $('input[name=trailer]').removeClass('hidden');
             // set the trailer input and model
-            $('input[name=trailer]').val(location.origin + res);
-            self.model.set({trailer : location.origin + res});
+            var videolink = _.escape(location.origin + res);
+            $('input[name=trailer]').val(videolink);
+            self.model.set({trailer : videolink});
             splat.utils.showNotice('Note!', 'Video has been uploaded to server', 'alert-info');
         }).fail(function(res){
             splat.utils.requestFailed(res);
@@ -76,8 +80,8 @@ splat.MovieForm = Backbone.View.extend({
     // handles change form fields event
     change: function(e) {
         var obj = {};
-        var name = e.target.name
-        var value = e.target.value
+        var name = e.target.name;
+        var value = _.escape(e.target.value);
         // properly format string input depending on field name.
         if (name == 'starring' || name == 'genre') {
             // split string then call trim on each value

@@ -15,7 +15,7 @@ splat.Reviewer = Backbone.View.extend({
     change: function(e) {
         var obj = {};
         // properly format string input depending on field name
-        obj[e.target.name] = e.target.value;
+        obj[e.target.name] = _.escape(e.target.value);
         // set the model to the changed values
         this.review.set(obj);
     },
