@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "courses/courses/cscc09f15/liwyanch/a1//js/views/header.js", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "courses/courses/cscc09f15/liwyanch/a2/app//js/views/header.js", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
 </head>
@@ -66,7 +66,26 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">splat</span><span class="p">.</span><span class="nx">Header</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-
+    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="p">},</span>
+    <span class="nx">events</span><span class="o">:</span><span class="p">{</span>
+        <span class="s2">&quot;change #orderForm&quot;</span> <span class="o">:</span> <span class="s2">&quot;sortOrder&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mouseover #orderdrop.active&quot;</span> <span class="o">:</span> <span class="s2">&quot;showOrderForm&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mouseout #orderdrop.active&quot;</span> <span class="o">:</span> <span class="s2">&quot;hideOrderForm&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;click #orderdrop&quot;</span> <span class="o">:</span> <span class="s2">&quot;showOrderForm&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="nx">showOrderForm</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#orderdrop&quot;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;open&#39;</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="nx">hideOrderForm</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#orderdrop&quot;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;open&#39;</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="nx">sortOrder</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+        <span class="nx">e</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
+        <span class="nx">splat</span><span class="p">.</span><span class="nx">order</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>  <span class="c1">// set app-level order field</span>
+        <span class="nx">Backbone</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;orderevent&#39;</span><span class="p">,</span> <span class="nx">e</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">hideOrderForm</span><span class="p">();</span>
+    <span class="p">},</span>
 
 </pre></div>
         </td>
@@ -96,6 +115,17 @@
         <span class="k">return</span> <span class="k">this</span><span class="p">;</span> <span class="c1">// support method chaining</span>
     <span class="p">},</span>
 
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>makes the menu item given by menuItem active</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">selectMenuItem</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">menuItem</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
@@ -104,7 +134,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
 </div>
 <p>removes any active classes under <nav><li></p>
         </td>
@@ -117,13 +147,25 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
 </div>
 <p>actives any tags associated to menuItem</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.nav a:contains(&#39;</span> <span class="o">+</span> <span class="nx">menuItem</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">).</span><span class="nx">parent</span><span class="p">().</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">);</span>
-    <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>this.active = menuItem;</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="p">},</span>
 <span class="p">});</span>
 </pre></div>
         </td>

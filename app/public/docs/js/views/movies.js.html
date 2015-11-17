@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "courses/courses/cscc09f15/liwyanch/a1//js/views/movies.js", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "courses/courses/cscc09f15/liwyanch/a2/app//js/views/movies.js", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
 </head>
@@ -78,17 +78,12 @@
 <p>render the View</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">movieThumbLoad</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;tpl/MovieThumb.html&#39;</span><span class="p">);</span>
+    <span class="nx">events</span><span class="o">:</span><span class="p">{</span>
+        <span class="s2">&quot;click .video-container&quot;</span><span class="o">:</span> <span class="s2">&quot;playVideo&quot;</span>
     <span class="p">},</span>
-    <span class="nx">moviesTemplate</span><span class="o">:</span> <span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">([</span>
-        <span class="s2">&quot;&lt;% movies.each(function(movie) { %&gt;&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;&lt;%= movieTemplate(movie.toJSON()) %&gt;&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;&lt;% }); %&gt;&quot;</span><span class="p">,</span>
-    <span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)),</span>
-    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">movieThumbLoad</span><span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">markup</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">movieThumbView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">MovieThumb</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">listenTo</span><span class="p">(</span><span class="nx">Backbone</span><span class="p">,</span> <span class="s1">&#39;orderevent&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
 
 </pre></div>
         </td>
@@ -98,17 +93,121 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
 </div>
-<p>apply to model, inject to Details view</p>
+<p>set the comparator for the model used by sort</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">movieTemplate</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span><span class="nx">markup</span><span class="p">);</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">moviesTemplate</span><span class="p">({</span>
-                <span class="nx">movies</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">collection</span><span class="p">,</span>
-                <span class="nx">movieTemplate</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">movieTemplate</span>
-            <span class="p">}));</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">comparator</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">movie</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nx">movie</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">splat</span><span class="p">.</span><span class="nx">order</span><span class="p">).</span><span class="nx">toLowerCase</span><span class="p">();</span>
+            <span class="p">};</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>sort collection before rendering it - implicitly uses comparator</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">sort</span><span class="p">();</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
+<p>re render view</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
         <span class="p">});</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">;</span> <span class="c1">// support method chaining</span>
-    <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<p>listens to collection sync to re-render</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">this</span><span class="p">.</span><span class="nx">listenTo</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">,</span> <span class="s1">&#39;sync&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">);</span>
+    <span class="p">},</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>handle play on video for whole video container</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">playVideo</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+        <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">play</span><span class="p">();</span>
+    <span class="p">},</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+</div>
+<p>function to combine movie JSON data for rendering to HTML</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">moviesTemplate</span><span class="o">:</span> <span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">([</span>
+        <span class="s2">&quot;&lt;% movies.each(function(movie) { %&gt;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;&lt;%= movieTemplate(movie.toJSON()) %&gt;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;&lt;% }); %&gt;&quot;</span><span class="p">,</span>
+    <span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)),</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+</div>
+<p>render View</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">moviesTemplate</span><span class="p">({</span>
+            <span class="nx">movies</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">,</span>
+            <span class="nx">movieTemplate</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">movieThumbView</span><span class="p">.</span><span class="nx">template</span>
+            <span class="p">})</span>
+        <span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.trailer source&quot;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+            <span class="nx">splat</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">showNotice</span><span class="p">(</span><span class="s1">&#39;Error&#39;</span><span class="p">,</span> <span class="s2">&quot;Video not found&quot;</span><span class="p">,</span> <span class="s1">&#39;alert-danger&#39;</span><span class="p">);</span>
+        <span class="p">});</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;[data-toggle=&quot;tooltip&quot;]&#39;</span><span class="p">).</span><span class="nx">tooltip</span><span class="p">()</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+</div>
+<p>support chaining</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">},</span>
 
 <span class="p">});</span>
 </pre></div>

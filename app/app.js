@@ -59,7 +59,6 @@ app.use(bodyParser.urlencoded({
 }));
 
 // set file-upload directory for trailer videos
-var imageMulter = multer({dest: __dirname + '/public/img/uploads/'});
 var movieMulter = multer({
     dest: __dirname + '/public/videos/uploads/',
     limits: {
@@ -67,6 +66,7 @@ var movieMulter = multer({
         fileSize: 5 * 1024 * 1024
     },
 });
+var imageMulter = multer({dest: __dirname + '/public/img/uploads/'});
 // checks req.body for HTTP method overrides
 app.use(methodOverride());
 

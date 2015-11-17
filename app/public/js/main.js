@@ -22,6 +22,7 @@ splat.AppRouter = Backbone.Router.extend({
         this.movies = new splat.Movies();
         // fetches the movies
         this.moviesFetch = this.movies.fetch();
+        splat.order = 'title';
         // subscribe to events from the server
         // sync the collections each time a change occurs
         // so that all clients remain in sync

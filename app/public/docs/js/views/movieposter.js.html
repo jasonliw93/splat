@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "courses/courses/cscc09f15/liwyanch/a1//js/views/movieposter.js", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "courses/courses/cscc09f15/liwyanch/a2/app//js/views/movieposter.js", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
 </head>
@@ -62,19 +62,17 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
 </div>
-<p>note View-name (Home) matches name of template file Home.html</p>
+<p>note View-name (MoviePoster) matches name of template file MoviePoster.html</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">splat</span><span class="p">.</span><span class="nx">MoviePoster</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
     <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">moviePosterLoad</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;tpl/MoviePoster.html&#39;</span><span class="p">);</span>
     <span class="p">},</span>
     <span class="nx">events</span><span class="o">:</span> <span class="p">{</span>
         <span class="s2">&quot;change #selectImage&quot;</span><span class="o">:</span> <span class="s2">&quot;selectImage&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;dragover #imageCanvas&quot;</span><span class="o">:</span> <span class="s2">&quot;dragoverHandler&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;drop #imageCanvas&quot;</span><span class="o">:</span> <span class="s2">&quot;dropHandler&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dragover #detailsImage&quot;</span><span class="o">:</span> <span class="s2">&quot;dragoverHandler&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;drop #detailsImage&quot;</span><span class="o">:</span> <span class="s2">&quot;dropHandler&quot;</span><span class="p">,</span>
     <span class="p">},</span>
-    <span class="nx">selectImage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -84,9 +82,10 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
-<p>set object attribute for image uploader</p>
+<p>handles event when user selects image</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">selectImage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">pictureFile</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
 
 </pre></div>
@@ -100,9 +99,12 @@
 <p>if the file type is image, read it</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">pictureFile</span><span class="p">.</span><span class="nx">type</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="s2">&quot;image/&quot;</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">pictureFile</span><span class="p">.</span><span class="nx">type</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;image/&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">imageRead</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">pictureFile</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">pictureFile</span><span class="p">.</span><span class="nx">type</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="c1">// else display error notification</span>
+            <span class="nx">splat</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">showNotice</span><span class="p">(</span><span class="s1">&#39;Error&#39;</span><span class="p">,</span> <span class="s2">&quot;Please select a valid image file&quot;</span><span class="p">,</span> <span class="s1">&#39;alert-danger&#39;</span><span class="p">);</span>
         <span class="p">}</span>
+    <span class="p">},</span>
 
 </pre></div>
         </td>
@@ -112,10 +114,11 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
 </div>
-<p>else display error notification</p>
+<p>Read pictureFile from filesystem, resulting in
+DataURL (base64 representation of image data).
+Use as model poster attrib. and image src attrib.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="p">},</span>
     <span class="nx">imageRead</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">pictureFile</span><span class="p">,</span> <span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">reader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FileReader</span><span class="p">();</span>
@@ -132,9 +135,22 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="nx">reader</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">setCanvasImage</span><span class="p">(</span><span class="nx">reader</span><span class="p">.</span><span class="nx">result</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<p>resize the image and set the image on callback.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">resize</span><span class="p">(</span><span class="nx">reader</span><span class="p">.</span><span class="nx">result</span><span class="p">,</span> <span class="s1">&#39;image/jpeg&#39;</span><span class="p">,</span> <span class="s1">&#39;0.9&#39;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">setImage</span><span class="p">);</span>
         <span class="p">};</span>
         <span class="nx">reader</span><span class="p">.</span><span class="nx">readAsDataURL</span><span class="p">(</span><span class="nx">pictureFile</span><span class="p">);</span> <span class="c1">// read image file</span>
+
     <span class="p">},</span>
     <span class="nx">dragoverHandler</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
 
@@ -144,7 +160,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
 <p>don't let parent element catch event</p>
         </td>
@@ -157,7 +173,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
 </div>
 <p>prevent default to enable drop event</p>
         </td>
@@ -170,7 +186,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
 </div>
 <p>jQuery event doesn’t have dataTransfer
 field - so use originalEvent</p>
@@ -178,24 +194,6 @@ field - so use originalEvent</p>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="nx">event</span><span class="p">.</span><span class="nx">originalEvent</span><span class="p">.</span><span class="nx">dataTransfer</span><span class="p">.</span><span class="nx">dropEffect</span> <span class="o">=</span> <span class="s1">&#39;copy&#39;</span><span class="p">;</span>
     <span class="p">},</span>
-    <span class="nx">dropHandler</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">event</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-        <span class="nx">event</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
-        <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
-        <span class="kd">var</span> <span class="nx">ev</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">originalEvent</span><span class="p">;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
-</div>
-<p>set object attribute for use by uploadPicture</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">pictureFile</span> <span class="o">=</span> <span class="nx">ev</span><span class="p">.</span><span class="nx">dataTransfer</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
 
 </pre></div>
         </td>
@@ -205,10 +203,15 @@ field - so use originalEvent</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
 </div>
-<p>only process image files</p>
+<p>handles event when user drags and drops a picture file</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">pictureFile</span><span class="p">.</span><span class="nx">type</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="s2">&quot;image/&quot;</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nx">dropHandler</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">event</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="nx">event</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
+        <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ev</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">originalEvent</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">pictureFile</span> <span class="o">=</span> <span class="nx">ev</span><span class="p">.</span><span class="nx">dataTransfer</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
 
 </pre></div>
         </td>
@@ -218,11 +221,15 @@ field - so use originalEvent</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
 </div>
-<p>Read image file and display in img tag</p>
+<p>only process image files</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">pictureFile</span><span class="p">.</span><span class="nx">type</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;image/&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">imageRead</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">pictureFile</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">pictureFile</span><span class="p">.</span><span class="nx">type</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="c1">// else display notification error</span>
+            <span class="nx">splat</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">showNotice</span><span class="p">(</span><span class="s1">&#39;Error&#39;</span><span class="p">,</span> <span class="s2">&quot;Please select a valid image file&quot;</span><span class="p">,</span> <span class="s1">&#39;alert-danger&#39;</span><span class="p">);</span>
         <span class="p">}</span>
+    <span class="p">},</span>
 
 </pre></div>
         </td>
@@ -232,22 +239,16 @@ field - so use originalEvent</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
-<p>else display notification error</p>
+<p>Resize sourceImg and call callback function on resized sourceImg when complete. 
+Type, quality are optional params for image-type and quality setting</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="p">},</span>
-    <span class="nx">setCanvasImage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">image</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#imageCanvas&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">&#39;2d&#39;</span><span class="p">);</span>
-        <span class="kd">var</span> <span class="nx">img</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">();</span>
+    <span class="nx">resize</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">sourceImg</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">quality</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="nx">img</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">ctx</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span><span class="nx">img</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">img</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">img</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span>
-                <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;poster&#39;</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">toDataURL</span><span class="p">());</span>
-        <span class="p">};</span>
-        <span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">image</span><span class="p">;</span>
-    <span class="p">},</span>
+        <span class="kd">var</span> <span class="nx">type</span> <span class="o">=</span> <span class="nx">type</span> <span class="o">||</span> <span class="s2">&quot;image/jpeg&quot;</span><span class="p">;</span> <span class="c1">// default MIME image type</span>
+        <span class="kd">var</span> <span class="nx">quality</span> <span class="o">=</span> <span class="nx">quality</span> <span class="o">||</span> <span class="mf">0.95</span><span class="p">;</span> <span class="c1">// tradeoff quality vs size</span>
+        <span class="kd">var</span> <span class="nx">image</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">(),</span> <span class="nx">MAX_HEIGHT</span> <span class="o">=</span> <span class="mi">255</span><span class="p">,</span> <span class="nx">MAX_WIDTH</span> <span class="o">=</span> <span class="mi">450</span><span class="p">,</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="nx">image</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -257,10 +258,18 @@ field - so use originalEvent</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
-<p>render the View</p>
+<p>proportion for img</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">image</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="nx">image</span><span class="p">.</span><span class="nx">height</span> <span class="o">&gt;</span> <span class="nx">MAX_WIDTH</span> <span class="o">/</span> <span class="nx">MAX_HEIGHT</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">image</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">image</span><span class="p">.</span><span class="nx">height</span> <span class="o">*</span> <span class="nx">MAX_WIDTH</span> <span class="o">/</span> <span class="nx">image</span><span class="p">.</span><span class="nx">width</span><span class="p">;</span>
+                <span class="nx">image</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">MAX_WIDTH</span><span class="p">;</span> 
+                <span class="nx">y</span> <span class="o">=</span> <span class="p">(</span><span class="nx">MAX_HEIGHT</span> <span class="o">-</span> <span class="nx">image</span><span class="p">.</span><span class="nx">height</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                <span class="nx">image</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">image</span><span class="p">.</span><span class="nx">width</span> <span class="o">*</span> <span class="nx">MAX_HEIGHT</span> <span class="o">/</span> <span class="nx">image</span><span class="p">.</span><span class="nx">height</span><span class="p">;</span>
+                <span class="nx">image</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">MAX_HEIGHT</span><span class="p">;</span>
+                <span class="nx">x</span> <span class="o">=</span> <span class="p">(</span><span class="nx">MAX_WIDTH</span> <span class="o">-</span> <span class="nx">image</span><span class="p">.</span><span class="nx">width</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="p">}</span>
 
 </pre></div>
         </td>
@@ -270,15 +279,62 @@ field - so use originalEvent</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
-<p>set the view element ($el) HTML content using its template</p>
+<p>creates a new "canvas" object</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">moviePosterLoad</span><span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">markup</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">moviePosterTemplate</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span><span class="nx">markup</span><span class="p">);</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">moviePosterTemplate</span><span class="p">());</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">setCanvasImage</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;poster&#39;</span><span class="p">));</span>
-        <span class="p">});</span>
+            <span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;canvas&quot;</span><span class="p">);</span>
+            <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">MAX_WIDTH</span><span class="p">;</span>
+            <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">MAX_HEIGHT</span><span class="p">;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+</div>
+<p>ctx becomes an object with properties and methods for drawing on canvas</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;2d&quot;</span><span class="p">);</span> <span class="c1">// get 2D rendering context</span>
+            <span class="nx">ctx</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span><span class="nx">image</span><span class="p">,</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">,</span> <span class="nx">image</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">image</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span> <span class="c1">// render</span>
+            <span class="nx">callback</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">toDataURL</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">quality</span><span class="p">),</span> <span class="nx">type</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">image</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">sourceImg</span><span class="p">;</span>
+    <span class="p">},</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+</div>
+<p>set sourceImg as model poster and display image. </p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">setImage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">sourceImg</span><span class="p">,</span> <span class="nx">type</span><span class="p">){</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;poster&#39;</span><span class="p">,</span> <span class="nx">sourceImg</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">targetImgElt</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#detailsImage&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="nx">targetImgElt</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">sourceImg</span><span class="p">;</span>
+        <span class="nx">splat</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">showNotice</span><span class="p">(</span><span class="s1">&#39;Note!&#39;</span><span class="p">,</span> <span class="s1">&#39;Movie Poster updated, to make changes permanent, click &quot;Save Changes&quot; button&#39;</span><span class="p">,</span> <span class="s1">&#39;alert-info&#39;</span><span class="p">);</span>
+    <span class="p">},</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+</div>
+<p>render the View</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">()));</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">;</span> <span class="c1">// support method chaining</span>
     <span class="p">}</span>
 <span class="p">});</span>
