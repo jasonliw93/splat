@@ -69,7 +69,7 @@ exports.editMovie = function(req, res){
 exports.deleteMovie = function(req, res){
     movieModel.findByIdAndRemove(req.params.id, function(err, movie) {
         if (err) {
-            res.status(500).send("Sorry, unable to retrieve movie at this time (" 
+            res.status(500).send("Sorry, unable to delete movie at this time (" 
                 +err.message+ ")" );
         } else if (!movie) {
             res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
@@ -77,7 +77,14 @@ exports.deleteMovie = function(req, res){
             // delete the image and video
             fs.unlink(__dirname + '/../public/img/uploads/' + movie.id + '.jpeg');
             fs.unlink(__dirname + '/../public/videos/' + movie.id + '.mp4');
-            res.status(200).send(movie);
+            reviewModel.remove({movieId : movie.id}, function(err) {
+                if (err) {
+                    res.status(500).send("Sorry, unable to delete reviews at this time (" 
+                        +err.message+ ")" );
+                }else{
+                    res.status(200).send(movie);
+                }
+            });
             broadcastEvent({model: "movie", movieId: movie.id, action: "remove"});
         }
     });
