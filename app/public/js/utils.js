@@ -22,7 +22,15 @@ splat.utils = {
         console.log(response);
         this.showNotice('Error', response.responseText, 'alert-danger');
     },
-    
+    displayValidationErrors: function(messages) {
+        for (var key in messages) {
+            if (messages.hasOwnProperty(key)) {
+                this.addValidationError(key, messages[key]);
+            }
+        }
+    this.showAlert('Error!', 'Fix validation errors and try again',
+                                                        'alert-danger');
+    },
     // validation error notices
     addValidationError: function(field, message) {
         // use jQuery to address input field by its name attribute

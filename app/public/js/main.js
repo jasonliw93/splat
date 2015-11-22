@@ -71,7 +71,7 @@ splat.AppRouter = Backbone.Router.extend({
         }
         //current view becomes the new view so that we can render the view element
         this.currentView = view;
-        $(selector).html(view.render().el);
+        $(selector).html(view.render().el).stop().hide().fadeIn(500);
 
     },
     home: function() {
@@ -167,7 +167,7 @@ splat.AppRouter = Backbone.Router.extend({
 
 splat.utils.loadTemplates(['Home', 'Header', 'About', 'Details', 
     'MovieThumb', 'MovieForm', 'MovieFormActions', 'MoviePoster', 
-    'ReviewsView','Reviewer', 'ReviewThumb'], function() {
+    'ReviewsView','Reviewer', 'ReviewThumb', 'Signup', 'Signin'], function() {
     splat.app = new splat.AppRouter();
     Backbone.history.start();
 });
@@ -188,8 +188,9 @@ Backbone.View.prototype.close = function() {
 
 Backbone.ajax = function() {
     // Invoke $.ajaxSetup in the context of Backbone.$
+
     Backbone.$.ajaxSetup.call(Backbone.$, {beforeSend: function(jqXHR){
-        jqXHR.setRequestHeader("X-CSRF-Token", splat.csrftoken);
+        jqXHR.setRequestHeader("X-CSRF-Token", splat.token);
     }});
     return Backbone.$.ajax.apply(Backbone.$, arguments);
 };

@@ -4,11 +4,11 @@
 		<!-- Creates a box for the rating of the movie-->
 		<% if (typeof _id !== "undefined") { %> 
 		<div class="review-swatch-container">
-			<a href="#movies/<%= _id %>/reviews">
+			<a href="#movies/<%- _id %>/reviews">
 			  <img class="review-swatch-bg" 
-			  src="<%= getReviewImage(freshVotes,freshTotal) %>">
+			  src="<%- getReviewImage(freshVotes,freshTotal) %>">
 			  <div class="review-swatch-details"> 
-			    <%= getReviewText(freshVotes,freshTotal) %>
+			    <%- getReviewText(freshVotes,freshTotal) %>
 			  </div>
 			</a>
 		</div>

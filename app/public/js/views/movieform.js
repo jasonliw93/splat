@@ -43,7 +43,7 @@ splat.MovieForm = Backbone.View.extend({
             processData: false,
             contentType: false,
             beforeSend: function(jqXHR){
-                jqXHR.setRequestHeader("X-CSRF-Token", splat.csrftoken);
+                jqXHR.setRequestHeader("X-CSRF-Token", splat.token);
             },
             xhr: function() {  // custom xhr
                 var myXhr = $.ajaxSettings.xhr();

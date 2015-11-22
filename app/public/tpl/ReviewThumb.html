@@ -8,11 +8,11 @@
             <div class="review-text">
                 <div class="panel panel-default">
                 <img src="<% if (freshness) { %> /img/fresh.gif <% } else { %> /img/rotten.gif <% } %> ">
-                <q><%= reviewText %></q>
+                <q><%- reviewText %></q>
                 </div>
                 <p>
-                    <img src="img/critic.gif" alt="Critic"/> <%= reviewAffil %> <br>
-                    <span><%= reviewName %></span>
+                    <img src="img/critic.gif" alt="Critic"/> <%- reviewAffil %> <br>
+                    <span><%- reviewName %></span>
                 </p>
 
             </div>

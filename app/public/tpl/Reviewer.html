@@ -15,7 +15,7 @@
     <div class="form-group">
         <label for="reviewText" class="control-label">Enter your review</label>
         <div>
-            <textarea class="col-xs-12" name="reviewText" rows="5"><%= reviewText %></textarea>
+            <textarea class="col-xs-12" name="reviewText" rows="5"><%- reviewText %></textarea>
             <span class="help-block col-xs-12"></span>
         </div>
     </div>
@@ -23,14 +23,14 @@
     <div class="form-group">
         <label for="reviewName" class="col-xs-2 control-label">Name</label>
         <div class="col-xs-4">
-            <input type="text" class="col-xs-12" name="reviewName" value="<%= reviewName %>" />
+            <input type="text" class="col-xs-12" name="reviewName" value="<%- reviewName %>" />
             <span class="help-block col-xs-12"></span>
         </div>
     </div>
     <div class="form-group">
         <label for="reviewAffil" class="col-xs-2 control-label">Affiliation</label>
         <div class="col-xs-4">
-            <input type="text" class="col-xs-12" name="reviewAffil" value="<%= reviewAffil %>" />
+            <input type="text" class="col-xs-12" name="reviewAffil" value="<%- reviewAffil %>" />
             <span class="help-block col-xs-12"></span>
         </div>
     </div>

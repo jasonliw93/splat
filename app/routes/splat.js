@@ -6,21 +6,98 @@ var fs = require('fs'),
     config = require(__dirname + '/../config'),  // port#, other params
     express = require("express"),
     url = require("url"),
-    _ = require("underscore");
+    _ = require("underscore"),
+    bcrypt = require("bcrypt");
+
+// create image-upload directory if it does not exist 
+fs.exists(__dirname + '/../public/img/uploads', function (exists) {
+    if (!exists) {
+        fs.mkdir(__dirname + '/../public/img/uploads', function (err) {
+            if (err) {
+                process.exit(1);  // can this be cleaned up with throw error???
+            };
+        });
+    }
+});
+
+// create video-upload directory if it does not exist 
+fs.exists(__dirname + '/../public/img/videos', function (exists) {
+    if (!exists) {
+        fs.mkdir(__dirname + '/../public/img/videos', function (err) {
+            if (err) {
+                process.exit(1);  // can this be cleaned up with throw error???
+            };
+        });
+    }
+});
+
+var mongoose = require('mongoose'); // MongoDB integration
+
+// Connect to database, using credentials specified in your config module
+mongoose.connect('mongodb://' +config.dbuser+ ':' +config.dbpass+
+               '@' + config.dbhost + '/' + config.dbname);
+
+// Schemas
+var MovieSchema = new mongoose.Schema({
+    title: { type: String, required: true },
+    released: { type: String, required: true},
+    director: { type: String, required: true },
+    starring: { type: [String], required: true },
+    rating: { type: String, required: true },
+    duration: { type: Number, required: true },
+    genre: { type: [String], required: true },
+    synopsis: { type: String, required: true },
+    freshTotal: { type: Number, required: true },
+    freshVotes: { type: Number, required: true },
+    trailer: { type: String, required: false },
+    poster: { type: String, required: true },
+    dated: { type: Date, required: true},
+    userId: {type:mongoose.Schema.Types.ObjectId, required: true},
+});
+
+var UserSchema = new mongoose.Schema({
+    username: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    email: { type: String, required: true }
+});
+
+var ReviewSchema = new mongoose.Schema({
+    freshness: { type:Number, required: true},
+    reviewText: { type:String, required: true},
+    reviewName: { type:String, required: true},
+    reviewAffil: { type:String, required: true},
+    movieId: {type:mongoose.Schema.Types.ObjectId, required: true},
+})
+
+// Constraints
+
+// each Movie title:director pair must be unique; duplicates are dropped
+MovieSchema.index({"title":1, "director":1}, {unique: true, dropDups: true});
+
+// each Review name:affil pair must be unique for a given movie (i.e.
+// reviewers are allowed only one review per movie); duplicates are dropped
+ReviewSchema.index({"reviewName":1, "reviewAffil":1, "movieId":1},
+                   {unique: true, dropDups: true});
+
+// Models
+var Movie = mongoose.model('Movie', MovieSchema);
+var User = mongoose.model('User', UserSchema);
+var Review = mongoose.model('Review', ReviewSchema);
+
 // Implemention of splat API handlers:
 
 // "exports" is used to make the associated name visible
 // to modules that "require" this file (in particular app.js)
 
 // heartbeat response for server API
-exports.api = function(req, res){
-  res.status(200).send('<h3>Eatz API is running! </h3><a href="index.html">Splat</a>');
+exports.api = function(req, res) {
+    res.send(200, '<h3>Splat! 0.2 API is running!</h3><a href="index.html">Splat</a>');
 };
 
 // retrieve an individual movie model, using it's id as a DB key
 exports.getMovie = function(req, res){
     // retrieve a specific movie
-    movieModel.findById(req.params.id, function(err, movie) {
+    Movie.findById(req.params.id, function(err, movie) {
         if (err) {
             res.status(500).send("Sorry, unable to retrieve movie at this time (" 
                 +err.message+ ")" );
@@ -33,7 +110,7 @@ exports.getMovie = function(req, res){
 };
 // retrives all movie models in collection
 exports.getMovies = function(req, res){
-    movieModel.find(function(err, movies) {
+    Movie.find(function(err, movies) {
         if (err) {
             res.status(500).send("Sorry, unable to retrieve movies at this time");
         } else {
@@ -42,70 +119,8 @@ exports.getMovies = function(req, res){
     });
 };
 
-// creates a new movie model
-exports.addMovie = function(req, res){    
-    var movie = new movieModel(req.body);
-    saveMovie(movie, res, 'add');
-};
-
-// edits movie model if the model can be found
-exports.editMovie = function(req, res){
-    movieModel.findById(req.params.id, function(err, movie){ 
-        if (err) {
-            res.status(500).send("Sorry, unable to retrieve movie at this time (" 
-                +err.message+ ")" );
-        } else if (!movie) {
-            res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
-        } else {
-            // merge request fields with existing movie fields
-            _.extend(movie, req.body);
-            saveMovie(movie, res, 'update');
-        }
-    });
-};
-
-
-// deletes the movie if it exists
-exports.deleteMovie = function(req, res){
-    movieModel.findByIdAndRemove(req.params.id, function(err, movie) {
-        if (err) {
-            res.status(500).send("Sorry, unable to delete movie at this time (" 
-                +err.message+ ")" );
-        } else if (!movie) {
-            res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
-        } else {
-            // delete the image and video
-            fs.unlink(__dirname + '/../public/img/uploads/' + movie.id + '.jpeg');
-            fs.unlink(__dirname + '/../public/videos/' + movie.id + '.mp4');
-            reviewModel.remove({movieId : movie.id}, function(err) {
-                if (err) {
-                    res.status(500).send("Sorry, unable to delete reviews at this time (" 
-                        +err.message+ ")" );
-                }else{
-                    res.status(200).send(movie);
-                }
-            });
-            broadcastEvent({model: "movie", movieId: movie.id, action: "remove"});
-        }
-    });
-};
-
-// Helper function used to save the movie which 
-// checks if poster needs to be saved to file first
-// and send response to original request.
-function saveMovie(movie, res, action){    
-    // save function called after we check if we have to save poster to file
-    var save = function() {
-        movie.save(function (err, movie) {
-            if (err){
-                res.status(500).send("Sorry, unable to " + action + " movie at this time (" 
-                            +err.message+ ")" );
-            }else{
-                res.status(200).send(movie);
-                broadcastEvent({model: "movie", movieId: movie.id, action: action});
-            }
-        });
-    };
+// helper function, not exported
+function savePoster(movie, callback){
     var dataUrlRegex = /^data:image\/(.+);base64,(.*)$/;
     var match = movie.poster.match(dataUrlRegex);
     // if poster is dataURL, then save it to file and update poster field
@@ -116,22 +131,105 @@ function saveMovie(movie, res, action){
         var newPath = __dirname + '/../public/' + imageURL;
         // write the data to file
         fs.writeFile(newPath, data, 'base64', function (err) {
-            if (err) 
+            if (err) {
                 return res.status(500).send("Sorry, error occured when uploading file");
-            // forces browser to reload the image if cached
-            movie.poster = imageURL + '?' + new Date().valueOf();;
-            save();
+            }else{
+                // forces browser to reload the image if cached
+                movie.poster = imageURL + '?' + new Date().valueOf();;
+                if (callback){
+                    callback();
+                }
+            }
         });
-    }else{
-        save();
+    } else {
+        if (callback){
+            callback();
+        }
     }
 }
+
+// creates a new movie model
+exports.addMovie = function(req, res){    
+    var movie = new Movie(req.body);
+    movie.userId = req.session.userid;
+    savePoster(movie, function() {
+        movie.save(function (err, result) {
+            if (!err) {
+                res.status(200).send(movie);
+                broadcastEvent({model: "movie", movieId: movie.id, action: 'add'});
+            } else if (err.err && err.err.indexOf("E11000") > -1) {
+                 res.status(403).send("Sorry, movie " +movie.title+ " directed by "
+                        +movie.director+ " has already been created");
+            } else {
+                res.status(500).send('Unable to save movie at this time: '
+                + 'please try again later ' + err.message);
+            }
+        });
+    });
+};
+
+// edits movie model if the model can be found
+exports.editMovie = function(req, res){
+    Movie.findById(req.params.id, function(findErr, movie){ 
+        if (findErr) {
+            res.status(500).send('Server is unable to process movie update; '
+                + 'please try again later ' + findErr.message);
+        } else if (!movie) {
+            res.status(404).send('Sorry, this movie does not exist (perhaps deleted?)');
+        } else {
+            // merge request fields with existing movie fields
+            _.extend(movie, req.body);
+            savePoster(movie, function() {
+                movie.save(function (saveErr, result) {
+                    if (!saveErr) {
+                        res.status(200).send(movie);
+                        broadcastEvent({model: "movie", movieId: movie.id, action: 'edit'});
+                    } else if (saveErr.err && saveErr.err.indexOf("E11000") !== -1) {
+                        res.status(403).send("Sorry, movie " +req.body.title
+                            + " directed by " +req.body.director+ " already exists.");
+                    } else if (saveErr.message) {
+                        res.status(500).send('Movie update failed: ' + saveErr.message);
+                    } else {
+                        res.status(500).send('Movie update failed');
+                    }
+                });                     
+            });
+        }
+    });
+};
+
+// deletes the movie if it exists
+exports.deleteMovie = function(req, res){
+    Movie.findByIdAndRemove(req.params.id, function(err, movie) {
+        if (err) {
+            res.status(500).send("Sorry, unable to delete movie at this time (" 
+                +err.message+ ")" );
+        } else if (!movie) {
+            res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
+        } else {
+            fs.unlink(__dirname + '/../public/img/uploads/' + movie.id + '.jpeg', function (uerr) {
+                if (uerr) {
+                    console.log('poster image not deleted : ' + movie.id + '. ' + uerr);
+                }else{
+                    console.log('poster image deleted : ' + movie.id);
+                }
+            });
+            fs.unlink(__dirname + '/../public/videos/' + movie.id + '.mp4', function (uerr){
+                if (uerr) console.log(uerr);
+            });
+            Review.remove({movieId : movie.id}, function(err) {
+                if (uerr) console.log(uerr);
+            });
+            broadcastEvent({model: "movie", movieId: movie.id, action: "remove"});
+        }
+    });
+};
 
 // adds a review model to the collection 
 // and update corresponding movie freshvotes and freshtotals
 exports.addReview = function(req, res){    
     // creates a new review model
-    var review = new reviewModel(req.body);
+    var review = new Review(req.body);
     review.movieId = req.params.id;
     // saves the review
     review.save(function (err, review) {
@@ -139,7 +237,7 @@ exports.addReview = function(req, res){
             res.status(500).send("Sorry, unable to add review at this time (" 
                         +err.message+ ")" );
         }else{
-            movieModel.findById(req.params.id, function(err, movie){ 
+            Movie.findById(req.params.id, function(err, movie){ 
                 if (err) {
                     res.status(500).send("Sorry, unable to retrieve movie at this time (" 
                         +err.message+ ")" );
@@ -167,7 +265,7 @@ exports.addReview = function(req, res){
 
 // retrieves the movie reviews for a specific movie id
 exports.getReviews = function(req, res){
-    reviewModel.find({movieId : req.params.id}, function(err, reviews) {
+    Review.find({movieId : req.params.id}, function(err, reviews) {
         if (err) {
             res.status(500).send("Sorry, unable to retrieve reviews at this time");
         } else {
@@ -187,7 +285,7 @@ exports.uploadVideo = function(req, res) {
         // id parameter is the movie's "id" attribute as a string value
         videoURL = '/movies/' + req.params.id + '/video',
         // rename the image file to match the imageURL
-        newPath = __dirname + '/../public/videos/uploads/' + req.params.id + suffix;
+        newPath = __dirname + '/../public/img/videos/' + req.params.id + suffix;
         fs.rename(filePath, newPath, function(err) {
         if (!err) {
             res.status(200).send(videoURL);
@@ -201,7 +299,7 @@ exports.uploadVideo = function(req, res) {
 // handles video playback of trailer video on server
 exports.playMovie = function(req, res){
     //console.log(req.headers);
-    var file = path.resolve(__dirname,"../public/videos/uploads/" + req.params.id + ".mp4");
+    var file = path.resolve(__dirname,"../public/img/videos/" + req.params.id + ".mp4");
     var range = req.headers.range;
     var positions = range.replace(/bytes=/, "").split("-");
     var start = parseInt(positions[0], 10);
@@ -228,47 +326,93 @@ exports.playMovie = function(req, res){
     });
 };
 
+exports.isAuth = function (req, res) {
+    console.log('isAuth ', req.session);
+    if (req.session && req.session.auth) {
+            res.send(200, {'userid': req.session.userid,
+                'username': req.session.username});
+    } else {
+            res.status(200).send({'userid': '', 'username': ''});
+    };
+};
 
-var mongoose = require('mongoose'); // MongoDB integration
+exports.auth = function (req, res) {
+  if (req.body.login) {   // login request
+    var username = req.body.username;
+    var password = req.body.password;
+    if (!username || !password) {
+        res.status(403).send('Invalid username-password combination, please try again');
+    };
+    User.findOne({username:username}, function(err, user){
+        if (user !== null) {
+            /* A3 ADD CODE BLOCK ... */
+            var sess = req.session;  // create session
+            sess.auth = true;
+            sess.username = username;
+            sess.userid = user.id;
+            // set session-timeout, from config file
+            if (req.body.remember) {
+                // if "remember me" selected on signin form,
+                // extend session to 10*default-session-timeout
+                // A3 ADD CODE BLOCK
+                sess.cookie.maxAge = config.sessionTimeout * 10;
+            }
+            bcrypt.compare(password, user.password, function(err, match) {
+                if (match){
+                    res.status(200).send({'userid': user.id, 'username': username});
+                }else{
+                    res.status(403).send('Invalid username-password combination, please try again');
+                }
+            });
+            // A3 ADD CODE BLOCK
+        } else if (!err) {  // unrecognized username, but not DB error
+            res.status(403).send('Invalid username-password combination, please try again');
+        } else {  // error response from DB
+            res.status(500).send("Unable to login at this time; please try again later " 
+                + err.message);
+        }
+    });
+  } else { // logout request
+    req.session.destroy(); // destroy session in the session-store
+    res.status(200).send({'userid': undefined, 'username': undefined});
+  };
+};
 
-// Connect to database, using credentials specified in your config module
-mongoose.connect('mongodb://' +config.dbuser+ ':' +config.dbpass+
-               '@' + config.dbhost + '/' + config.dbname);
+exports.signup = function(req, res) {
+    var user = new User(req.body);
+    encryptPassword(user, function() {
+    // store the hashed-with-salt password in the DB
+        user.save(function (serr, result) {
+        if (!serr) {
+          req.session.auth = true;
+          req.session.username = result.username;
+          req.session.userid = result.id;
+          res.status(200).send({'username':result.username, 'userid':result.id});
+        } else {
+          console.log(serr);
+          if (serr.err && serr.err.indexOf("E11000") !== -1) {
+            res.status(403).send("Sorry, username '"+user.username+
+                "' is already taken; please choose another username");
+          } else {
+            res.status(500).send("Unable to create account at this time; please try again later (" +serr.message+ ")");
+          }
+        }
+        });
+    });
+};
 
-
-// Schemas
-var MovieSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    released: { type: String, required: true},
-    director: { type: String, required: true },
-    starring: { type: [String], required: true },
-    rating: { type: String, required: true },
-    duration: { type: Number, required: true },
-    genre: { type: [String], required: true },
-    synopsis: { type: String, required: true },
-    freshTotal: { type: Number, required: true },
-    freshVotes: { type: Number, required: true },
-    trailer: { type: String, required: false },
-    poster: { type: String, required: true },
-    dated: { type: Date, required: true},
-});
-
-var ReviewSchema = new mongoose.Schema({
-    freshness: { type:Number, required: true},
-    reviewText: { type:String, required: true},
-    reviewName: { type:String, required: true},
-    reviewAffil: { type:String, required: true},
-    movieId: {type:mongoose.Schema.Types.ObjectId, required: true},
-})
-
-// Constraints
-// each title:director pair must be unique; duplicates are dropped
-MovieSchema.index({ title: 1, director: 1 }, { unique: true });  // ADD CODE
-// no pair of reviews can have matching reviewName:reviewAffil pairs
-ReviewSchema.index({ reviewName: 1, reviewAfill: 1, movieId: 1}, {unique: true});
-// Models
-var movieModel = mongoose.model('Movie', MovieSchema);
-var reviewModel = mongoose.model('Review', ReviewSchema);
+function encryptPassword(user, callback){
+    bcrypt.genSalt(10, function(err, salt) {
+        bcrypt.hash(user.password, salt, function(err, hash) {
+            // Store hash in your password DB.
+            console.log(user.password, hash);
+            user.password = hash;  // A3 ADD CODE
+            if (callback) {
+                callback();
+            }
+        });
+    });
+}
 
 // Server Sent Events
 var subscribers = []; // array of active subscribers

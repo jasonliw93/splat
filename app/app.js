@@ -31,34 +31,27 @@ var https = require('https'),   // ADD CODE
     config = require("./config"),
     splat = require('./routes/splat.js');  // route handlers ... ADD CODE
 
-var app = express();  // Create Express app server
-
-app.use(session({
-  secret: 'My super session secret',
-  cookie: {
-    httpOnly: true,
-    secure: true
-  }
-}));
-
-app.use(csrf());
-
-// Setup for rendering csurf token into index.html at app-startup
-app.engine('.html', require('ejs').__express);
-app.set('views', __dirname + '/public');
-// When client-side requests index.html, perform template substitution on it
-app.get('/index.html', function(req, res) {
-    // req.csrfToken() returns a fresh random CSRF token value
-    res.render('index.html', {csrftoken: req.csrfToken()});
-});
-
-app.use(function(err, req, res, next) { 
-    if (err.code == 'EBADCSRFTOKEN'){
-        res.status(403).send('reload the app to get a fresh CSRF token value');
+// middleware check that req is associated with an authenticated session
+function isAuthd(req, res, next) {
+    if (req.session && req.session.auth) {
+        return next();
     }else{
-        next();
+        res.status(403).send('Please log in first, before making changes.');
     }
-});
+};
+
+// middleware check that the session-userid matches the userid passed
+// in the request body, e.g. when deleting or updating a model
+function hasPermission(req, res, next) {
+    // A3 ADD CODE BLOCK
+    if (req.session && req.session.userid == req.body.userId) {
+        return next();
+    }else{
+        res.status(403).send('You do not have permission to make changes to this item.');
+    }
+};
+
+var app = express();  // Create Express app server
 
 // Configure app server
 
@@ -67,7 +60,7 @@ app.set('port', process.env.PORT || config.port);
 
 // activate basic HTTP authentication (to protect your solution files)
 if (config.httpauth){
-    app.use(basicAuth(config.username, config.password));
+    app.use(basicAuth(config.basicAuthUser, config.basicAuthPass));  
 }
 // change param value to control level of logging  ... ADD CODE
 app.use(logger('dev'));  // 'default', 'short', 'tiny', 'dev'
@@ -79,22 +72,68 @@ app.get('/events', splat.subscribeEvents);
 app.use(compression());
 
 // parse HTTP request body
-app.use(bodyParser.json({
-    limit: 100000
-}));
+app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({
-    extended: true
+    extended: true, limit: '5mb'
 }));
 
 // set file-upload directory for trailer videos
 var movieMulter = multer({
-    dest: __dirname + '/public/videos/uploads/',
+    dest: __dirname + '/public/img/videos/',
     limits: {
         files: 1,
         fileSize: 5 * 1024 * 1024
     },
 });
 var imageMulter = multer({dest: __dirname + '/public/img/uploads/'});
+
+var MongoStore = require('connect-mongo')(session);
+
+// Session config, based on Express.session, values taken from config.js
+app.use(session({
+    //name: 'splat.sess',
+    secret: config.sessionSecret,  // A3 ADD CODE
+    store: new MongoStore({
+        url: 'mongodb://' +config.dbuser+ ':' +config.dbpass+
+               '@' + config.dbhost + '/' + config.dbname
+    }),
+    //rolling: true,  // reset session timer on every client access
+    cookie: { 
+        maxAge:config.sessionTimeout,  // A3 ADD CODE
+        secure: true,
+        // maxAge: null,  // no-expire session-cookies for testing
+        httpOnly: true },
+    //saveUninitialized: false,
+    //resave: false
+}));
+
+app.use(csrf());
+
+// Setup for rendering csurf token into index.html at app-startup
+app.engine('.html', require('ejs').__express);
+
+app.set('views', __dirname + '/public');
+
+// When client-side requests index.html, perform template substitution on it
+app.get('/index.html', function(req, res) {
+    // req.csrfToken() returns a fresh random CSRF token value
+    console.log(req.session);
+    res.render('index.html', {
+        csrftoken: req.csrfToken(), 
+        auth: req.session.auth,
+        username : req.session.username,
+        userid : req.session.userid
+    });
+});
+
+app.use(function(err, req, res, next) { 
+    if (err.code == 'EBADCSRFTOKEN'){
+        res.status(403).send('reload the app to get a fresh CSRF token value');
+    }else{
+        next();
+    }
+});
+
 // checks req.body for HTTP method overrides
 app.use(methodOverride());
 
@@ -107,31 +146,51 @@ app.use(methodOverride());
 // Heartbeat test of server API
 app.get('/', splat.api);
 
-// route handlers for movie model
+// Retrieve a single movie by its id attribute
 app.get('/movies/:id', splat.getMovie);
+
+// Retrieve a collection of all movies
 app.get('/movies', splat.getMovies);
-app.post('/movies', splat.addMovie);
-app.put('/movies/:id', splat.editMovie);
-app.delete('/movies/:id', splat.deleteMovie);
 
-// route handlers for review model
+// Create a new movie in the collection
+app.post('/movies', isAuthd, splat.addMovie);
+
+// Update an existing movie in the collection
+app.put('/movies/:id', [isAuthd, hasPermission], splat.editMovie);
+
+// Delete a movie from the collection
+app.delete('/movies/:id', [isAuthd, hasPermission], splat.deleteMovie);
+
+// Retrieve a collection of reviews for movie with given id
 app.get('/movies/:id/reviews', splat.getReviews);
-app.post('/movies/:id/reviews', splat.addReview);
 
-// route handlers for video upload and playback
+// Create a new review in the collection
+app.post('/movies/:id/reviews', isAuthd, splat.addReview);
+
+// Video playback request
 app.get('/movies/:id/video', splat.playMovie);
+
+// Video upload request
 app.post('/movies/:id/video', movieMulter, splat.uploadVideo);
+
+// User login/logout
+app.put('/user', splat.auth);
+
+// User signup
+app.post('/user', splat.signup);
 
 // location of app's static content
 app.use(express.static(__dirname + "/public"));
 
+// allow browsing of docs directory
+app.use(directory(__dirname +  "/public/docs"));
+
 // return error details to client - use only during development
 app.use(errorHandler({ dumpExceptions:true, showStack:true }));
 
-// log and close anything else
+// Default-route middleware in case none of above match
 app.use(function (req, res) {
-    console.log('%s %s', req.method, req.url);
-    res.status(404).end();
+    res.status(404).send('<h3>File Not Found</h3>');
 });
 
 var options = {
