@@ -28,11 +28,10 @@ splat.MoviesView = Backbone.View.extend({
         "<% }); %>",
     ].join('')),
     // render View
-    sort: function(field){
-        var order = field || splat.order;
+    sort: function(){
         // set the comparator for the model used by sort
         this.collection.comparator = function(movie) {
-            return movie.get(order).toLowerCase();
+            return movie.get(splat.order).toLowerCase();
         };
         // sort collection before rendering it - implicitly uses comparator
         this.collection.sort();

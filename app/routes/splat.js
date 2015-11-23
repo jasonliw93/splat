@@ -326,6 +326,22 @@ exports.playMovie = function(req, res){
     });
 };
 
+exports.hasPermission = function(req, res, next) {
+    Movie.findById(req.params.id, function(err, movie) {
+        if (err) {
+            res.status(500).send("Sorry, unable to retrieve movie at this time (" 
+                +err.message+ ")" );
+        } else if (!movie) {
+            res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
+        } else {
+            if (movie.userId == req.session.userid){
+                next();
+            }else{
+                res.status(403).send('You do not have permission to make changes to this item.');
+            }
+        }
+    });
+};
 exports.isAuth = function (req, res) {
     console.log('isAuth ', req.session);
     if (req.session && req.session.auth) {
