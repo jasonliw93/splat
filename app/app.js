@@ -113,9 +113,11 @@ app.set('views', __dirname + '/public');
 // When client-side requests index.html, perform template substitution on it
 app.get('/index.html', function(req, res) {
     // req.csrfToken() returns a fresh random CSRF token value
-    console.log(req.session);
     res.render('index.html', {
-        csrftoken: req.csrfToken()
+        csrftoken: req.csrfToken(),
+        auth: req.session.auth,
+        username : req.session.username,
+        userid : req.session.userid
     });
 });
 
