@@ -342,6 +342,7 @@ exports.hasPermission = function(req, res, next) {
         }
     });
 };
+
 exports.isAuth = function (req, res) {
     console.log('isAuth ', req.session);
     if (req.session && req.session.auth) {
@@ -405,7 +406,6 @@ exports.signup = function(req, res) {
           req.session.userid = result.id;
           res.status(200).send({'username':result.username, 'userid':result.id});
         } else {
-          console.log(serr);
           if (serr.err && serr.err.indexOf("E11000") !== -1) {
             res.status(403).send("Sorry, username '"+user.username+
                 "' is already taken; please choose another username");
@@ -421,7 +421,6 @@ function encryptPassword(user, callback){
     bcrypt.genSalt(10, function(err, salt) {
         bcrypt.hash(user.password, salt, function(err, hash) {
             // Store hash in your password DB.
-            console.log(user.password, hash);
             user.password = hash;  // A3 ADD CODE
             if (callback) {
                 callback();

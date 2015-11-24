@@ -61,7 +61,7 @@ var app = express();  // Create Express app server
 app.set('port', process.env.PORT || config.port);
 
 // activate basic HTTP authentication (to protect your solution files)
-if (config.httpauth){
+if (config.basicAuth){
     app.use(basicAuth(config.basicAuthUser, config.basicAuthPass));  
 }
 // change param value to control level of logging  ... ADD CODE
@@ -89,24 +89,18 @@ var movieMulter = multer({
 });
 var imageMulter = multer({dest: __dirname + '/public/img/uploads/'});
 
-var MongoStore = require('connect-mongo')(session);
-
-// Session config, based on Express.session, values taken from config.js
 app.use(session({
-    //name: 'splat.sess',
-    secret: config.sessionSecret,  // A3 ADD CODE
-    store: new MongoStore({
-        url: 'mongodb://' +config.dbuser+ ':' +config.dbpass+
-               '@' + config.dbhost + '/' + config.dbname
-    }),
-    //rolling: true,  // reset session timer on every client access
-    cookie: { 
-        maxAge:config.sessionTimeout,  // A3 ADD CODE
-        secure: true,
-        // maxAge: null,  // no-expire session-cookies for testing
-        httpOnly: true },
-    //saveUninitialized: false,
-    //resave: false
+        name: 'splat.sess',
+        secret: config.sessionSecret,  // A3 ADD CODE
+        //store: store,
+        rolling: true,  // reset session timer on every client access
+        cookie: { 
+            maxAge:config.sessionTimeout,  // A3 ADD CODE
+            secure: true,
+            httpOnly: true 
+        },
+        saveUninitialized: false,
+        resave: false
 }));
 
 app.use(csrf());
@@ -121,10 +115,7 @@ app.get('/index.html', function(req, res) {
     // req.csrfToken() returns a fresh random CSRF token value
     console.log(req.session);
     res.render('index.html', {
-        csrftoken: req.csrfToken(), 
-        auth: req.session.auth,
-        username : req.session.username,
-        userid : req.session.userid
+        csrftoken: req.csrfToken()
     });
 });
 
