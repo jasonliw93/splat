@@ -37,7 +37,7 @@ splat.Movie = Backbone.Model.extend({
         },
         released : function(value) {
             // regex for movie year
-            var yearRegex = /^(19[1-9]\d|20(1[0-6]|0\d))$/ //1910-2016
+            var yearRegex = /^(19[1-9]\d|20(1[0-6]|0\d))$/; //1910-2016
             //checks if year is valid
             return (value && yearRegex.test(value)) ? {
                 isValid: true
@@ -76,7 +76,7 @@ splat.Movie = Backbone.Model.extend({
                 message: "You must enter atleast one actor's name. Only letters-spaces and \"-\", \"'\""
             };
             // checks if starring is an array and there is atleast one actor
-            if (!(values instanceof Array) || values.length == 0) {
+            if (!(values instanceof Array) || values.length === 0) {
                 return notValid;
             }
             // checks if there is an actor that is invalid in the array
@@ -87,7 +87,7 @@ splat.Movie = Backbone.Model.extend({
             }
             return {
                 isValid: true
-            }
+            };
         },
         duration : function(value) {
             // checks if the duration is a number
@@ -106,7 +106,7 @@ splat.Movie = Backbone.Model.extend({
                 message: "You must enter atleast one movie genre. Only letters-spaces and \"-\", \"'\""
             };
             // checks if genre is an array and there is atleast one genre
-            if (!(values instanceof Array) || values.length == 0) {
+            if (!(values instanceof Array) || values.length === 0) {
                 return notValid;
             }
             // checks if there is an invalid genre in the array
@@ -117,7 +117,7 @@ splat.Movie = Backbone.Model.extend({
             }
             return {
                 isValid: true
-            }
+            };
         },
         synopsis : function(value) {
             // regex for synopsis
@@ -126,7 +126,7 @@ splat.Movie = Backbone.Model.extend({
                 isValid: false,
                 message: "You must enter a synopsis. Only letters-digits-spaces and \",\", \".\", \"!\", \"?\", \"-\", \"'\", \"*\" allowed. No blank lines."
             };
-            var lines = value.split('\n')
+            var lines = value.split('\n');
             // checks if its empty or only filled with symbols
             for (var index = 0; index < lines.length; index++) {
                 if (!wordRegex.test(lines[index])) {
@@ -135,7 +135,7 @@ splat.Movie = Backbone.Model.extend({
             }
             return {
                 isValid: true
-            }
+            };
         },
         freshTotal : function(value) {
             // checks if freshtotal is a number
@@ -198,11 +198,11 @@ splat.Movie = Backbone.Model.extend({
         // go through each attr key and check it's value
         for (var key in attrs) {
             if (this.validators[key]){
-                var check = this.validators[key](attrs[key])
+                var check = this.validators[key](attrs[key]);
                 if (!check.isValid){
                     // add invalid message to invalid object
                     this.invalid[key] = check.message;
-                    isInvalid = true
+                    isInvalid = true;
                 }
             }
         }

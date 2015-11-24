@@ -7,7 +7,7 @@ var splat = splat || {};
 // note View-name (Home) matches name of template file Home.html
 splat.ReviewsView = Backbone.View.extend({
     // render the View
-    initialize: function(options) {
+    initialize: function() {
         this.reviewerView = new splat.Reviewer({
             collection : this.collection
         });
@@ -15,7 +15,7 @@ splat.ReviewsView = Backbone.View.extend({
             collection : this.collection
         });
         // listens to collection sync to re-render
-        this.listenTo(this.collection, 'sync', function(e){
+        this.listenTo(this.collection, 'sync', function(){
             this.reviewThumbsView.render();
             this.showScore();
         });

@@ -38,15 +38,15 @@ splat.MoviesView = Backbone.View.extend({
         this.render();
     },
     render: function() {
+
         $(this.el).html(this.moviesTemplate({
             movies: this.collection,
             movieTemplate: this.movieThumbView.template
-            })
-        );
-        this.$(".trailer source").on('error', function(e){
+        }));
+        this.$(".trailer source").on('error', function(){
             splat.utils.showNotice('Error', "Video not found", 'alert-danger');
         });
-        this.$('[data-toggle="tooltip"]').tooltip()
+        this.$('[data-toggle="tooltip"]').tooltip();
         // support chaining
         return this;
     },

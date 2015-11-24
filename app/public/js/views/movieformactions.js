@@ -8,16 +8,8 @@ var splat = splat || {};
 splat.MovieFormActions = Backbone.View.extend({
     initialize: function() {
         this.isNew = this.model.isNew();
-        var self = this;
         // listens to model to refrain users from changing an attribute
         // a removed model
-        this.listenTo(this.model, 'remove', function(model){
-            splat.app.navigate('#movies', {
-                    replace: true,
-                    trigger: true
-            });
-            splat.utils.showNotice('Error', "Movie has been removed since last opened", 'alert-warning');
-        });
         this.listenTo(this.model, 'change:freshTotal', this.render);
     },
     events: {
@@ -41,7 +33,7 @@ splat.MovieFormActions = Backbone.View.extend({
         // adds model to collection and save model to database
         this.model.collection.create(this.model, {
             wait: true,
-            success: function(model, response) {
+            success: function(model) {
                 // if image was uploaded replace dataURL to image link
                 var targetImgElt = $('#detailsImage')[0];
                 targetImgElt.src = model.get('poster');
@@ -61,14 +53,14 @@ splat.MovieFormActions = Backbone.View.extend({
     destroy: function() {
         this.model.destroy({
             wait: true, // don't destroy client model until server responds
-            success: function(model, response) {
+            success: function() {
                 // later, we'll navigate to the browse view upon success
                 splat.app.navigate('#movies', {
                     replace: true,
                     trigger: true
                 });
                 // notification panel, defined in section 2.6
-                splat.utils.showNotice('Success', "Movie deleted", 'alert-success')
+                splat.utils.showNotice('Success', "Movie deleted", 'alert-success');
             },
             error: function(model, response) {
                 // display the error response from the server

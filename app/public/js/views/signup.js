@@ -22,11 +22,11 @@ splat.Signup = Backbone.View.extend({
     change: function (e) {
         var self = this;
         // Remove any existing alert messages
-	splat.utils.hideNotice();
-	if (!this.model) {
-	    // create User model to hold auth credentials
-            this.model = new splat.User();
-	}
+    	splat.utils.hideNotice();
+    	if (!this.model) {
+    	    // create User model to hold auth credentials
+                this.model = new splat.User();
+    	}
         var change = {};
 
         // Apply change to the model;
@@ -38,7 +38,7 @@ splat.Signup = Backbone.View.extend({
         // fields, since there is just one password in the model.  Have the
         // model validate that field, but have the view verify that the 2
         // password fields are the same.
-	var check;
+    	var check;
         if (e.target.name === 'password' || e.target.name === 'password2') {
             if (self.$('#signup_password').val() !== self.$('#signup_password2').val()) {
                 check = {isValid: false, message: "Password values must match"};
@@ -49,7 +49,7 @@ splat.Signup = Backbone.View.extend({
             }
         } else {
             check = this.model.validateItem(e.target.name);
-	}
+        }
         check.isValid ?
               splat.utils.removeValidationError(e.target.name)
             : splat.utils.addValidationError(e.target.name, check.message);
@@ -59,11 +59,11 @@ splat.Signup = Backbone.View.extend({
         e.preventDefault();
 
 	var self = this;
-        var check = self.model.validateAll();
-        if (check.isValid === false) {
-            splat.utils.displayValidationErrors(check.messages);
-            return false;
-        };
+    var check = self.model.validateAll();
+    if (check.isValid === false) {
+        splat.utils.displayValidationErrors(check.messages);
+        return false;
+    }
 
 	this.model.save(null, {
             wait: true,

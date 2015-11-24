@@ -18,19 +18,19 @@ splat.MovieForm = Backbone.View.extend({
     uploadVideo: function(e){
         // error handler for video files that do not match the requirements
         if (!e.target.files.length){
-            return
+            return;
         }
         if (e.target.files[0].size > 5 * 1024 * 1024){ //5mb limit
             splat.utils.showNotice('Warning', 'Video is too large!', 'alert-warning');
-            return
+            return;
         }
-        if (e.target.files[0].type != "video/mp4"){ //mp4 only
+        if (e.target.files[0].type !== "video/mp4"){ //mp4 only
             splat.utils.showNotice('Warning', 'Video must be an mp4!', 'alert-warning');
-            return
+            return;
         }
         if (!this.model.id){
             splat.utils.showNotice('Warning', 'Please save the movie first', 'alert-warning');
-            return
+            return;
         }
         // upload video to server using ajax
         var self = this;
@@ -83,10 +83,10 @@ splat.MovieForm = Backbone.View.extend({
         var name = e.target.name;
         var value = _.escape(e.target.value);
         // properly format string input depending on field name.
-        if (name == 'starring' || name == 'genre') {
+        if (name === 'starring' || name === 'genre') {
             // split string then call trim on each value
             obj[name] = value.split(",").map(Function.prototype.call, String.prototype.trim);
-        } else if (name == 'duration'){
+        } else if (name === 'duration'){
             obj[name] = Number(value);
         } else {
             obj[name] = value;

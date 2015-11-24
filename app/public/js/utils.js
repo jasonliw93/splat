@@ -105,7 +105,7 @@ splat.utils = {
                     // attach template helper functions to view template
                     splat[view].prototype.template = function(x){
                         return _.template(data)(_.extend(x, self.templateHelpers));
-                    }
+                    };
                 }));
 
                 // No Backbone view file is defined; cannot set template function.

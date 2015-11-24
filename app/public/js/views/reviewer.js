@@ -28,7 +28,7 @@ splat.Reviewer = Backbone.View.extend({
         this.collection.create(this.review, {
             // notification panel, defined in section 2.6
             wait: true,
-            success : function (model, response){
+            success : function (){
                 splat.utils.showNotice('Success', "review has been saved", 'alert-success');
                 // reset fields and create new review by re-render
                 self.render();

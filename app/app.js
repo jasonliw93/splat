@@ -40,19 +40,6 @@ function isAuthd(req, res, next) {
     }
 };
 
-// middleware check that the session-userid matches the userid passed
-// in the request body, e.g. when deleting or updating a model
-    
-function hasPermission(req, res, next) {
-    // A3 ADD CODE BLOCK
-    if (req.session && req.body.userId == req.session.userid) {
-        return next();
-    }else{
-        res.status(403).send('You do not have permission to make changes to this item.');
-    }
-
-};
-
 var app = express();  // Create Express app server
 
 // Configure app server

@@ -80,8 +80,8 @@ splat.Header = Backbone.View.extend({
         this.signinform = new splat.Signin({ model:newuser });
         this.$('#signinDiv').append(this.signinform.render().el);
         if (splat.auth) {
-            this.signedIn({'userid': splat.userid, 'username': splat.username})
-        };
+            this.signedIn({'userid': splat.userid, 'username': splat.username});
+        }
         return this; // support method chaining
     },
     // makes the menu item given by menuItem active

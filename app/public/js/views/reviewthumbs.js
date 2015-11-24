@@ -6,7 +6,7 @@ var splat = splat || {};
 
 splat.ReviewThumbs = Backbone.View.extend({
     // render the View
-    initialize: function(options) {
+    initialize: function() {
         this.reviewThumbView = new splat.ReviewThumb();
     },
     // creates the review thumbs template function

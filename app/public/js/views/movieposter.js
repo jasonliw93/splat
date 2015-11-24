@@ -17,7 +17,7 @@ splat.MoviePoster = Backbone.View.extend({
     selectImage: function(event) {
         this.pictureFile = event.target.files[0];
         // if the file type is image, read it
-        if (this.pictureFile.type.indexOf('image/') == 0) {
+        if (this.pictureFile.type.indexOf('image/') === 0) {
             this.imageRead(this.pictureFile, this.pictureFile.type);
         } else { // else display error notification
             splat.utils.showNotice('Error', "Please select a valid image file", 'alert-danger');
@@ -30,9 +30,15 @@ splat.MoviePoster = Backbone.View.extend({
         var self = this;
         var reader = new FileReader();
         // callback for when read operation is finished
-        reader.onload = function(event) {
+        reader.onload = function() {
             // resize the image and set the image on callback.
-            self.resize(reader.result, 'image/jpeg', '0.9', self.setImage);
+            self.resize(reader.result, type, '0.9', function(sourceImg) {
+                // set sourceImg as model poster and display image. 
+                self.model.set('poster', sourceImg);
+                var targetImgElt = $('#detailsImage')[0];
+                targetImgElt.src = sourceImg;
+                splat.utils.showNotice('Note!', 'Movie Poster updated, to make changes permanent, click "Save Changes" button', 'alert-info');
+            });
         };
         reader.readAsDataURL(pictureFile); // read image file
 
@@ -54,7 +60,7 @@ splat.MoviePoster = Backbone.View.extend({
         var ev = event.originalEvent;
         this.pictureFile = ev.dataTransfer.files[0];
         // only process image files
-        if (this.pictureFile.type.indexOf('image/') == 0) {
+        if (this.pictureFile.type.indexOf('image/') === 0) {
             this.imageRead(this.pictureFile, this.pictureFile.type);
         } else { // else display notification error
             splat.utils.showNotice('Error', "Please select a valid image file", 'alert-danger');
@@ -63,7 +69,6 @@ splat.MoviePoster = Backbone.View.extend({
     // Resize sourceImg and call callback function on resized sourceImg when complete. 
     // Type, quality are optional params for image-type and quality setting
     resize: function(sourceImg, type, quality, callback) {
-        var self = this;
         var type = type || "image/jpeg"; // default MIME image type
         var quality = quality || 0.95; // tradeoff quality vs size
         var image = new Image(), MAX_HEIGHT = 255, MAX_WIDTH = 450, x = 0, y = 0;
@@ -85,16 +90,11 @@ splat.MoviePoster = Backbone.View.extend({
             // ctx becomes an object with properties and methods for drawing on canvas
             var ctx = canvas.getContext("2d"); // get 2D rendering context
             ctx.drawImage(image,x,y, image.width, image.height); // render
-            callback.call(self, canvas.toDataURL(type, quality), type);
-        }
+            if (callback){
+                callback(canvas.toDataURL("image/jpeg", quality));
+            }
+        };
         image.src = sourceImg;
-    },
-    // set sourceImg as model poster and display image. 
-    setImage: function(sourceImg, type){
-        this.model.set('poster', sourceImg);
-        var targetImgElt = $('#detailsImage')[0];
-        targetImgElt.src = sourceImg;
-        splat.utils.showNotice('Note!', 'Movie Poster updated, to make changes permanent, click "Save Changes" button', 'alert-info');
     },
     // render the View
     render: function() {
