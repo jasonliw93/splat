@@ -20,7 +20,7 @@ splat.Movie = Backbone.Model.extend({
         trailer: "", // URL for trailer/movie-streaming
         poster: "img/placeholder.png", // movie-poster image URL
         dated: new Date(), // date of movie created
-        userId: "",
+        userId: null,
     },
     // validators for each attribute
     validators: {

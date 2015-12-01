@@ -33,6 +33,7 @@ var https = require('https'),   // ADD CODE
 
 // middleware check that req is associated with an authenticated session
 function isAuthd(req, res, next) {
+    console.log(req.body);
     if (req.session && req.session.auth) {
         return next();
     }else{
@@ -117,6 +118,10 @@ app.get('/index.html', function(req, res) {
     });
 });
 
+app.get('/test/test.html',function(req, res) {
+    res.render('test/test.html',
+    {csrftoken: req.csrfToken()});
+});
 // App routes (RESTful API) - handler implementation resides in routes/splat.js
 
 // Perform route lookup based on HTTP method and URL.
@@ -167,6 +172,7 @@ app.use(directory(__dirname +  "/public/docs"));
 
 app.use(function(err, req, res, next) { 
     if (err.code == 'EBADCSRFTOKEN'){
+        console.log('csurf');
         res.status(403).send('reload the app to get a fresh CSRF token value');
     }else{
         next();

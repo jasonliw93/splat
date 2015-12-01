@@ -179,6 +179,7 @@ exports.editMovie = function(req, res){
         } else {
             // merge request fields with existing movie fields
             _.extend(movie, req.body);
+            movie.userId = req.session.userid;
             savePoster(movie, function() {
                 movie.save(function (saveErr, result) {
                     if (!saveErr) {
@@ -344,7 +345,10 @@ exports.hasPermission = function(req, res, next) {
         } else if (!movie) {
             res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
         } else {
+            console.log(movie.userId);
+            console.log(req.session.userid);
             if (movie.userId == req.session.userid || !movie.userId){
+
                 next();
             }else{
                 res.status(403).send('You do not have permission to make changes to this item.');

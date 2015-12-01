@@ -9,7 +9,7 @@
 	"rating":"R","released":"1999","synopsis":"great thriller",
 	"title":"Zbrba Gomez","trailer":"http://archive.org",
 	"userid":"54635fe6a1342684065f6959", "genre":["action"],
-	"starring":["Bruce Willis,Amy Winemouse"]});  // model
+	"starring":["Bruce Willis", "Amy Winemouse"]});  // model
     movie.urlRoot = '/movies';
     // authenticate user with valid credentials
     var user = new splat.User({username:"a", password:"a", login: 1});
