@@ -334,7 +334,7 @@ exports.hasPermission = function(req, res, next) {
         } else if (!movie) {
             res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
         } else {
-            if (movie.userId == req.session.userid){
+            if (movie.userId == req.session.userid || !movie.userId){
                 next();
             }else{
                 res.status(403).send('You do not have permission to make changes to this item.');
@@ -390,7 +390,11 @@ exports.auth = function (req, res) {
         }
     });
   } else { // logout request
-    req.session.destroy(); // destroy session in the session-store
+    //req.session.destroy(); // destroy session in the session-store
+    var sess = req.session;  // create session
+    sess.auth = false;
+    sess.username = undefined;
+    sess.userid = undefined;
     res.status(200).send({'userid': undefined, 'username': undefined});
   };
 };

@@ -4,7 +4,7 @@ var splat =  splat || {};
 
 splat.User = Backbone.Model.extend({
 
-    urlRoot: "/user", 
+    urlRoot: "/auth", 
 
     idAttribute: "_id",   // to match mongo, which uses _id rather than id
 

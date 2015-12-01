@@ -93,9 +93,18 @@ app.use(session({
 app.use(csrf());
 
 // Setup for rendering csurf token into index.html at app-startup
+
+// checks req.body for HTTP method overrides
+app.use(methodOverride());
+
 app.engine('.html', require('ejs').__express);
 
 app.set('views', __dirname + '/public');
+
+app.get('/*', function(req, res, next) { 
+    res.setHeader('Strict-Transport-Security', 'max-age=604800');
+    next();
+});
 
 // When client-side requests index.html, perform template substitution on it
 app.get('/index.html', function(req, res) {
@@ -107,17 +116,6 @@ app.get('/index.html', function(req, res) {
         userid : req.session.userid
     });
 });
-
-app.use(function(err, req, res, next) { 
-    if (err.code == 'EBADCSRFTOKEN'){
-        res.status(403).send('reload the app to get a fresh CSRF token value');
-    }else{
-        next();
-    }
-});
-
-// checks req.body for HTTP method overrides
-app.use(methodOverride());
 
 // App routes (RESTful API) - handler implementation resides in routes/splat.js
 
@@ -156,16 +154,24 @@ app.get('/movies/:id/video', splat.playMovie);
 app.post('/movies/:id/video', movieMulter, splat.uploadVideo);
 
 // User login/logout
-app.put('/user', splat.auth);
+app.put('/auth', splat.auth);
 
 // User signup
-app.post('/user', splat.signup);
+app.post('/auth', splat.signup);
 
 // location of app's static content
 app.use(express.static(__dirname + "/public"));
 
 // allow browsing of docs directory
 app.use(directory(__dirname +  "/public/docs"));
+
+app.use(function(err, req, res, next) { 
+    if (err.code == 'EBADCSRFTOKEN'){
+        res.status(403).send('reload the app to get a fresh CSRF token value');
+    }else{
+        next();
+    }
+});
 
 // return error details to client - use only during development
 app.use(errorHandler({ dumpExceptions:true, showStack:true }));
