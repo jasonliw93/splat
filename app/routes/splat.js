@@ -215,11 +215,21 @@ exports.deleteMovie = function(req, res){
                 }
             });
             fs.unlink(__dirname + '/../public/videos/' + movie.id + '.mp4', function (uerr){
-                if (uerr) console.log(uerr);
+                if (uerr) {
+                    console.log('movie trailer not deleted : ' + movie.id + '. ' + uerr);
+                }else{
+                    console.log('movie trailer deleted : ' + movie.id);
+                }
             });
-            Review.remove({movieId : movie.id}, function(err) {
-                if (uerr) console.log(uerr);
+            Review.remove({movieId : movie.id}, function(rerr) {
+                if (rerr) {
+                    console.log('error when removing reviews for movie id: ',
+                        req.params.id, rerr);
+                } else {
+                    console.log('removed reviews'); 
+                }
             });
+            res.status(200).send({"responseText": "movie deleted"});
             broadcastEvent({model: "movie", movieId: movie.id, action: "remove"});
         }
     });
