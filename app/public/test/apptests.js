@@ -56,7 +56,7 @@ QUnit.jUnitReport = function(report) {
     ok( addModelCallback.called,
 		 "add callback triggered by movies collection add()" );
     // make sure user is logged out
-    var user = new splat.User({username:"a", password:"a"});
+    var user = new splat.User({username:"jason", password:"12345"});
     var auth = user.save(null, {
         type: 'put',
 	    success: function (model, resp) {
@@ -86,11 +86,10 @@ QUnit.jUnitReport = function(report) {
     var user = new splat.User({username:"a", password:"a"});
     var auth = user.save(null, {
         type: 'put',
-	success: function (model, resp) {
-	    assert.deepEqual( resp, {}, "Signout returns empty response object" );
-    	    done1();
-
-	}
+    	success: function (model, resp) {
+    	    assert.deepEqual( resp, {}, "Signout returns empty response object" );
+        	done1();
+    	}
     });
     auth.done(function() { 
         // try to destroy an existing movie
@@ -105,10 +104,11 @@ QUnit.jUnitReport = function(report) {
   });
 
 test("Test movie create-delete succeeds in authenticated session.", function(assert) {
-    assert.expect( 3 );
+    assert.expect( 4 );
     var done1 = assert.async();
     var done2 = assert.async();
     var done3 = assert.async();
+    var done4 = assert.async();
     var movie = new splat.Movie({"__v":0,"dated":"2015-10-21T20:44:27.403Z",
     "director":"Sean Penn","duration":109,"freshTotal":18,"freshVotes":27,
     "poster":"img/uploads/5627f969b8236b2b7c0a37b6.jpeg?1448200894795",
@@ -123,7 +123,7 @@ test("Test movie create-delete succeeds in authenticated session.", function(ass
         type: 'put',
         success: function (model, resp) {
             assert.equal( resp.username, "jason",
-        "Successful login with valid credentials" );
+                "Successful login with valid credentials" );
             done1();
         }
     });
@@ -131,31 +131,106 @@ test("Test movie create-delete succeeds in authenticated session.", function(ass
     auth.done(function() { 
     // create new movie model in DB
         movie.save(null, {
-        wait: true,
+            wait: true,
             success: function (model, resp) {
-        assert.notEqual( resp._id, undefined,
+                assert.notEqual( resp._id, undefined,
                     "Saving new model succeeds when authenticated" );
-        saveMovie.resolve();
-        done2();
+                saveMovie.resolve();
+                done2();
             }
         });
     });
 
     // when authentication and saving async calls have completed
+    var deleteMovie = $.Deferred();
     $.when(auth, saveMovie).then(function() {
         // attempt to delete newly-saved movie
         movie.destroy({
         success: function (model, resp) {
             assert.equal( resp.responseText, "movie deleted",
             "Deleting returns 200 status code" );
+            deleteMovie.resolve();
             done3();
         }
         });
     });
+    $.when(deleteMovie).then(function() {
+        movie.fetch({
+            error: function(model, resp) {
+                assert.equal( resp.status, 404,
+                    "Deleting worked and fetch returns 404 status code" );
+                done4();
+            }
+        });
+    });
+  });
+
+
+test("Test movie-fetch succeeds", function(assert) {
+    assert.expect( 1 );
+    var done1 = assert.async();
+    var done2 = assert.async();
+    var done3 = assert.async();
+    var done4 = assert.async();
+    var movie = new splat.Movie({"__v":0,"dated":"2015-10-21T20:44:27.403Z",
+    "director":"Sean Penn","duration":109,"freshTotal":18,"freshVotes":27,
+    "poster":"img/uploads/5627f969b8236b2b7c0a37b6.jpeg?1448200894795",
+    "rating":"R","released":"1999","synopsis":"great thriller",
+    "title":"Zorba Games","trailer":"http://archive.org",
+    "userId":"5652125cf568e642205f7502", "genre":["action"],
+    "starring":["Bruce Willis", "Amy Winemouse"]});  // model
+    movie.urlRoot = '/movies';
+    // authenticate user with valid credentials
+    var user = new splat.User({username:"jason", password:"12345", login: 1});
+    var auth = user.save(null, {
+        type: 'put',
+        success: function (model, resp) {
+            done1();
+        }
+    });
+    
+    var saveMovie = $.Deferred();
+    auth.done(function() { 
+        movie.save(null, {
+            wait: true,
+            success: function (model, resp) {
+                saveMovie.resolve();
+                done2();
+            }
+        });
+    });
+    
+    // when authentication and saving async calls have completed
+    var newMovie = new splat.Movie();  // model
+    var fetchMovie = $.Deferred();
+    $.when(saveMovie).then(function() {
+        // attempt to delete newly-saved movie
+        newMovie.set("_id", movie.id);
+        newMovie.urlRoot = '/movies';
+        // fetch existing movie model
+        newMovie.fetch({
+            success: function(model, resp) {
+                assert.deepEqual(resp, movie.attributes,
+                "Successful movie fetch" );
+                fetchMovie.resolve();
+                done3();
+            }
+        });
+    });
+
+    $.when(fetchMovie).then(function() {
+        // attempt to delete newly-saved movie
+        newMovie.destroy({
+            success: function (model, resp) {
+                done4();
+            }
+        });
+    });
+
   });
 
  test("Test movie-save succeeds if session is authenticated.", function(assert) {
-    assert.expect( 5 );
+    assert.expect( 2 );
     var done1 = assert.async();
     var done2 = assert.async();
     var done3 = assert.async();
@@ -169,70 +244,223 @@ test("Test movie create-delete succeeds in authenticated session.", function(ass
     "userId":"5652125cf568e642205f7502", "genre":["action"],
     "starring":["Bruce Willis", "Amy Winemouse"]});  // model
     movie.urlRoot = '/movies';
+    var movie2 = new splat.Movie();  // model
+    movie2.urlRoot = '/movies';
     // authenticate user with valid credentials
     var user = new splat.User({username:"jason", password:"12345", login: 1});
     var auth = user.save(null, {
         type: 'put',
         success: function (model, resp) {
-            assert.equal( resp.username, "jason",
-        "Successful login with valid credentials" );
             done1();
         }
     });
+    
     var saveMovie = $.Deferred();
+    
     auth.done(function() { 
-    // create new movie model in DB
         movie.save(null, {
-        wait: true,
+            wait: true,
             success: function (model, resp) {
-        assert.notEqual( resp._id, undefined,
-                    "Saving new model succeeds when authenticated" );
-        saveMovie.resolve();
-        done2();
+                // set id for fetch to compare movie instance later
+                movie2.set("_id", movie.id);
+                saveMovie.resolve();
+                done2();
             }
         });
     });
-    var movie2 = new splat.Movie();  // model
-    // when authentication and saving async calls have completed
-    var fetchMovie = $.Deferred();
-    $.when(auth, saveMovie).then(function() {
-        // attempt to delete newly-saved movie
-        movie2.set("_id", movie.id);
-        movie2.urlRoot = '/movies';
-        // fetch existing movie model
-        var movieFetch = movie2.fetch({
-            success: function(movie2, resp) {
-                assert.equal(movie2.id, movie.id,
-                "Successful movie fetch" );
-                fetchMovie.resolve();
-                done3();
-            }
-        });
-    });
-
+    // update the movie
     var updateMovie = $.Deferred();
-    $.when(fetchMovie).then(function() {
+    $.when(saveMovie).then(function() {
         // attempt to delete newly-saved movie
-        movie2.save({"title": "QUnit!"}, {
+        movie.save({"title": "QUnit!"}, {
             success: function (model, resp) {
                 assert.equal( resp.title, "QUnit!",
                     "Saving model update succeeds when logged in" );
                 updateMovie.resolve();
+                done3();
+            }
+        });
+    });
+    // compare with new instance of movie to double check
+    var compareMovie = $.Deferred();
+    $.when(updateMovie).then(function() {
+        // attempt to delete newly-saved movie
+        // fetch existing movie model
+        movie2.fetch({
+            success: function(model, resp) {
+                assert.equal(resp.title, "QUnit!",
+                    "Successful updated model on server" );
+                compareMovie.resolve();
                 done4();
             }
         });
     });
-    $.when(updateMovie).then(function() {
+    // delete movie
+    $.when(compareMovie).then(function() {
         // attempt to delete newly-saved movie
-        movie2.destroy({
+        movie.destroy({
             success: function (model, resp) {
-                assert.equal( resp.responseText, "movie deleted",
-                "Deleting returns 200 status code" );
                 done5();
             }
         });
     });
 
-
   });
 
+test("Test review-create-delete if session is authenticated.", function(assert) {
+    assert.expect( 3 );
+    var done1 = assert.async();
+    var done2 = assert.async();
+    var done3 = assert.async();
+    var done4 = assert.async();
+    var done5 = assert.async();
+    
+    var movie = new splat.Movie({"__v":0,"dated":"2015-10-21T20:44:27.403Z",
+    "director":"Sean Penn","duration":109,"freshTotal":18,"freshVotes":27,
+    "poster":"img/uploads/5627f969b8236b2b7c0a37b6.jpeg?1448200894795",
+    "rating":"R","released":"1999","synopsis":"great thriller",
+    "title":"Zorba Games","trailer":"http://archive.org",
+    "userId":"5652125cf568e642205f7502", "genre":["action"],
+    "starring":["Bruce Willis", "Amy Winemouse"]});  // model
+    movie.urlRoot = '/movies';
+    var review = new splat.Review({ "freshness":0,"reviewName":"1",
+    "reviewAffil":"1","reviewText":"1","__v":0});
+    // authenticate user with valid credentials
+    var user = new splat.User({username:"jason", password:"12345", login: 1});
+    var auth = user.save(null, {
+        type: 'put',
+        success: function (model, resp) {
+            done1();
+        }
+    });
+    
+    var saveMovie = $.Deferred();
+    auth.done(function() { 
+        movie.save(null, {
+            wait: true,
+            success: function (model, resp) {
+                // set id for fetch to compare movie instance later
+                review.urlRoot = '/movies/' + movie.id +'/reviews'
+                saveMovie.resolve();
+                done2();
+            }
+        });
+    });
+
+    var saveReview = $.Deferred();
+    $.when(saveMovie).then(function() {
+        review.save(null, {
+            success: function (model, resp) {
+                assert.notEqual( resp._id, undefined,
+                    "Saving new review succeeds when authenticated" );
+
+                assert.equal( resp.movieId, movie.id,
+                    "associate new review to movie id successful" );
+                saveReview.resolve();
+                done3();
+            }
+        });
+    });
+
+    // delete movie
+    var deleteMovie = $.Deferred();
+    $.when(saveReview).then(function() {
+        movie.destroy({
+            success: function (model, resp) {
+                deleteMovie.resolve();
+                done4();
+            }
+        });
+    });
+
+    // check that review is deleted
+    $.when(deleteMovie).then(function() {
+        review.fetch({
+            error: function (model, error) {
+                assert.equal( error.status, 404,
+                    "review fetch after movie delete returns 403 status");
+                deleteMovie.resolve();
+                done5();
+            }
+        });
+    });
+  });
+
+
+test("Test review-create if session is not authenticated.", function(assert) {
+    assert.expect( 1 );
+    var done1 = assert.async();
+    var done2 = assert.async();
+    var done3 = assert.async();
+    var done4 = assert.async();
+    var done5 = assert.async();
+    var movie = new splat.Movie({"__v":0,"dated":"2015-10-21T20:44:27.403Z",
+    "director":"Sean Penn","duration":109,"freshTotal":18,"freshVotes":27,
+    "poster":"img/uploads/5627f969b8236b2b7c0a37b6.jpeg?1448200894795",
+    "rating":"R","released":"1999","synopsis":"great thriller",
+    "title":"Zorba Games","trailer":"http://archive.org",
+    "userId":"5652125cf568e642205f7502", "genre":["action"],
+    "starring":["Bruce Willis", "Amy Winemouse"]});  // model
+    movie.urlRoot = '/movies';
+    var review = new splat.Review({ "freshness":0,"reviewName":"1",
+    "reviewAffil":"1","reviewText":"1","__v":0});
+    // authenticate user with valid credentials
+    var user = new splat.User({username:"jason", password:"12345", login: 1});
+    var auth = user.save(null, {
+        type: 'put',
+        success: function (model, resp) {
+            done1();
+        }
+    });
+    
+    var saveMovie = $.Deferred();
+    auth.done(function() { 
+        movie.save(null, {
+            wait: true,
+            success: function (model, resp) {
+                // set id for fetch to compare movie instance later
+                review.urlRoot = '/movies/' + movie.id +'/reviews'
+                saveMovie.resolve();
+                done2();
+            }
+        });
+    });
+    var saveReview = $.Deferred();
+    $.when(saveMovie).then(function() {
+        // make sure user is logged out
+        user = new splat.User({username:"jason", password:"12345"});
+        auth = user.save(null, {
+            type: 'put',
+            success: function (model, resp) {
+                done3();
+            }
+        });
+        auth.done(function() { 
+            // try to destroy an existing movie
+            review.save(null, {
+                error: function (model, error) {
+                    assert.equal( error.status, 403,
+                    "Saving review without authentication returns 403 status");
+                    saveReview.resolve();
+                    done4();
+                }
+            });
+        });
+    });
+    // delete movie
+    $.when(saveReview).then(function() {
+        // attempt to delete newly-saved movie
+        user = new splat.User({username:"jason", password:"12345", login: 1});
+        auth = user.save(null, {
+            type: 'put',
+            success: function (model, resp) {
+                movie.destroy({
+                    success: function (model, resp) {
+                        done5();
+                    }
+                });
+            }
+        });   
+    });
+
+  });

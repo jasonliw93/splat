@@ -172,7 +172,7 @@ app.use(directory(__dirname +  "/public/docs"));
 
 app.use(function(err, req, res, next) { 
     if (err.code == 'EBADCSRFTOKEN'){
-        console.log('csurf');
+        console.log('csurf error');
         res.status(403).send('reload the app to get a fresh CSRF token value');
     }else{
         next();

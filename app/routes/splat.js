@@ -309,13 +309,11 @@ exports.uploadVideo = function(req, res) {
 
 // handles video playback of trailer video on server
 exports.playMovie = function(req, res){
-    //console.log(req.headers);
     var file = path.resolve(__dirname,"../public/img/videos/" + req.params.id + ".mp4");
     var range = req.headers.range;
     var positions = range.replace(/bytes=/, "").split("-");
     var start = parseInt(positions[0], 10);
     fs.stat(file, function (err, stats) {
-        //console.log(stats);
         if (err) {
             res.status(404).send("Sorry, unable to retrieve video at this time");
         }else{
@@ -345,8 +343,6 @@ exports.hasPermission = function(req, res, next) {
         } else if (!movie) {
             res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
         } else {
-            console.log(movie.userId);
-            console.log(req.session.userid);
             if (movie.userId == req.session.userid || !movie.userId){
 
                 next();
@@ -358,7 +354,6 @@ exports.hasPermission = function(req, res, next) {
 };
 
 exports.isAuth = function (req, res) {
-    console.log('isAuth ', req.session);
     if (req.session && req.session.auth) {
             res.send(200, {'userid': req.session.userid,
                 'username': req.session.username});
