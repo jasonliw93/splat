@@ -11,59 +11,59 @@ splat.Header = Backbone.View.extend({
         this.listenTo(Backbone, 'signedIn', this.signedIn);
         this.listenTo(Backbone, 'signedOut', this.signedOut);
     },
-    events:{
-        "change #orderForm" : "sortOrder",
-        "mouseenter #orderdrop.active" : "showOrderForm",
-        "mouseleave #orderdrop.active" : "hideOrderForm",
-        "click #ordering" : "showOrderForm",
+    events: {
+        "change #orderForm": "sortOrder",
+        "mouseenter #orderdrop.active": "showOrderForm",
+        "mouseleave #orderdrop.active": "hideOrderForm",
+        "click #ordering": "showOrderForm",
     },
     // helper for signedUp, signedIn to update UI on successful authentication
     authenticatedUI: function(response) {
-        this.$('#greet').html(response.username);  // ugly!
-        this.$('#signoutUser').html('<b>'+response.username+'</b>');
-        this.$('.btn.signinSubmit').css("display","none");
-        this.$('.btn.signoutSubmit').css("display","block");
-        this.$('#addMovie').show();  // auth'd users can add movies
+        this.$('#greet').html(response.username); // ugly!
+        this.$('#signoutUser').html('<b>' + response.username + '</b>');
+        this.$('.btn.signinSubmit').css("display", "none");
+        this.$('.btn.signoutSubmit').css("display", "block");
+        this.$('#addMovie').show(); // auth'd users can add movies
     },
 
     // update UI on successful signup authentication
     signedUp: function(response) {
         this.$('#signupdrop').removeClass('open');
-        this.$('.signinput').css("display","none");
-        this.$('#signupForm')[0].reset();   // clear signup form
+        this.$('.signinput').css("display", "none");
+        this.$('#signupForm')[0].reset(); // clear signup form
         this.authenticatedUI(response);
     },
 
     // update UI on successful signin authentication
     signedIn: function(response) {
         this.$('#signindrop').removeClass('open');
-        this.$('[class*="signin"]').css("display","none");
-        this.$('#signinForm')[0].reset();   // clear signin form
+        this.$('[class*="signin"]').css("display", "none");
+        this.$('#signinForm')[0].reset(); // clear signin form
         this.authenticatedUI(response);
     },
 
     // update UI on authentication signout
-    signedOut: function(model) {
-        $('#greet').html('Sign In');
-        $('#signoutUser').html('');
-        $('.btn.signoutSubmit').css("display","none");
-        $('.btn.signinSubmit').css("display","block");
-        $('[class*="signin"]').css("display","block");
-        $('#signindrop').removeClass('open');
-        $('#addMovie').hide();  // non-auth'd users can't add movies
+    signedOut: function() {
+        this.$('#greet').html('Sign In');
+        this.$('#signoutUser').html('');
+        this.$('.btn.signoutSubmit').css("display", "none");
+        this.$('.btn.signinSubmit').css("display", "block");
+        this.$('[class*="signin"]').css("display", "block");
+        this.$('#signindrop').removeClass('open');
+        this.$('#addMovie').hide(); // non-auth'd users can't add movies
     },
 
-    showOrderForm: function(){
+    showOrderForm: function() {
         this.$("#orderdrop").addClass('open');
     },
 
-    hideOrderForm: function(){
+    hideOrderForm: function() {
         this.$("#orderdrop").removeClass('open');
     },
-    
-    sortOrder: function(e){
+
+    sortOrder: function(e) {
         e.stopPropagation();
-        splat.order = e.target.value;  // set app-level order field
+        splat.order = e.target.value; // set app-level order field
         Backbone.trigger('orderevent', e);
         this.hideOrderForm(e);
     },
@@ -72,15 +72,22 @@ splat.Header = Backbone.View.extend({
         // set the view element ($el) HTML content using its template
         this.$el.html(this.template());
         // create new User model for signup
-        var newuser = new splat.User(); 
+        var newuser = new splat.User();
 
-        this.signupform = new splat.Signup({ model:newuser });
+        this.signupform = new splat.Signup({
+            model: newuser
+        });
         this.$('#signupDiv').append(this.signupform.render().el);
 
-        this.signinform = new splat.Signin({ model:newuser });
+        this.signinform = new splat.Signin({
+            model: newuser
+        });
         this.$('#signinDiv').append(this.signinform.render().el);
         if (splat.auth) {
-            this.signedIn({'userid': splat.userid, 'username': splat.username});
+            this.signedIn({
+                'userid': splat.userid,
+                'username': splat.username
+            });
         }
         return this; // support method chaining
     },

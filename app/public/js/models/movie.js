@@ -24,7 +24,7 @@ splat.Movie = Backbone.Model.extend({
     },
     // validators for each attribute
     validators: {
-        title : function(value) {
+        title: function(value) {
             // regex for movie title
             var titleRegex = /^[a-zA-Z0-9 \,\.\!\?\-\'\*]+$/;
             //checks if title is valid
@@ -35,7 +35,7 @@ splat.Movie = Backbone.Model.extend({
                 message: "You must enter a movie title. Only letters-digits-spaces and \",\", \".\", \"!\", \"?\", \"-\", \"'\", \"*\" allowed"
             };
         },
-        released : function(value) {
+        released: function(value) {
             // regex for movie year
             var yearRegex = /^(19[1-9]\d|20(1[0-6]|0\d))$/; //1910-2016
             //checks if year is valid
@@ -46,7 +46,7 @@ splat.Movie = Backbone.Model.extend({
                 message: "You must enter a year between 1910 and 2016"
             };
         },
-        director : function(value) {
+        director: function(value) {
             // regex for director
             var directorRegex = /^[a-zA-Z0-9 \,\.\!\?\-\'\*]+$/;
             // checks if director input is valid
@@ -57,7 +57,7 @@ splat.Movie = Backbone.Model.extend({
                 message: "You must enter a director's name. Only letters-digits-spaces and \",\", \".\", \"!\", \"?\", \"-\", \"'\", \"*\" allowed"
             };
         },
-        rating : function(value) {
+        rating: function(value) {
             // regex for movie rating
             var ratingRegex = /^(G|PG|PG\-13|R|NC\-17|NR)$/;
             // checks if rating is valid
@@ -68,7 +68,7 @@ splat.Movie = Backbone.Model.extend({
                 message: "You must enter one of G, PG, PG-13, R, NC-17, NR."
             };
         },
-        starring : function(values) {
+        starring: function(values) {
             // regex for actor names
             var actorRegex = /^[a-zA-Z \-\']+$/;
             var notValid = {
@@ -89,7 +89,7 @@ splat.Movie = Backbone.Model.extend({
                 isValid: true
             };
         },
-        duration : function(value) {
+        duration: function(value) {
             // checks if the duration is a number
             return (!isNaN(value) && value >= 0 && value <= 999) ? {
                 isValid: true
@@ -98,7 +98,7 @@ splat.Movie = Backbone.Model.extend({
                 message: "You must enter a duration between 0 and 999."
             };
         },
-        genre : function(values) {
+        genre: function(values) {
             // regex for genre
             var genreRegex = /^[a-zA-Z \-\']+$/;
             var notValid = {
@@ -119,7 +119,7 @@ splat.Movie = Backbone.Model.extend({
                 isValid: true
             };
         },
-        synopsis : function(value) {
+        synopsis: function(value) {
             // regex for synopsis
             var wordRegex = /^[ \w\,\.\!\?\-\'\*]+$/;
             var notValid = {
@@ -137,25 +137,25 @@ splat.Movie = Backbone.Model.extend({
                 isValid: true
             };
         },
-        freshTotal : function(value) {
+        freshTotal: function(value) {
             // checks if freshtotal is a number
-            return (!isNaN(value) && value >= 0)  ? {
+            return (!isNaN(value) && value >= 0) ? {
                 isValid: true
             } : {
                 isValid: false,
                 message: "You must enter non-negative integer."
             };
         },
-        freshVotes : function(value) {
+        freshVotes: function(value) {
             // checks if freshvotes is a number
-            return (!isNaN(value) && value >= 0)  ? {
+            return (!isNaN(value) && value >= 0) ? {
                 isValid: true
             } : {
                 isValid: false,
                 message: "You must enter non-negative integer."
             };
         },
-        trailer : function(value) {
+        trailer: function(value) {
             // regex for trailer URL
             var urlRegex = /^(https?:\/\/[\w-]+(\.[\w-]+)+(:\d+)?(\/\S*)?)$/;
             //var urlRegex = /^(https?:\/\/\w+(\.\w+)*(\/[\w\.#]+)*\/?)?$/;
@@ -166,9 +166,9 @@ splat.Movie = Backbone.Model.extend({
                 message: "You must enter a valid trailer url"
             };
         },
-        dated : function(value) {
+        dated: function(value) {
             // convert to date object if dated is a date string
-            var d = new Date(value); 
+            var d = new Date(value);
             // checks if dated is valid (valid dates have number value)
             return (value && d instanceof Date && !isNaN(d)) ? {
                 isValid: true
@@ -187,7 +187,7 @@ splat.Movie = Backbone.Model.extend({
                 isValid: true
             };
     },
-    validateAll: function () {
+    validateAll: function() {
 
         var messages = {};
 
@@ -200,8 +200,12 @@ splat.Movie = Backbone.Model.extend({
             }
         }
 
-        return _.size(messages) > 0 ? {isValid: false, messages: messages}
-                    : {isValid: true};
+        return _.size(messages) > 0 ? {
+            isValid: false,
+            messages: messages
+        } : {
+            isValid: true
+        };
 
     }
 });

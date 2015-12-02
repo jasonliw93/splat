@@ -14,7 +14,7 @@ splat.AppRouter = Backbone.Router.extend({
         "movies": "browse",
         "movies/add": "addHandler",
         "movies/:id": "editHandler",
-        "movies/:id/reviews" : "reviews",
+        "movies/:id/reviews": "reviews",
         "*default": "home",
     },
     // When an instance of an AppRouter is declared, create a Header view
@@ -26,21 +26,21 @@ splat.AppRouter = Backbone.Router.extend({
         // subscribe to events from the server
         // sync the collections each time a change occurs
         // so that all clients remain in sync
-        
+
         var eventStream = new EventSource('/events');
         var self = this;
         eventStream.onmessage = function(e) {
             // parses the data from JSON to a model
             var data = JSON.parse(e.data);
-            if (data.model === 'movie') { 
+            if (data.model === 'movie') {
                 // fetches the movies
                 self.moviesFetch = self.movies.fetch();
-            } else if (data.model === 'review'){
+            } else if (data.model === 'review') {
                 // fetches the movies first
                 self.moviesFetch = self.movies.fetch();
                 self.moviesFetch.done(function() {
                     var movie = self.movies.get(data.movieId);
-                    if (movie.reviews){
+                    if (movie.reviews) {
                         // sync the reviews only if the client
                         // previously fetched them
                         movie.reviews.fetch();
@@ -52,7 +52,7 @@ splat.AppRouter = Backbone.Router.extend({
                 console.log(data);
             }
         };
-        
+
         // instantiate a Header view
         this.headerView = new splat.Header();
         // insert the rendered Header view element into the document DOM
@@ -136,13 +136,13 @@ splat.AppRouter = Backbone.Router.extend({
             splat.utils.requestFailed(resp);
         });
     },
-    reviews : function(id){
+    reviews: function(id) {
         var self = this;
         this.moviesFetch.done(function() {
             // get movie and add a review collection if needed
             var movie = self.movies.get(id);
-            if (!movie.reviews){
-                movie.reviews =  new splat.Reviews(id);
+            if (!movie.reviews) {
+                movie.reviews = new splat.Reviews(id);
             }
             // fetches the movie reviews and puts them into a collection
             var reviewsFetch = movie.reviews.fetch();
@@ -154,7 +154,7 @@ splat.AppRouter = Backbone.Router.extend({
             }).fail(function(reviews, resp) {
                 splat.utils.requestFailed(resp);
             });
-            
+
         }).fail(function(movies, resp) {
             splat.utils.requestFailed(resp);
         });
@@ -165,9 +165,10 @@ splat.AppRouter = Backbone.Router.extend({
 // template loading is complete, instantiate a Backbone router
 // with history.
 
-splat.utils.loadTemplates(['Home', 'Header', 'About', 'Details', 
-    'MovieThumb', 'MovieForm', 'MovieFormActions', 'MoviePoster', 
-    'ReviewsView','Reviewer', 'ReviewThumb', 'Signup', 'Signin'], function() {
+splat.utils.loadTemplates(['Home', 'Header', 'About', 'Details',
+    'MovieThumb', 'MovieForm', 'MovieFormActions', 'MoviePoster',
+    'ReviewsView', 'Reviewer', 'ReviewThumb', 'Signup', 'Signin'
+], function() {
     splat.app = new splat.AppRouter();
     Backbone.history.start();
 });
@@ -189,8 +190,10 @@ Backbone.View.prototype.close = function() {
 Backbone.ajax = function() {
     // Invoke $.ajaxSetup in the context of Backbone.$
 
-    Backbone.$.ajaxSetup.call(Backbone.$, {beforeSend: function(jqXHR){
-        jqXHR.setRequestHeader("X-CSRF-Token", splat.token);
-    }});
+    Backbone.$.ajaxSetup.call(Backbone.$, {
+        beforeSend: function(jqXHR) {
+            jqXHR.setRequestHeader("X-CSRF-Token", splat.token);
+        }
+    });
     return Backbone.$.ajax.apply(Backbone.$, arguments);
 };

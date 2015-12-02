@@ -17,7 +17,7 @@ splat.MovieFormActions = Backbone.View.extend({
         "click #moviedel": "destroy",
     },
     // save model to database
-    beforeSave: function(){
+    beforeSave: function() {
         var check = this.model.validateAll();
         if (check.isValid === false) {
             splat.utils.displayValidationErrors(check.messages);
@@ -36,7 +36,10 @@ splat.MovieFormActions = Backbone.View.extend({
                 targetImgElt.src = model.get('poster');
                 // navigate to the edit view upon success
                 if (self.isNew) {
-                    splat.app.navigate('#movies/' + self.model.id, {replace:true, trigger:false});
+                    splat.app.navigate('#movies/' + self.model.id, {
+                        replace: true,
+                        trigger: false
+                    });
                 }
                 splat.utils.showNotice('Success!', 'Movie saved', 'alert-success');
                 self.render();

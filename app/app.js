@@ -1,6 +1,5 @@
 // app.js Node.js server
-
-"use strict;"   // flag JS errors 
+"use strict;" // flag JS errors 
 
 /* Module dependencies:
  *
@@ -10,9 +9,9 @@
  * The convention is use the same name for variable and module.
  */
 
-var https = require('https'),   // ADD CODE
+var https = require('https'), // ADD CODE
     // NOTE, use the version of "express" linked to the assignment handout
-    express = require('express'),   // ADD CODE
+    express = require('express'), // ADD CODE
     fs = require("fs"),
     path = require("path"),
     url = require("url"),
@@ -24,24 +23,23 @@ var https = require('https'),   // ADD CODE
     methodOverride = require("method-override"),
     directory = require("serve-index"),
     errorHandler = require("errorhandler"),
-    basicAuth = require("basic-auth-connect"),  // optional, for HTTP auth
+    basicAuth = require("basic-auth-connect"), // optional, for HTTP auth
     csrf = require('csurf'),
     // config is an object module, that defines app-config attribues,
     // such as "port", DB parameters
     config = require("./config"),
-    splat = require('./routes/splat.js');  // route handlers ... ADD CODE
+    splat = require('./routes/splat.js'); // route handlers ... ADD CODE
 
 // middleware check that req is associated with an authenticated session
 function isAuthd(req, res, next) {
-    console.log(req.body);
     if (req.session && req.session.auth) {
         return next();
-    }else{
+    } else {
         res.status(403).send('Please log in first, before making changes.');
     }
 };
 
-var app = express();  // Create Express app server
+var app = express(); // Create Express app server
 
 // Configure app server
 
@@ -49,11 +47,11 @@ var app = express();  // Create Express app server
 app.set('port', process.env.PORT || config.port);
 
 // activate basic HTTP authentication (to protect your solution files)
-if (config.basicAuth){
-    app.use(basicAuth(config.basicAuthUser, config.basicAuthPass));  
+if (config.basicAuth) {
+    app.use(basicAuth(config.basicAuthUser, config.basicAuthPass));
 }
 // change param value to control level of logging  ... ADD CODE
-app.use(logger('dev'));  // 'default', 'short', 'tiny', 'dev'
+app.use(logger('dev')); // 'default', 'short', 'tiny', 'dev'
 
 // placed before compression otherwise it will not work
 app.get('/events', splat.subscribeEvents);
@@ -62,9 +60,12 @@ app.get('/events', splat.subscribeEvents);
 app.use(compression());
 
 // parse HTTP request body
-app.use(bodyParser.json({limit: '5mb'}));
+app.use(bodyParser.json({
+    limit: '5mb'
+}));
 app.use(bodyParser.urlencoded({
-    extended: true, limit: '5mb'
+    extended: true,
+    limit: '5mb'
 }));
 
 // set file-upload directory for trailer videos
@@ -75,20 +76,19 @@ var movieMulter = multer({
         fileSize: 5 * 1024 * 1024
     },
 });
-var imageMulter = multer({dest: __dirname + '/public/img/uploads/'});
 
 app.use(session({
-        name: 'splat.sess',
-        secret: config.sessionSecret,  // A3 ADD CODE
-        //store: store,
-        rolling: true,  // reset session timer on every client access
-        cookie: { 
-            maxAge:config.sessionTimeout,  // A3 ADD CODE
-            secure: true,
-            httpOnly: true 
-        },
-        saveUninitialized: false,
-        resave: false
+    name: 'splat.sess',
+    secret: config.sessionSecret, // A3 ADD CODE
+    //store: store,
+    rolling: true, // reset session timer on every client access
+    cookie: {
+        maxAge: config.sessionTimeout, // A3 ADD CODE
+        secure: true,
+        httpOnly: true
+    },
+    saveUninitialized: false,
+    resave: false
 }));
 
 app.use(csrf());
@@ -102,7 +102,7 @@ app.engine('.html', require('ejs').__express);
 
 app.set('views', __dirname + '/public');
 
-app.get('/*', function(req, res, next) { 
+app.get('/*', function(req, res, next) {
     res.setHeader('Strict-Transport-Security', 'max-age=604800');
     next();
 });
@@ -113,14 +113,15 @@ app.get('/index.html', function(req, res) {
     res.render('index.html', {
         csrftoken: req.csrfToken(),
         auth: req.session.auth,
-        username : req.session.username,
-        userid : req.session.userid
+        username: req.session.username,
+        userid: req.session.userid
     });
 });
 
-app.get('/test/test.html',function(req, res) {
-    res.render('test/test.html',
-    {csrftoken: req.csrfToken()});
+app.get('/test/test.html', function(req, res) {
+    res.render('test/test.html', {
+        csrftoken: req.csrfToken()
+    });
 });
 // App routes (RESTful API) - handler implementation resides in routes/splat.js
 
@@ -168,32 +169,35 @@ app.post('/auth', splat.signup);
 app.use(express.static(__dirname + "/public"));
 
 // allow browsing of docs directory
-app.use(directory(__dirname +  "/public/docs"));
+app.use('/docs', directory(__dirname + "/public/docs/"));
 
-app.use(function(err, req, res, next) { 
-    if (err.code == 'EBADCSRFTOKEN'){
+app.use(function(err, req, res, next) {
+    if (err.code == 'EBADCSRFTOKEN') {
         console.log('csurf error');
         res.status(403).send('reload the app to get a fresh CSRF token value');
-    }else{
+    } else {
         next();
     }
 });
 
 // return error details to client - use only during development
-app.use(errorHandler({ dumpExceptions:true, showStack:true }));
+app.use(errorHandler({
+    dumpExceptions: true,
+    showStack: true
+}));
 
 // Default-route middleware in case none of above match
-app.use(function (req, res) {
+app.use(function(req, res) {
     res.status(404).send('<h3>File Not Found</h3>');
 });
 
 var options = {
-    key: fs.readFileSync('key.pem'),  // RSA private-key
-    cert: fs.readFileSync('cert.pem')  // RSA public-key certificate
+    key: fs.readFileSync('key.pem'), // RSA private-key
+    cert: fs.readFileSync('cert.pem') // RSA public-key certificate
 };
 
 // Start HTTP server
-https.createServer(options, app).listen(app.get('port'), function () {
+https.createServer(options, app).listen(app.get('port'), function() {
     console.log("Express server listening on port %d in %s mode",
-            app.get('port'), config.env );
+        app.get('port'), config.env);
 });

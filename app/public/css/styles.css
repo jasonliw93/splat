@@ -5,18 +5,14 @@ body {
     background-color: black;
     padding-bottom: 40px;
 }
-
 .navbar-nav {
     margin: 0;
 }
-
-
-#content{
+#content {
     color: white;
     padding-left: 20px;
     padding-right: 20px;
 }
-
 /*Footer Format*/
 
 .footer {
@@ -30,7 +26,6 @@ body {
     color: #999;
     text-align: right;
 }
-
 .home-hero {
     text-align: center;
     font-color: white;
@@ -38,7 +33,6 @@ body {
     font-family: "Verdana", "Geneva", "Helvetica";
     text-shadow: 1px 1px 1px #000;
 }
-
 /*Splash Format*/
 
 #splash {
@@ -87,13 +81,11 @@ body {
     height: auto;
     width: 50%;
 }
-
 /*Font Colour for header in About page*/
 
 .about-hero h1 {
     color: #B8CEE6;
 }
-
 /*Container format for buttons in movie form*/
 
 .editActions {
@@ -101,21 +93,20 @@ body {
     padding-bottom: 20px;
     text-align: center;
 }
-
 /*font for labels in Movie Form*/
 
 .form-group label {
     font-family: Andika;
 }
 /*font color for input in Movie Form*/
-.form-group input, .form-group textarea{
+
+.form-group input,
+.form-group textarea {
     color: black;
 }
-
-.help-block{
+.help-block {
     margin-bottom: 0;
 }
-
 .thumbnails {
     left-margin: 0px;
     right-margin: 15px;
@@ -130,99 +121,90 @@ body {
     width: 100%;
     padding: 0px;
 }
-.thumbnail .details{
-    display:flex;
+.thumbnail .details {
+    display: flex;
     flex-direction: row;
-    flex-wrap: wrap; 
+    flex-wrap: wrap;
     padding: 5px 5px;
     font-size: 80%;
     text-align: right;
     font-family: ariel, sans-serif;
     color: white;
 }
-
-.thumbnail .details p{
+.thumbnail .details p {
     flex: 100%;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;   
+    text-overflow: ellipsis;
     margin: 0px;
 }
-
 .thumbnail .video-container {
     position: relative;
     height: 0;
-    padding-bottom: 56.25%;  /* 16:9 */
+    padding-bottom: 56.25%;
+    /* 16:9 */
 }
-.thumbnail .trailer{
+.thumbnail .trailer {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
 }
-
 #detailsImage {
-    border:1px solid #9d9d9d;
+    border: 1px solid #9d9d9d;
     max-width: 100%;
-    width:100%;
-    margin : 0px 0px 10px;
+    width: 100%;
+    margin: 0px 0px 10px;
 }
-
-.dropdown-menu{
+.dropdown-menu {
     padding-left: 10px;
     background-color: #070707;
     color: white;
 }
-
-.panel{
+.panel {
     color: black;
     border: 2px solid green;
     padding: 5px;
-    margin-bottom:10px;
+    margin-bottom: 10px;
     border-radius: 10px;
 }
-.score{
+.score {
     color: red;
     font-size: 150%;
     font-style: italic;
     padding-left: 50px;
 }
-
-.review-swatch-container{
+.review-swatch-container {
     padding: 0;
     position: relative;
 }
-#movieformactions .review-swatch-container{
+#movieformactions .review-swatch-container {
     width: 75px;
     height: 75px;
 }
-.review-swatch-bg{ 
+.review-swatch-bg {
     width: 100%;
 }
-.review-swatch-details{
+.review-swatch-details {
     position: absolute;
     font-weight: bold;
-    font-size:90%;
-    color:white;
+    font-size: 90%;
+    color: white;
     top: 10px;
     left: 10px;
     padding-left: 5px;
 }
-
-.alert{
-    display:none;
+.alert {
+    display: none;
 }
-
-.review-text{
+.review-text {
     word-wrap: break-word;
 }
-
-.progress{
+.progress {
     padding: 0px;
 }
-
-#notification-panel{
+#notification-panel {
     z-index: 99999999;
     pointer-events: none;
 }

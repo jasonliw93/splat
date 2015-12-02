@@ -7,10 +7,10 @@ splat.Review = Backbone.Model.extend({
     idAttribute: "_id",
     // default values for each attribute
     defaults: {
-        freshness : 0.0,
-        reviewName : "",
-        reviewAffil : "",
-        reviewText : "",
-        movieId : undefined,
+        freshness: 0.0,
+        reviewName: "",
+        reviewAffil: "",
+        reviewText: "",
+        movieId: undefined,
     }
-});	
+});

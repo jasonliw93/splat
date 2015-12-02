@@ -1,9 +1,9 @@
 'use strict';
 
-var splat =  splat || {};
+var splat = splat || {};
 
 splat.Users = Backbone.Collection.extend({
-    model:splat.User,
+    model: splat.User,
 
-    url:'/auth'  // to interact with the model via the server API
+    url: '/auth' // to interact with the model via the server API
 });

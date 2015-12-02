@@ -9,14 +9,14 @@ splat.utils = {
         $('#notification-panel').removeClass("alert-danger alert-warning alert-success alert-info");
         $('#notification-panel').addClass("alert " + cssStyle);
         $('#notification-panel').html('<strong>' + noticeType + '</strong> ' + noticeText);
-        $('#notification-panel').stop(true,true).show().fadeOut(5000);
+        $('#notification-panel').stop(true, true).show().fadeOut(5000);
     },
-    
+
     // hides the notice
     hideNotice: function() {
-        $('#notification-panel').stop(true,true).hide();
+        $('#notification-panel').stop(true, true).hide();
     },
-    
+
     // alerts the user if the request between the server has failed in the console
     requestFailed: function(response) {
         console.log(response);
@@ -28,8 +28,8 @@ splat.utils = {
                 this.addValidationError(key, messages[key]);
             }
         }
-    this.showNotice('Error!', 'Fix validation errors and try again',
-                                                        'alert-danger');
+        this.showNotice('Error!', 'Fix validation errors and try again',
+            'alert-danger');
     },
     // validation error notices
     addValidationError: function(field, message) {
@@ -38,7 +38,7 @@ splat.utils = {
         formGroup.addClass('has-error');
         $('.help-block', formGroup).html(message);
     },
-    
+
     // removes the error notices
     removeValidationError: function(field) {
         var formGroup = $('.form-group').find('input[name=' + field + '], textarea[name=' + field + ']').parent().parent();
@@ -46,27 +46,27 @@ splat.utils = {
         $('.help-block', formGroup).html('');
     },
     // helpful functions attached to all templates to reduce duplication
-    templateHelpers : {
+    templateHelpers: {
         // gets the review image for given votes
-        getReviewImage: function(freshVotes, freshTotal){            
-            if (freshVotes/freshTotal >= 0.5) { 
+        getReviewImage: function(freshVotes, freshTotal) {
+            if (freshVotes / freshTotal >= 0.5) {
                 return '/img/fresh_lg.png';
-            }else{
+            } else {
                 return '/img/rotten_lg.png';
             }
         },
         // gets review rating for movie 
-        getReviewText: function(freshVotes, freshTotal){            
-            return (freshVotes/freshTotal*100).toFixed(1) + '% (' + freshTotal+ ')';
+        getReviewText: function(freshVotes, freshTotal) {
+            return (freshVotes / freshTotal * 100).toFixed(1) + '% (' + freshTotal + ')';
         },
-        formatArray: function(array){
+        formatArray: function(array) {
             return array.join(', ');
         },
         // gets trailer
-        getTrailer: function(id, trailer){
-            if (trailer){
+        getTrailer: function(id, trailer) {
+            if (trailer) {
                 return trailer;
-            }else{
+            } else {
                 return 'movies/' + id + '/video';
             }
         }
@@ -103,7 +103,7 @@ splat.utils = {
                 deferreds.push($.get('tpl/' + view + '.html', function(data) {
                     // Set template function on associated Backbone view.
                     // attach template helper functions to view template
-                    splat[view].prototype.template = function(x){
+                    splat[view].prototype.template = function(x) {
                         return _.template(data)(_.extend(x, self.templateHelpers));
                     };
                 }));
