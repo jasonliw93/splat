@@ -31,7 +31,6 @@ module.exports = function(grunt) {
 		    'public/js/views/signin.js',
 		    'public/js/views/signup.js',
 		    'public/js/main.js',
-		    // A3 ADD CODE for other app JavaScript files
 		],
 		dest: 'public/js/<%= pkg.name %>-min.js'
 	    },
@@ -42,9 +41,9 @@ module.exports = function(grunt) {
 			'--ignore-ssl-errors':true
 		},
 	    all: {
-		options: {
-		    urls: ['http://mathlab.utsc.utoronto.ca:<%= pkg.port %>/test/test.html']
-		}
+			options: {
+			    urls: ['http://mathlab.utsc.utoronto.ca:<%= pkg.port %>/test/test.html']
+			}
 	    }
 	},
 

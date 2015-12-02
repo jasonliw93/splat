@@ -2,14 +2,17 @@
 
 module.exports = {
 	env : 'dev',
-	port : 8000,
+	port : 41261,
 	dbuser : 'liwyanch',
-	dbpass : 'liwyanch',
+	dbpass : 'Password1',
 	dbname : 'liwyanch',
-	dbhost : 'localhost:27017',
+	dbhost : '10.15.2.164',
 	basicAuthUser : 'jason',
 	basicAuthPass : '123456',
-	httpauth : false,
+	basicAuth : false,
 	sessionSecret: "super secret session",
-	sessionTimeout : 180000//1800000, //30 min
+	sessionTimeout : 30 * 60 * 1000
+	testerUser: 'tester',
+	testerPass: 'tester'
 };
+

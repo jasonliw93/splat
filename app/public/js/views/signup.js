@@ -58,33 +58,33 @@ splat.Signup = Backbone.View.extend({
     signup: function(e) {
         e.preventDefault();
 
-	var self = this;
-    var check = self.model.validateAll();
-    if (check.isValid === false) {
-        splat.utils.displayValidationErrors(check.messages);
-        return false;
-    }
+        var self = this;
+        var check = self.model.validateAll();
+        if (check.isValid === false) {
+            splat.utils.displayValidationErrors(check.messages);
+            return false;
+        }
 
-	this.model.save(null, {
-            wait: true,
-            success: function(model, response) {
-		if (response.error) {
-                    splat.utils.showNotice('Signup Failed',
-			'Failed to create account', 'alert-danger');
-		} else {
-		    //splat.token = response.token;
-            splat.userid = response.userid;
-            splat.username = response.username;
-            splat.utils.showNotice('Signup Successful!',
-			'Welcome ' + splat.username, 'alert-success');
-		    // header view updates when signedUp event fires
-		    Backbone.trigger('signedUp', response);
-		}
-            },
-            error: function (model, err) {
-                splat.utils.showNotice('Error', err.responseText, 'alert-danger');
-            }
-	});
+        this.model.save(null, {
+                wait: true,
+                success: function(model, response) {
+        	if (response.error) {
+                        splat.utils.showNotice('Signup Failed',
+        		'Failed to create account', 'alert-danger');
+        	} else {
+        	    //splat.token = response.token;
+                splat.userid = response.userid;
+                splat.username = response.username;
+                splat.utils.showNotice('Signup Successful!',
+        		'Welcome ' + splat.username, 'alert-success');
+        	    // header view updates when signedUp event fires
+        	    Backbone.trigger('signedUp', response);
+        	}
+                },
+                error: function (model, err) {
+                    splat.utils.showNotice('Error', err.responseText, 'alert-danger');
+                }
+        });
     }
 
 });

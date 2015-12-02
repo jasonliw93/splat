@@ -11,6 +11,6 @@ splat.Review = Backbone.Model.extend({
         reviewName : "",
         reviewAffil : "",
         reviewText : "",
-        movieId : null,
+        movieId : undefined,
     }
 });	

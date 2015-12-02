@@ -18,15 +18,12 @@ splat.MovieFormActions = Backbone.View.extend({
     },
     // save model to database
     beforeSave: function(){
-        if (this.model.isValid()){
-            this.save();
-        }else{
-            splat.utils.showNotice('Error', this.model.validationError, 'alert-danger');
-            // add validation error for each invalid message in invalid object 
-            for (var key in this.model.invalid) {
-                splat.utils.addValidationError(key, this.model.invalid[key]);
-            }
-        }
+        var check = this.model.validateAll();
+        if (check.isValid === false) {
+            splat.utils.displayValidationErrors(check.messages);
+            return false;
+        };
+        this.save();
     },
     save: function() {
         var self = this;

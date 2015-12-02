@@ -28,7 +28,7 @@ splat.utils = {
                 this.addValidationError(key, messages[key]);
             }
         }
-    this.showAlert('Error!', 'Fix validation errors and try again',
+    this.showNotice('Error!', 'Fix validation errors and try again',
                                                         'alert-danger');
     },
     // validation error notices

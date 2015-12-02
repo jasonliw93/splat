@@ -84,6 +84,13 @@ var Movie = mongoose.model('Movie', MovieSchema);
 var User = mongoose.model('User', UserSchema);
 var Review = mongoose.model('Review', ReviewSchema);
 
+if (config.testerUser){
+    var user = new User({username: config.testerUser, password: config.testerPass, 
+        email: "None"});
+    encryptPassword(user, function() {
+        user.save();
+    });
+}
 // Implemention of splat API handlers:
 
 // "exports" is used to make the associated name visible
@@ -149,7 +156,7 @@ function savePoster(movie, callback){
 }
 
 // creates a new movie model
-exports.addMovie = function(req, res){    
+exports.addMovie = function(req, res){
     var movie = new Movie(req.body);
     movie.userId = req.session.userid;
     savePoster(movie, function() {
@@ -157,10 +164,10 @@ exports.addMovie = function(req, res){
             if (!err) {
                 res.status(200).send(movie);
                 broadcastEvent({model: "movie", movieId: movie.id, action: 'add'});
-            } else if (err.err && err.err.indexOf("E11000") > -1) {
-                 res.status(403).send("Sorry, movie " +movie.title+ " directed by "
+            } else if (err.message && err.message.indexOf("E11000") > -1) {
+                res.status(403).send("Sorry, movie " +movie.title+ " directed by "
                         +movie.director+ " has already been created");
-            } else {
+            }else {
                 res.status(500).send('Unable to save movie at this time: '
                 + 'please try again later ' + err.message);
             }

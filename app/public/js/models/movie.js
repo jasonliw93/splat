@@ -20,7 +20,7 @@ splat.Movie = Backbone.Model.extend({
         trailer: "", // URL for trailer/movie-streaming
         poster: "img/placeholder.png", // movie-poster image URL
         dated: new Date(), // date of movie created
-        userId: null,
+        userId: undefined,
     },
     // validators for each attribute
     validators: {
@@ -187,27 +187,21 @@ splat.Movie = Backbone.Model.extend({
                 isValid: true
             };
     },
-    // name:value pairs where name is the field name and value is the invalid message
-    invalid : {},
-    // validates all the attributes given by attrs
-    // called by model save
-    validate: function(attrs) {
-        // remove any previous invalid messages
-        this.invalid = {};
-        var isInvalid = false;
-        // go through each attr key and check it's value
-        for (var key in attrs) {
-            if (this.validators[key]){
-                var check = this.validators[key](attrs[key]);
-                if (!check.isValid){
-                    // add invalid message to invalid object
-                    this.invalid[key] = check.message;
-                    isInvalid = true;
+    validateAll: function () {
+
+        var messages = {};
+
+        for (var key in this.validators) {
+            if (this.validators.hasOwnProperty(key)) {
+                var check = this.validators[key](this.get(key));
+                if (check.isValid === false) {
+                    messages[key] = check.message;
                 }
             }
         }
-        if (isInvalid) {
-            return "Fix validation errors and try again";
-        }
+
+        return _.size(messages) > 0 ? {isValid: false, messages: messages}
+                    : {isValid: true};
+
     }
 });
