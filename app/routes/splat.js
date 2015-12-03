@@ -20,17 +20,6 @@ fs.exists(__dirname + '/../public/img/uploads', function(exists) {
     }
 });
 
-// create video-upload directory if it does not exist 
-fs.exists(__dirname + '/../public/img/videos', function(exists) {
-    if (!exists) {
-        fs.mkdir(__dirname + '/../public/img/videos', function(err) {
-            if (err) {
-                process.exit(1); // can this be cleaned up with throw error???
-            };
-        });
-    }
-});
-
 var mongoose = require('mongoose'); // MongoDB integration
 
 // Connect to database, using credentials specified in your config module
