@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>user.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../doc-style.css" />
+  <script src="../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../", thisFile = "courses/courses/cscc09f15/liwyanch/a2/app//js/models/user.js", defaultSidebar = true;
+  </script>
+  <script src="../../doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>user.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">splat</span> <span class="o">=</span> <span class="nx">splat</span> <span class="o">||</span> <span class="p">{};</span>
+
+<span class="nx">splat</span><span class="p">.</span><span class="nx">User</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+
+    <span class="nx">urlRoot</span><span class="o">:</span> <span class="s2">&quot;/auth&quot;</span><span class="p">,</span>
+
+    <span class="nx">idAttribute</span><span class="o">:</span> <span class="s2">&quot;_id&quot;</span><span class="p">,</span> <span class="c1">// to match mongo, which uses _id rather than id</span>
+
+    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">validators</span> <span class="o">=</span> <span class="p">{};</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">.</span><span class="nx">username</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="nx">value</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+            <span class="p">}</span> <span class="o">:</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;username required&quot;</span>
+            <span class="p">};</span>
+        <span class="p">};</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">.</span><span class="nx">email</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="nx">value</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+            <span class="p">}</span> <span class="o">:</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;email required&quot;</span>
+            <span class="p">};</span>
+        <span class="p">};</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">.</span><span class="nx">password</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="nx">value</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+            <span class="p">}</span> <span class="o">:</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;password required&quot;</span>
+            <span class="p">};</span>
+        <span class="p">};</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">.</span><span class="nx">password2</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="nx">value</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+            <span class="p">}</span> <span class="o">:</span> <span class="p">{</span>
+                <span class="nx">isValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;password required&quot;</span>
+            <span class="p">};</span>
+        <span class="p">};</span>
+    <span class="p">},</span>
+
+    <span class="nx">validateItem</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">[</span><span class="nx">key</span><span class="p">])</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">[</span><span class="nx">key</span><span class="p">](</span><span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="o">:</span> <span class="p">{</span>
+            <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="p">};</span>
+    <span class="p">},</span>
+
+    <span class="nx">validateAll</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+        <span class="kd">var</span> <span class="nx">messages</span> <span class="o">=</span> <span class="p">{};</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">check</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">[</span><span class="nx">key</span><span class="p">](</span><span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">key</span><span class="p">));</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">check</span><span class="p">.</span><span class="nx">isValid</span> <span class="o">===</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">messages</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">check</span><span class="p">.</span><span class="nx">message</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">size</span><span class="p">(</span><span class="nx">messages</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="p">{</span>
+            <span class="nx">isValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+            <span class="nx">messages</span><span class="o">:</span> <span class="nx">messages</span>
+        <span class="p">}</span> <span class="o">:</span> <span class="p">{</span>
+            <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+
+<span class="p">});</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

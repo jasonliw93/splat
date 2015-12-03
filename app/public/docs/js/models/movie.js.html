@@ -81,6 +81,7 @@
         <span class="nx">trailer</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="c1">// URL for trailer/movie-streaming</span>
         <span class="nx">poster</span><span class="o">:</span> <span class="s2">&quot;img/placeholder.png&quot;</span><span class="p">,</span> <span class="c1">// movie-poster image URL</span>
         <span class="nx">dated</span><span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(),</span> <span class="c1">// date of movie created</span>
+        <span class="nx">userId</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">,</span>
     <span class="p">},</span>
 
 </pre></div>
@@ -95,7 +96,7 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">validators</span><span class="o">:</span> <span class="p">{</span>
-        <span class="nx">title</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">title</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -128,7 +129,7 @@
                 <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;You must enter a movie title. Only letters-digits-spaces and \&quot;,\&quot;, \&quot;.\&quot;, \&quot;!\&quot;, \&quot;?\&quot;, \&quot;-\&quot;, \&quot;&#39;\&quot;, \&quot;*\&quot; allowed&quot;</span>
             <span class="p">};</span>
         <span class="p">},</span>
-        <span class="nx">released</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">released</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -141,7 +142,7 @@
 <p>regex for movie year</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-            <span class="kd">var</span> <span class="nx">yearRegex</span> <span class="o">=</span> <span class="sr">/^(19[1-9]\d|20(1[0-6]|0\d))$/</span> <span class="c1">//1910-2016</span>
+            <span class="kd">var</span> <span class="nx">yearRegex</span> <span class="o">=</span> <span class="sr">/^(19[1-9]\d|20(1[0-6]|0\d))$/</span><span class="p">;</span> <span class="c1">//1910-2016</span>
 
 </pre></div>
         </td>
@@ -161,7 +162,7 @@
                 <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;You must enter a year between 1910 and 2016&quot;</span>
             <span class="p">};</span>
         <span class="p">},</span>
-        <span class="nx">director</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">director</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -194,7 +195,7 @@
                 <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;You must enter a director&#39;s name. Only letters-digits-spaces and \&quot;,\&quot;, \&quot;.\&quot;, \&quot;!\&quot;, \&quot;?\&quot;, \&quot;-\&quot;, \&quot;&#39;\&quot;, \&quot;*\&quot; allowed&quot;</span>
             <span class="p">};</span>
         <span class="p">},</span>
-        <span class="nx">rating</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">rating</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -227,7 +228,7 @@
                 <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;You must enter one of G, PG, PG-13, R, NC-17, NR.&quot;</span>
             <span class="p">};</span>
         <span class="p">},</span>
-        <span class="nx">starring</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">values</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">starring</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">values</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -257,7 +258,7 @@
 <p>checks if starring is an array and there is atleast one actor</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">values</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="p">)</span> <span class="o">||</span> <span class="nx">values</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">values</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="p">)</span> <span class="o">||</span> <span class="nx">values</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">return</span> <span class="nx">notValid</span><span class="p">;</span>
             <span class="p">}</span>
 
@@ -279,9 +280,9 @@
             <span class="p">}</span>
             <span class="k">return</span> <span class="p">{</span>
                 <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
-            <span class="p">}</span>
+            <span class="p">};</span>
         <span class="p">},</span>
-        <span class="nx">duration</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">duration</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -301,7 +302,7 @@
                 <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;You must enter a duration between 0 and 999.&quot;</span>
             <span class="p">};</span>
         <span class="p">},</span>
-        <span class="nx">genre</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">values</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">genre</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">values</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -331,7 +332,7 @@
 <p>checks if genre is an array and there is atleast one genre</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">values</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="p">)</span> <span class="o">||</span> <span class="nx">values</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">values</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="p">)</span> <span class="o">||</span> <span class="nx">values</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">return</span> <span class="nx">notValid</span><span class="p">;</span>
             <span class="p">}</span>
 
@@ -353,9 +354,9 @@
             <span class="p">}</span>
             <span class="k">return</span> <span class="p">{</span>
                 <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
-            <span class="p">}</span>
+            <span class="p">};</span>
         <span class="p">},</span>
-        <span class="nx">synopsis</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">synopsis</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -373,7 +374,7 @@
                 <span class="nx">isValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
                 <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;You must enter a synopsis. Only letters-digits-spaces and \&quot;,\&quot;, \&quot;.\&quot;, \&quot;!\&quot;, \&quot;?\&quot;, \&quot;-\&quot;, \&quot;&#39;\&quot;, \&quot;*\&quot; allowed. No blank lines.&quot;</span>
             <span class="p">};</span>
-            <span class="kd">var</span> <span class="nx">lines</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">)</span>
+            <span class="kd">var</span> <span class="nx">lines</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -393,9 +394,9 @@
             <span class="p">}</span>
             <span class="k">return</span> <span class="p">{</span>
                 <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
-            <span class="p">}</span>
+            <span class="p">};</span>
         <span class="p">},</span>
-        <span class="nx">freshTotal</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">freshTotal</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -408,14 +409,14 @@
 <p>checks if freshtotal is a number</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">return</span> <span class="p">(</span><span class="o">!</span><span class="nb">isNaN</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">value</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>  <span class="o">?</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="o">!</span><span class="nb">isNaN</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">value</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="p">{</span>
                 <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
             <span class="p">}</span> <span class="o">:</span> <span class="p">{</span>
                 <span class="nx">isValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
                 <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;You must enter non-negative integer.&quot;</span>
             <span class="p">};</span>
         <span class="p">},</span>
-        <span class="nx">freshVotes</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">freshVotes</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -428,14 +429,14 @@
 <p>checks if freshvotes is a number</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-            <span class="k">return</span> <span class="p">(</span><span class="o">!</span><span class="nb">isNaN</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">value</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>  <span class="o">?</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="o">!</span><span class="nb">isNaN</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">value</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="p">{</span>
                 <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
             <span class="p">}</span> <span class="o">:</span> <span class="p">{</span>
                 <span class="nx">isValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
                 <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;You must enter non-negative integer.&quot;</span>
             <span class="p">};</span>
         <span class="p">},</span>
-        <span class="nx">trailer</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">trailer</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -468,7 +469,7 @@
                 <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;You must enter a valid trailer url&quot;</span>
             <span class="p">};</span>
         <span class="p">},</span>
-        <span class="nx">dated</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">dated</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -481,7 +482,7 @@
 <p>convert to date object if dated is a date string</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-            <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span> 
+            <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -533,83 +534,26 @@ test it, else defaults to valid</p>
                 <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
             <span class="p">};</span>
     <span class="p">},</span>
+    <span class="nx">validateAll</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
-</div>
-<p>name:value pairs where name is the field name and value is the invalid message</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">invalid</span> <span class="o">:</span> <span class="p">{},</span>
+        <span class="kd">var</span> <span class="nx">messages</span> <span class="o">=</span> <span class="p">{};</span>
 
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
-</div>
-<p>validates all the attributes given by attrs
-called by model save</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">validate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">attrs</span><span class="p">)</span> <span class="p">{</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
-</div>
-<p>remove any previous invalid messages</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">invalid</span> <span class="o">=</span> <span class="p">{};</span>
-        <span class="kd">var</span> <span class="nx">isInvalid</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
-</div>
-<p>go through each attr key and check it's value</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">attrs</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">[</span><span class="nx">key</span><span class="p">]){</span>
-                <span class="kd">var</span> <span class="nx">check</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">[</span><span class="nx">key</span><span class="p">](</span><span class="nx">attrs</span><span class="p">[</span><span class="nx">key</span><span class="p">])</span>
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">check</span><span class="p">.</span><span class="nx">isValid</span><span class="p">){</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
-</div>
-<p>add invalid message to invalid object</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-                    <span class="k">this</span><span class="p">.</span><span class="nx">invalid</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">check</span><span class="p">.</span><span class="nx">message</span><span class="p">;</span>
-                    <span class="nx">isInvalid</span> <span class="o">=</span> <span class="kc">true</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">check</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">validators</span><span class="p">[</span><span class="nx">key</span><span class="p">](</span><span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">key</span><span class="p">));</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">check</span><span class="p">.</span><span class="nx">isValid</span> <span class="o">===</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">messages</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">check</span><span class="p">.</span><span class="nx">message</span><span class="p">;</span>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">isInvalid</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="s2">&quot;Fix validation errors and try again&quot;</span><span class="p">;</span>
-        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">size</span><span class="p">(</span><span class="nx">messages</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="p">{</span>
+            <span class="nx">isValid</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+            <span class="nx">messages</span><span class="o">:</span> <span class="nx">messages</span>
+        <span class="p">}</span> <span class="o">:</span> <span class="p">{</span>
+            <span class="nx">isValid</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="p">};</span>
+
     <span class="p">}</span>
 <span class="p">});</span>
 </pre></div>

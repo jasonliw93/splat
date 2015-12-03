@@ -78,7 +78,7 @@
 <p>render the View</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">reviewerView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">Reviewer</span><span class="p">({</span>
             <span class="nx">collection</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">collection</span>
         <span class="p">});</span>
@@ -97,7 +97,7 @@
 <p>listens to collection sync to re-render</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">this</span><span class="p">.</span><span class="nx">listenTo</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">,</span> <span class="s1">&#39;sync&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">listenTo</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">collection</span><span class="p">,</span> <span class="s1">&#39;sync&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">reviewThumbsView</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">showScore</span><span class="p">();</span>
         <span class="p">});</span>

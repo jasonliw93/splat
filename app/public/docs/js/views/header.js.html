@@ -67,24 +67,15 @@
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">splat</span><span class="p">.</span><span class="nx">Header</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
     <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">listenTo</span><span class="p">(</span><span class="nx">Backbone</span><span class="p">,</span> <span class="s1">&#39;signedUp&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">signedUp</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">listenTo</span><span class="p">(</span><span class="nx">Backbone</span><span class="p">,</span> <span class="s1">&#39;signedIn&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">signedIn</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">listenTo</span><span class="p">(</span><span class="nx">Backbone</span><span class="p">,</span> <span class="s1">&#39;signedOut&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">signedOut</span><span class="p">);</span>
     <span class="p">},</span>
-    <span class="nx">events</span><span class="o">:</span><span class="p">{</span>
-        <span class="s2">&quot;change #orderForm&quot;</span> <span class="o">:</span> <span class="s2">&quot;sortOrder&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;mouseover #orderdrop.active&quot;</span> <span class="o">:</span> <span class="s2">&quot;showOrderForm&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;mouseout #orderdrop.active&quot;</span> <span class="o">:</span> <span class="s2">&quot;hideOrderForm&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;click #orderdrop&quot;</span> <span class="o">:</span> <span class="s2">&quot;showOrderForm&quot;</span><span class="p">,</span>
-    <span class="p">},</span>
-    <span class="nx">showOrderForm</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#orderdrop&quot;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;open&#39;</span><span class="p">);</span>
-    <span class="p">},</span>
-    <span class="nx">hideOrderForm</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#orderdrop&quot;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;open&#39;</span><span class="p">);</span>
-    <span class="p">},</span>
-    <span class="nx">sortOrder</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
-        <span class="nx">e</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
-        <span class="nx">splat</span><span class="p">.</span><span class="nx">order</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>  <span class="c1">// set app-level order field</span>
-        <span class="nx">Backbone</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;orderevent&#39;</span><span class="p">,</span> <span class="nx">e</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">hideOrderForm</span><span class="p">();</span>
+    <span class="nx">events</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;change #orderForm&quot;</span><span class="o">:</span> <span class="s2">&quot;sortOrder&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mouseenter #orderdrop.active&quot;</span><span class="o">:</span> <span class="s2">&quot;showOrderForm&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mouseleave #orderdrop.active&quot;</span><span class="o">:</span> <span class="s2">&quot;hideOrderForm&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;click #ordering&quot;</span><span class="o">:</span> <span class="s2">&quot;showOrderForm&quot;</span><span class="p">,</span>
     <span class="p">},</span>
 
 </pre></div>
@@ -94,6 +85,100 @@
         <td class="docs">
 <div class="pilwrap">
   <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>helper for signedUp, signedIn to update UI on successful authentication</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">authenticatedUI</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#greet&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">username</span><span class="p">);</span> <span class="c1">// ugly!</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#signoutUser&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&lt;b&gt;&#39;</span> <span class="o">+</span> <span class="nx">response</span><span class="p">.</span><span class="nx">username</span> <span class="o">+</span> <span class="s1">&#39;&lt;/b&gt;&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.btn.signinSubmit&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.btn.signoutSubmit&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="p">,</span> <span class="s2">&quot;block&quot;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#addMovie&#39;</span><span class="p">).</span><span class="nx">show</span><span class="p">();</span> <span class="c1">// auth&#39;d users can add movies</span>
+    <span class="p">},</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>update UI on successful signup authentication</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">signedUp</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#signupdrop&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;open&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.signinput&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#signupForm&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">reset</span><span class="p">();</span> <span class="c1">// clear signup form</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">authenticatedUI</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+    <span class="p">},</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>update UI on successful signin authentication</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">signedIn</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#signindrop&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;open&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;[class*=&quot;signin&quot;]&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#signinForm&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">reset</span><span class="p">();</span> <span class="c1">// clear signin form</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">authenticatedUI</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+    <span class="p">},</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
+<p>update UI on authentication signout</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">signedOut</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#greet&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;Sign In&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#signoutUser&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.btn.signoutSubmit&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.btn.signinSubmit&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="p">,</span> <span class="s2">&quot;block&quot;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;[class*=&quot;signin&quot;]&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;display&quot;</span><span class="p">,</span> <span class="s2">&quot;block&quot;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#signindrop&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;open&#39;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#addMovie&#39;</span><span class="p">).</span><span class="nx">hide</span><span class="p">();</span> <span class="c1">// non-auth&#39;d users can&#39;t add movies</span>
+    <span class="p">},</span>
+
+    <span class="nx">showOrderForm</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#orderdrop&quot;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;open&#39;</span><span class="p">);</span>
+    <span class="p">},</span>
+
+    <span class="nx">hideOrderForm</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#orderdrop&quot;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;open&#39;</span><span class="p">);</span>
+    <span class="p">},</span>
+
+    <span class="nx">sortOrder</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">e</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
+        <span class="nx">splat</span><span class="p">.</span><span class="nx">order</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span> <span class="c1">// set app-level order field</span>
+        <span class="nx">Backbone</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;orderevent&#39;</span><span class="p">,</span> <span class="nx">e</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">hideOrderForm</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+    <span class="p">},</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
 </div>
 <p>render the View</p>
         </td>
@@ -106,12 +191,41 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
 <p>set the view element ($el) HTML content using its template</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">());</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+</div>
+<p>create new User model for signup</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="kd">var</span> <span class="nx">newuser</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">User</span><span class="p">();</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">signupform</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">Signup</span><span class="p">({</span>
+            <span class="nx">model</span><span class="o">:</span> <span class="nx">newuser</span>
+        <span class="p">});</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#signupDiv&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">signupform</span><span class="p">.</span><span class="nx">render</span><span class="p">().</span><span class="nx">el</span><span class="p">);</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">signinform</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">Signin</span><span class="p">({</span>
+            <span class="nx">model</span><span class="o">:</span> <span class="nx">newuser</span>
+        <span class="p">});</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#signinDiv&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">signinform</span><span class="p">.</span><span class="nx">render</span><span class="p">().</span><span class="nx">el</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">splat</span><span class="p">.</span><span class="nx">auth</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">signedIn</span><span class="p">({</span>
+                <span class="s1">&#39;userid&#39;</span><span class="o">:</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">userid</span><span class="p">,</span>
+                <span class="s1">&#39;username&#39;</span><span class="o">:</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">username</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">;</span> <span class="c1">// support method chaining</span>
     <span class="p">},</span>
 
@@ -121,7 +235,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
 </div>
 <p>makes the menu item given by menuItem active</p>
         </td>
@@ -134,7 +248,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
 </div>
 <p>removes any active classes under <nav><li></p>
         </td>
@@ -147,7 +261,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
 </div>
 <p>actives any tags associated to menuItem</p>
         </td>
@@ -160,7 +274,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
 <p>this.active = menuItem;</p>
         </td>

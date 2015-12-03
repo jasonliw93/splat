@@ -97,7 +97,7 @@
 <p>properly format string input depending on field name</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">obj</span><span class="p">[</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+        <span class="nx">obj</span><span class="p">[</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">escape</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -165,7 +165,7 @@ check if model is valid before adding to collection</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
             <span class="nx">wait</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-            <span class="nx">success</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="nx">response</span><span class="p">){</span>
+            <span class="nx">success</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">(){</span>
                 <span class="nx">splat</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">showNotice</span><span class="p">(</span><span class="s1">&#39;Success&#39;</span><span class="p">,</span> <span class="s2">&quot;review has been saved&quot;</span><span class="p">,</span> <span class="s1">&#39;alert-success&#39;</span><span class="p">);</span>
 
 </pre></div>

@@ -85,7 +85,7 @@
         <span class="s2">&quot;movies&quot;</span><span class="o">:</span> <span class="s2">&quot;browse&quot;</span><span class="p">,</span>
         <span class="s2">&quot;movies/add&quot;</span><span class="o">:</span> <span class="s2">&quot;addHandler&quot;</span><span class="p">,</span>
         <span class="s2">&quot;movies/:id&quot;</span><span class="o">:</span> <span class="s2">&quot;editHandler&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;movies/:id/reviews&quot;</span> <span class="o">:</span> <span class="s2">&quot;reviews&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;movies/:id/reviews&quot;</span><span class="o">:</span> <span class="s2">&quot;reviews&quot;</span><span class="p">,</span>
         <span class="s2">&quot;*default&quot;</span><span class="o">:</span> <span class="s2">&quot;home&quot;</span><span class="p">,</span>
     <span class="p">},</span>
 
@@ -115,6 +115,7 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">moviesFetch</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">fetch</span><span class="p">();</span>
+        <span class="nx">splat</span><span class="p">.</span><span class="nx">order</span> <span class="o">=</span> <span class="s1">&#39;title&#39;</span><span class="p">;</span>
 
 </pre></div>
         </td>
@@ -129,7 +130,8 @@ sync the collections each time a change occurs
 so that all clients remain in sync</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="kd">var</span> <span class="nx">eventStream</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">EventSource</span><span class="p">(</span><span class="s1">&#39;/events&#39;</span><span class="p">)</span>
+
+        <span class="kd">var</span> <span class="nx">eventStream</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">EventSource</span><span class="p">(</span><span class="s1">&#39;/events&#39;</span><span class="p">);</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="nx">eventStream</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
 
@@ -145,7 +147,7 @@ so that all clients remain in sync</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
             <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">model</span> <span class="o">==</span> <span class="s1">&#39;movie&#39;</span><span class="p">)</span> <span class="p">{</span> 
+            <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">model</span> <span class="o">===</span> <span class="s1">&#39;movie&#39;</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -159,7 +161,7 @@ so that all clients remain in sync</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
                 <span class="nx">self</span><span class="p">.</span><span class="nx">moviesFetch</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">fetch</span><span class="p">();</span>
-            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">model</span> <span class="o">==</span> <span class="s1">&#39;review&#39;</span><span class="p">){</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">model</span> <span class="o">===</span> <span class="s1">&#39;review&#39;</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -173,9 +175,9 @@ so that all clients remain in sync</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
                 <span class="nx">self</span><span class="p">.</span><span class="nx">moviesFetch</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">fetch</span><span class="p">();</span>
-                <span class="nx">self</span><span class="p">.</span><span class="nx">moviesFetch</span><span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">coll</span><span class="p">,</span> <span class="nx">resp</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">self</span><span class="p">.</span><span class="nx">moviesFetch</span><span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
                     <span class="kd">var</span> <span class="nx">movie</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">movieId</span><span class="p">);</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="nx">movie</span><span class="p">.</span><span class="nx">reviews</span><span class="p">){</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">movie</span><span class="p">.</span><span class="nx">reviews</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -191,13 +193,14 @@ previously fetched them</p>
         <td class="code highlight"><div class="highlight"><pre>
                         <span class="nx">movie</span><span class="p">.</span><span class="nx">reviews</span><span class="p">.</span><span class="nx">fetch</span><span class="p">();</span>
                     <span class="p">}</span>
-                <span class="p">}).</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">coll</span><span class="p">,</span> <span class="nx">resp</span><span class="p">)</span> <span class="p">{</span>
+                <span class="p">}).</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">movies</span><span class="p">,</span> <span class="nx">resp</span><span class="p">)</span> <span class="p">{</span>
                     <span class="nx">splat</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">requestFailed</span><span class="p">(</span><span class="nx">resp</span><span class="p">);</span>
                 <span class="p">});</span>
             <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
                 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
             <span class="p">}</span>
-        <span class="p">}</span>
+        <span class="p">};</span>
+
 
 </pre></div>
         </td>
@@ -265,7 +268,7 @@ close() methods when its own close() method is invoked.   </p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">currentView</span> <span class="o">=</span> <span class="nx">view</span><span class="p">;</span>
-        <span class="nx">$</span><span class="p">(</span><span class="nx">selector</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">view</span><span class="p">.</span><span class="nx">render</span><span class="p">().</span><span class="nx">el</span><span class="p">);</span>
+        <span class="nx">$</span><span class="p">(</span><span class="nx">selector</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">view</span><span class="p">.</span><span class="nx">render</span><span class="p">().</span><span class="nx">el</span><span class="p">).</span><span class="nx">stop</span><span class="p">().</span><span class="nx">hide</span><span class="p">().</span><span class="nx">fadeIn</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
 
     <span class="p">},</span>
     <span class="nx">home</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -283,7 +286,7 @@ close() methods when its own close() method is invoked.   </p>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">homeView</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">homeView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">Home</span><span class="p">();</span>
-        <span class="p">};</span>
+        <span class="p">}</span>
 
 </pre></div>
         </td>
@@ -315,7 +318,7 @@ $('#content').html(this.homeView.render().el);</p>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">aboutView</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">aboutView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">About</span><span class="p">();</span>
-        <span class="p">};</span>
+        <span class="p">}</span>
 
 </pre></div>
         </td>
@@ -346,7 +349,7 @@ $('#content').html(this.homeView.render().el);</p>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">this</span><span class="p">.</span><span class="nx">moviesFetch</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">fetch</span><span class="p">();</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">moviesFetch</span><span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">coll</span><span class="p">,</span> <span class="nx">resp</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">moviesFetch</span><span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -415,7 +418,7 @@ $('#content').html(this.homeView.render().el);</p>
     <span class="p">},</span>
     <span class="nx">editHandler</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">moviesFetch</span><span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">coll</span><span class="p">,</span> <span class="nx">resp</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">moviesFetch</span><span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -458,13 +461,13 @@ $('#content').html(this.homeView.render().el);</p>
         <td class="code highlight"><div class="highlight"><pre>
             <span class="nx">self</span><span class="p">.</span><span class="nx">showView</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">detailsView</span><span class="p">);</span>
             <span class="nx">self</span><span class="p">.</span><span class="nx">headerView</span><span class="p">.</span><span class="nx">selectMenuItem</span><span class="p">(</span><span class="s2">&quot;Add Movie&quot;</span><span class="p">);</span>
-        <span class="p">}).</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">coll</span><span class="p">,</span> <span class="nx">resp</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">}).</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">movies</span><span class="p">,</span> <span class="nx">resp</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">splat</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">requestFailed</span><span class="p">(</span><span class="nx">resp</span><span class="p">);</span>
         <span class="p">});</span>
     <span class="p">},</span>
-    <span class="nx">reviews</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">){</span>
+    <span class="nx">reviews</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">moviesFetch</span><span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">coll</span><span class="p">,</span> <span class="nx">resp</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">moviesFetch</span><span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -478,8 +481,8 @@ $('#content').html(this.homeView.render().el);</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
             <span class="kd">var</span> <span class="nx">movie</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">movie</span><span class="p">.</span><span class="nx">reviews</span><span class="p">){</span>
-                <span class="nx">movie</span><span class="p">.</span><span class="nx">reviews</span> <span class="o">=</span>  <span class="k">new</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">Reviews</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">movie</span><span class="p">.</span><span class="nx">reviews</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">movie</span><span class="p">.</span><span class="nx">reviews</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">Reviews</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
             <span class="p">}</span>
 
 </pre></div>
@@ -494,16 +497,16 @@ $('#content').html(this.homeView.render().el);</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
             <span class="kd">var</span> <span class="nx">reviewsFetch</span> <span class="o">=</span> <span class="nx">movie</span><span class="p">.</span><span class="nx">reviews</span><span class="p">.</span><span class="nx">fetch</span><span class="p">();</span>
-            <span class="nx">reviewsFetch</span><span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">coll</span><span class="p">,</span> <span class="nx">resp</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">reviewsFetch</span><span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
                 <span class="nx">self</span><span class="p">.</span><span class="nx">reviewsView</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">ReviewsView</span><span class="p">({</span>
                     <span class="nx">collection</span><span class="o">:</span> <span class="nx">movie</span><span class="p">.</span><span class="nx">reviews</span><span class="p">,</span>
                 <span class="p">});</span>
                 <span class="nx">self</span><span class="p">.</span><span class="nx">showView</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">reviewsView</span><span class="p">);</span>
-            <span class="p">}).</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">coll</span><span class="p">,</span> <span class="nx">resp</span><span class="p">)</span> <span class="p">{</span>
+            <span class="p">}).</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">reviews</span><span class="p">,</span> <span class="nx">resp</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">splat</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">requestFailed</span><span class="p">(</span><span class="nx">resp</span><span class="p">);</span>
             <span class="p">});</span>
-            
-        <span class="p">}).</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">coll</span><span class="p">,</span> <span class="nx">resp</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="p">}).</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">movies</span><span class="p">,</span> <span class="nx">resp</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">splat</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">requestFailed</span><span class="p">(</span><span class="nx">resp</span><span class="p">);</span>
         <span class="p">});</span>
     <span class="p">}</span>
@@ -524,9 +527,10 @@ with history.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-<span class="nx">splat</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">loadTemplates</span><span class="p">([</span><span class="s1">&#39;Home&#39;</span><span class="p">,</span> <span class="s1">&#39;Header&#39;</span><span class="p">,</span> <span class="s1">&#39;About&#39;</span><span class="p">,</span> <span class="s1">&#39;Details&#39;</span><span class="p">,</span> 
-    <span class="s1">&#39;MovieThumb&#39;</span><span class="p">,</span> <span class="s1">&#39;MovieForm&#39;</span><span class="p">,</span> <span class="s1">&#39;MovieFormActions&#39;</span><span class="p">,</span> <span class="s1">&#39;MoviePoster&#39;</span><span class="p">,</span> 
-    <span class="s1">&#39;ReviewsView&#39;</span><span class="p">,</span><span class="s1">&#39;Reviewer&#39;</span><span class="p">,</span> <span class="s1">&#39;ReviewThumb&#39;</span><span class="p">],</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<span class="nx">splat</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">loadTemplates</span><span class="p">([</span><span class="s1">&#39;Home&#39;</span><span class="p">,</span> <span class="s1">&#39;Header&#39;</span><span class="p">,</span> <span class="s1">&#39;About&#39;</span><span class="p">,</span> <span class="s1">&#39;Details&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;MovieThumb&#39;</span><span class="p">,</span> <span class="s1">&#39;MovieForm&#39;</span><span class="p">,</span> <span class="s1">&#39;MovieFormActions&#39;</span><span class="p">,</span> <span class="s1">&#39;MoviePoster&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ReviewsView&#39;</span><span class="p">,</span> <span class="s1">&#39;Reviewer&#39;</span><span class="p">,</span> <span class="s1">&#39;ReviewThumb&#39;</span><span class="p">,</span> <span class="s1">&#39;Signup&#39;</span><span class="p">,</span> <span class="s1">&#39;Signin&#39;</span>
+<span class="p">],</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="nx">splat</span><span class="p">.</span><span class="nx">app</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">AppRouter</span><span class="p">();</span>
     <span class="nx">Backbone</span><span class="p">.</span><span class="nx">history</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span>
 <span class="p">});</span>
@@ -559,6 +563,28 @@ suggested by D. Bailey (author of Marionette)   </p>
     <span class="k">this</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">unbind</span><span class="p">();</span> <span class="c1">// Note, implied by remove() in BB 1.0.0 and later</span>
 
+<span class="p">};</span>
+
+<span class="nx">Backbone</span><span class="p">.</span><span class="nx">ajax</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+</div>
+<p>Invoke $.ajaxSetup in the context of Backbone.$</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+    <span class="nx">Backbone</span><span class="p">.</span><span class="nx">$</span><span class="p">.</span><span class="nx">ajaxSetup</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">Backbone</span><span class="p">.</span><span class="nx">$</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">beforeSend</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">jqXHR</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s2">&quot;X-CSRF-Token&quot;</span><span class="p">,</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">token</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+    <span class="k">return</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">Backbone</span><span class="p">.</span><span class="nx">$</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
 <span class="p">};</span>
 </pre></div>
         </td>

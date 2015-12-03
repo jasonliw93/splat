@@ -58,9 +58,9 @@
         <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#notification-panel&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s2">&quot;alert-danger alert-warning alert-success alert-info&quot;</span><span class="p">);</span>
         <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#notification-panel&#39;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s2">&quot;alert &quot;</span> <span class="o">+</span> <span class="nx">cssStyle</span><span class="p">);</span>
         <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#notification-panel&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&lt;strong&gt;&#39;</span> <span class="o">+</span> <span class="nx">noticeType</span> <span class="o">+</span> <span class="s1">&#39;&lt;/strong&gt; &#39;</span> <span class="o">+</span> <span class="nx">noticeText</span><span class="p">);</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#notification-panel&#39;</span><span class="p">).</span><span class="nx">stop</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span><span class="kc">true</span><span class="p">).</span><span class="nx">show</span><span class="p">().</span><span class="nx">fadeOut</span><span class="p">(</span><span class="mi">5000</span><span class="p">);</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#notification-panel&#39;</span><span class="p">).</span><span class="nx">stop</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">).</span><span class="nx">show</span><span class="p">().</span><span class="nx">fadeOut</span><span class="p">(</span><span class="mi">5000</span><span class="p">);</span>
     <span class="p">},</span>
-    
+
 
 </pre></div>
         </td>
@@ -74,9 +74,9 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">hideNotice</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#notification-panel&#39;</span><span class="p">).</span><span class="nx">stop</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span><span class="kc">true</span><span class="p">).</span><span class="nx">hide</span><span class="p">();</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#notification-panel&#39;</span><span class="p">).</span><span class="nx">stop</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">).</span><span class="nx">hide</span><span class="p">();</span>
     <span class="p">},</span>
-    
+
 
 </pre></div>
         </td>
@@ -93,7 +93,15 @@
         <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">showNotice</span><span class="p">(</span><span class="s1">&#39;Error&#39;</span><span class="p">,</span> <span class="nx">response</span><span class="p">.</span><span class="nx">responseText</span><span class="p">,</span> <span class="s1">&#39;alert-danger&#39;</span><span class="p">);</span>
     <span class="p">},</span>
-    
+    <span class="nx">displayValidationErrors</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">messages</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">messages</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">messages</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">addValidationError</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">messages</span><span class="p">[</span><span class="nx">key</span><span class="p">]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">showNotice</span><span class="p">(</span><span class="s1">&#39;Error!&#39;</span><span class="p">,</span> <span class="s1">&#39;Fix validation errors and try again&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;alert-danger&#39;</span><span class="p">);</span>
+    <span class="p">},</span>
 
 </pre></div>
         </td>
@@ -123,7 +131,7 @@
         <span class="nx">formGroup</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;has-error&#39;</span><span class="p">);</span>
         <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.help-block&#39;</span><span class="p">,</span> <span class="nx">formGroup</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
     <span class="p">},</span>
-    
+
 
 </pre></div>
         </td>
@@ -153,7 +161,7 @@
 <p>helpful functions attached to all templates to reduce duplication</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">templateHelpers</span> <span class="o">:</span> <span class="p">{</span>
+    <span class="nx">templateHelpers</span><span class="o">:</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -166,10 +174,10 @@
 <p>gets the review image for given votes</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">getReviewImage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">freshVotes</span><span class="p">,</span> <span class="nx">freshTotal</span><span class="p">){</span>            
-            <span class="k">if</span> <span class="p">(</span><span class="nx">freshVotes</span><span class="o">/</span><span class="nx">freshTotal</span> <span class="o">&gt;=</span> <span class="mf">0.5</span><span class="p">)</span> <span class="p">{</span> 
+        <span class="nx">getReviewImage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">freshVotes</span><span class="p">,</span> <span class="nx">freshTotal</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">freshVotes</span> <span class="o">/</span> <span class="nx">freshTotal</span> <span class="o">&gt;=</span> <span class="mf">0.5</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">return</span> <span class="s1">&#39;/img/fresh_lg.png&#39;</span><span class="p">;</span>
-            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
                 <span class="k">return</span> <span class="s1">&#39;/img/rotten_lg.png&#39;</span><span class="p">;</span>
             <span class="p">}</span>
         <span class="p">},</span>
@@ -185,10 +193,10 @@
 <p>gets review rating for movie </p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">getReviewText</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">freshVotes</span><span class="p">,</span> <span class="nx">freshTotal</span><span class="p">){</span>            
-            <span class="k">return</span> <span class="p">(</span><span class="nx">freshVotes</span><span class="o">/</span><span class="nx">freshTotal</span><span class="o">*</span><span class="mi">100</span><span class="p">).</span><span class="nx">toFixed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;% (&#39;</span> <span class="o">+</span> <span class="nx">freshTotal</span><span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">;</span>
+        <span class="nx">getReviewText</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">freshVotes</span><span class="p">,</span> <span class="nx">freshTotal</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nx">freshVotes</span> <span class="o">/</span> <span class="nx">freshTotal</span> <span class="o">*</span> <span class="mi">100</span><span class="p">).</span><span class="nx">toFixed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;% (&#39;</span> <span class="o">+</span> <span class="nx">freshTotal</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">;</span>
         <span class="p">},</span>
-        <span class="nx">formatArray</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">array</span><span class="p">){</span>
+        <span class="nx">formatArray</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">array</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">return</span> <span class="nx">array</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">);</span>
         <span class="p">},</span>
 
@@ -203,10 +211,10 @@
 <p>gets trailer</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">getTrailer</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">trailer</span><span class="p">){</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">trailer</span><span class="p">){</span>
+        <span class="nx">getTrailer</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">trailer</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">trailer</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">return</span> <span class="nx">trailer</span><span class="p">;</span>
-            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
                 <span class="k">return</span> <span class="s1">&#39;movies/&#39;</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;/video&#39;</span><span class="p">;</span>
             <span class="p">}</span>
         <span class="p">}</span>
@@ -353,9 +361,9 @@ resulting template data to anonymous function to process it.</p>
 attach template helper functions to view template</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-                    <span class="nx">splat</span><span class="p">[</span><span class="nx">view</span><span class="p">].</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">template</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">){</span>
+                    <span class="nx">splat</span><span class="p">[</span><span class="nx">view</span><span class="p">].</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">template</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
                         <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span><span class="nx">data</span><span class="p">)(</span><span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">templateHelpers</span><span class="p">));</span>
-                    <span class="p">}</span>
+                    <span class="p">};</span>
                 <span class="p">}));</span>
 
 

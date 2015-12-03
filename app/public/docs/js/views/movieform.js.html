@@ -111,19 +111,19 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">length</span><span class="p">){</span>
-            <span class="k">return</span>
+            <span class="k">return</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">size</span> <span class="o">&gt;</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">){</span> <span class="c1">//5mb limit</span>
             <span class="nx">splat</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">showNotice</span><span class="p">(</span><span class="s1">&#39;Warning&#39;</span><span class="p">,</span> <span class="s1">&#39;Video is too large!&#39;</span><span class="p">,</span> <span class="s1">&#39;alert-warning&#39;</span><span class="p">);</span>
-            <span class="k">return</span>
+            <span class="k">return</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">type</span> <span class="o">!=</span> <span class="s2">&quot;video/mp4&quot;</span><span class="p">){</span> <span class="c1">//mp4 only</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">type</span> <span class="o">!==</span> <span class="s2">&quot;video/mp4&quot;</span><span class="p">){</span> <span class="c1">//mp4 only</span>
             <span class="nx">splat</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">showNotice</span><span class="p">(</span><span class="s1">&#39;Warning&#39;</span><span class="p">,</span> <span class="s1">&#39;Video must be an mp4!&#39;</span><span class="p">,</span> <span class="s1">&#39;alert-warning&#39;</span><span class="p">);</span>
-            <span class="k">return</span>
+            <span class="k">return</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">id</span><span class="p">){</span>
             <span class="nx">splat</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">showNotice</span><span class="p">(</span><span class="s1">&#39;Warning&#39;</span><span class="p">,</span> <span class="s1">&#39;Please save the movie first&#39;</span><span class="p">,</span> <span class="s1">&#39;alert-warning&#39;</span><span class="p">);</span>
-            <span class="k">return</span>
+            <span class="k">return</span><span class="p">;</span>
         <span class="p">}</span>
 
 </pre></div>
@@ -146,6 +146,9 @@
             <span class="nx">data</span><span class="o">:</span> <span class="nx">formdata</span><span class="p">,</span>
             <span class="nx">processData</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
             <span class="nx">contentType</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+            <span class="nx">beforeSend</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">){</span>
+                <span class="nx">jqXHR</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s2">&quot;X-CSRF-Token&quot;</span><span class="p">,</span> <span class="nx">splat</span><span class="p">.</span><span class="nx">token</span><span class="p">);</span>
+            <span class="p">},</span>
             <span class="nx">xhr</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>  <span class="c1">// custom xhr</span>
                 <span class="kd">var</span> <span class="nx">myXhr</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">ajaxSettings</span><span class="p">.</span><span class="nx">xhr</span><span class="p">();</span>
                 <span class="k">if</span><span class="p">(</span><span class="nx">myXhr</span><span class="p">.</span><span class="nx">upload</span><span class="p">){</span>
@@ -224,8 +227,9 @@ and user will be notified </p>
 <p>set the trailer input and model</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;input[name=trailer]&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">location</span><span class="p">.</span><span class="nx">origin</span> <span class="o">+</span> <span class="nx">res</span><span class="p">);</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">set</span><span class="p">({</span><span class="nx">trailer</span> <span class="o">:</span> <span class="nx">location</span><span class="p">.</span><span class="nx">origin</span> <span class="o">+</span> <span class="nx">res</span><span class="p">});</span>
+            <span class="kd">var</span> <span class="nx">videolink</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">escape</span><span class="p">(</span><span class="nx">location</span><span class="p">.</span><span class="nx">origin</span> <span class="o">+</span> <span class="nx">res</span><span class="p">);</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;input[name=trailer]&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">videolink</span><span class="p">);</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">set</span><span class="p">({</span><span class="nx">trailer</span> <span class="o">:</span> <span class="nx">videolink</span><span class="p">});</span>
             <span class="nx">splat</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">showNotice</span><span class="p">(</span><span class="s1">&#39;Note!&#39;</span><span class="p">,</span> <span class="s1">&#39;Video has been uploaded to server&#39;</span><span class="p">,</span> <span class="s1">&#39;alert-info&#39;</span><span class="p">);</span>
         <span class="p">}).</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">res</span><span class="p">){</span>
             <span class="nx">splat</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">requestFailed</span><span class="p">(</span><span class="nx">res</span><span class="p">);</span>
@@ -246,8 +250,8 @@ and user will be notified </p>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">change</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{};</span>
-        <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">name</span>
-        <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span>
+        <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">escape</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -260,7 +264,7 @@ and user will be notified </p>
 <p>properly format string input depending on field name.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">name</span> <span class="o">==</span> <span class="s1">&#39;starring&#39;</span> <span class="o">||</span> <span class="nx">name</span> <span class="o">==</span> <span class="s1">&#39;genre&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">name</span> <span class="o">===</span> <span class="s1">&#39;starring&#39;</span> <span class="o">||</span> <span class="nx">name</span> <span class="o">===</span> <span class="s1">&#39;genre&#39;</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -274,7 +278,7 @@ and user will be notified </p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
             <span class="nx">obj</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="nb">Function</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">call</span><span class="p">,</span> <span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">trim</span><span class="p">);</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">name</span> <span class="o">==</span> <span class="s1">&#39;duration&#39;</span><span class="p">){</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">name</span> <span class="o">===</span> <span class="s1">&#39;duration&#39;</span><span class="p">){</span>
             <span class="nx">obj</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
             <span class="nx">obj</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
