@@ -70,8 +70,8 @@ test("Test movie model/collection add/save, and callback functions.", function(a
         "add callback triggered by movies collection add()");
     // make sure user is logged out
     var user = new splat.User({
-        username: "tester",
-        password: "tester"
+        username: "a",
+        password: "a"
     });
     var auth = user.save(null, {
         type: 'put',
@@ -102,8 +102,8 @@ test("Test movie-delete triggers an error event if unauthenticated.", function(a
     });
     // make sure user is logged out
     var user = new splat.User({
-        username: "tester",
-        password: "tester"
+        username: "a",
+        password: "a"
     });
     var auth = user.save(null, {
         type: 'put',
@@ -149,14 +149,14 @@ test("Test movie create-delete succeeds in authenticated session.", function(ass
     movie.urlRoot = '/movies';
     // authenticate user with valid credentials
     var user = new splat.User({
-        username: "tester",
-        password: "tester",
+        username: "a",
+        password: "a",
         login: 1
     });
     var auth = user.save(null, {
         type: 'put',
         success: function(model, resp) {
-            assert.equal(resp.username, "tester",
+            assert.equal(resp.username, "a",
                 "Successful login with valid credentials");
             done1();
         }
@@ -230,8 +230,8 @@ test("Test movie-save succeeds if session is authenticated.", function(assert) {
     movie2.urlRoot = '/movies';
     // authenticate user with valid credentials
     var user = new splat.User({
-        username: "tester",
-        password: "tester",
+        username: "a",
+        password: "a",
         login: 1
     });
     var auth = user.save(null, {
@@ -328,8 +328,8 @@ test("Test review-create-delete if session is authenticated.", function(assert) 
     });
     // authenticate user with valid credentials
     var user = new splat.User({
-        username: "tester",
-        password: "tester",
+        username: "a",
+        password: "a",
         login: 1
     });
     var auth = user.save(null, {
@@ -423,8 +423,8 @@ test("Test review-create if session is not authenticated.", function(assert) {
     });
     // authenticate user with valid credentials
     var user = new splat.User({
-        username: "tester",
-        password: "tester",
+        username: "a",
+        password: "a",
         login: 1
     });
     var auth = user.save(null, {
@@ -450,8 +450,8 @@ test("Test review-create if session is not authenticated.", function(assert) {
     $.when(saveMovie).then(function() {
         // make sure user is logged out
         user = new splat.User({
-            username: "tester",
-            password: "tester"
+            username: "a",
+            password: "a"
         });
         auth = user.save(null, {
             type: 'put',
@@ -475,8 +475,8 @@ test("Test review-create if session is not authenticated.", function(assert) {
     $.when(saveReview).then(function() {
         // attempt to delete newly-saved movie
         user = new splat.User({
-            username: "tester",
-            password: "tester",
+            username: "a",
+            password: "a",
             login: 1
         });
         auth = user.save(null, {
@@ -515,8 +515,8 @@ test("Test movie schema validation in authenticated session.", function(assert) 
     movie.urlRoot = '/movies';
     // authenticate user with valid credentials
     var user = new splat.User({
-        username: "tester",
-        password: "tester",
+        username: "a",
+        password: "a",
         login: 1
     });
     var auth = user.save(null, {
@@ -580,8 +580,8 @@ test("Test movie dup constaints in authenticated session.", function(assert) {
     dupMovie.urlRoot = '/movies';
     // authenticate user with valid credentials
     var user = new splat.User({
-        username: "tester",
-        password: "tester",
+        username: "a",
+        password: "a",
         login: 1
     });
     var auth = user.save(null, {
