@@ -1,9 +1,12 @@
-NOTE: We are using 2 grace days to get the early submit bonus for A2.
+Note: (just in case)
+If running grunt, remember to change the port in the package.json to match config.js. Additionally, qunit requires a user called "a" with password "a".
 
-The process of saving the image to the server caused us the most trouble because there are no many different methods to do it...
-Some of the highlights:
+Unit testing was a little hard to get started with.
+
+Some of the highlights (mostly from A2): 
 1) Make the app sync across all clients
 2) Added functionality to upload video, although it is not perfect because It will overwrite any existing video if it exists and it will persist even without clicking "Save Changes" but I added it for the learning experience and convinience.
 3) we also split the movie thumbs so that the clicking the video section only plays the video instead of opening the edit form because this worked better on other browsers like Mozilla and makes more sense in my opinion.
 4) from A1, I keep the aspect ratio of the original image instead of stretching.
 5) we also fixed the notification bar to the top to make it more noticable (on mobile for example) and made it so that the it doesn't affect clicks to the navigation bar when present.
+6) The automatically log the user back in if there session is still active.

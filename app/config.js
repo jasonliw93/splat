@@ -2,7 +2,7 @@
 
 module.exports = {
 	env : 'dev',
-	port : 41261,
+	port : 41260,
 	dbuser : 'liwyanch',
 	dbpass : 'Password1',
 	dbname : 'liwyanch',
