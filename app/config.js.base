@@ -11,8 +11,6 @@ module.exports = {
 	basicAuthPass : '123456',
 	basicAuth : false,
 	sessionSecret: "super secret session",
-	sessionTimeout : 30 * 60 * 1000
-	testerUser: 'tester',
-	testerPass: 'tester'
+	sessionTimeout : 30 * 60 * 1000,
 };
 
