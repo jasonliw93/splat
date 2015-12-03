@@ -49,7 +49,7 @@ test("Test movie model/collection add/save, and callback functions.", function(a
         "duration": 109,
         "freshTotal": 18,
         "freshVotes": 27,
-        "poster": "img/uploads/5627f969b8236b2b7c0a37b6.jpeg?1448200894795",
+        "poster": "img/placeholder.png",
         "rating": "R",
         "released": "1999",
         "synopsis": "great thriller",
@@ -137,7 +137,7 @@ test("Test movie create-delete succeeds in authenticated session.", function(ass
         "duration": 109,
         "freshTotal": 18,
         "freshVotes": 27,
-        "poster": "img/uploads/5627f969b8236b2b7c0a37b6.jpeg?1448200894795",
+        "poster": "img/placeholder.png",
         "rating": "R",
         "released": "1999",
         "synopsis": "great thriller",
@@ -187,7 +187,7 @@ test("Test movie create-delete succeeds in authenticated session.", function(ass
             }
         });
     });
-
+    // attempt to delete a movie twice
     $.when(deleteMovie).then(function() {
         movie.destroy({
             error: function(model, resp) {
@@ -201,79 +201,6 @@ test("Test movie create-delete succeeds in authenticated session.", function(ass
 
 });
 
-test("Test movie create-delete succeeds in authenticated session.", function(assert) {
-    assert.expect(4);
-    var done1 = assert.async();
-    var done2 = assert.async();
-    var done3 = assert.async();
-    var done4 = assert.async();
-    var movie = new splat.Movie({
-        "__v": 0,
-        "dated": "2015-10-21T20:44:27.403Z",
-        "director": "Sean Penn",
-        "duration": 109,
-        "freshTotal": 18,
-        "freshVotes": 27,
-        "poster": "img/uploads/5627f969b8236b2b7c0a37b6.jpeg?1448200894795",
-        "rating": "R",
-        "released": "1999",
-        "synopsis": "great thriller",
-        "title": "Zorba Games",
-        "trailer": "http://archive.org",
-        "genre": ["action"],
-        "starring": ["Bruce Willis", "Amy Winemouse"]
-    }); // model
-    movie.urlRoot = '/movies';
-    // authenticate user with valid credentials
-    var user = new splat.User({
-        username: "tester",
-        password: "tester",
-        login: 1
-    });
-    var auth = user.save(null, {
-        type: 'put',
-        success: function(model, resp) {
-            assert.equal(resp.username, "tester",
-                "Successful login with valid credentials");
-            done1();
-        }
-    });
-    var saveMovie = $.Deferred();
-    auth.done(function() {
-        // create new movie model in DB
-        movie.save(null, {
-            wait: true,
-            success: function(model, resp) {
-                assert.notEqual(resp._id, undefined,
-                    "Saving new model succeeds when authenticated");
-                saveMovie.resolve();
-                done2();
-            }
-        });
-    });
-    // when authentication and saving async calls have completed
-    var deleteMovie = $.Deferred();
-    $.when(auth, saveMovie).then(function() {
-        // attempt to delete newly-saved movie
-        movie.destroy({
-            success: function(model, resp) {
-                assert.equal(resp.responseText, "movie deleted",
-                    "Deleting returns 200 status code");
-                deleteMovie.resolve();
-                done3();
-            }
-        });
-    });
-    $.when(deleteMovie).then(function() {
-        movie.fetch({
-            error: function(model, resp) {
-                assert.equal(resp.status, 404,
-                    "Deleting worked and fetch returns 404 status code");
-                done4();
-            }
-        });
-    });
-});
 
 test("Test movie-save succeeds if session is authenticated.", function(assert) {
     assert.expect(2);
@@ -289,7 +216,7 @@ test("Test movie-save succeeds if session is authenticated.", function(assert) {
         "duration": 109,
         "freshTotal": 18,
         "freshVotes": 27,
-        "poster": "img/uploads/5627f969b8236b2b7c0a37b6.jpeg?1448200894795",
+        "poster": "img/placeholder.png",
         "rating": "R",
         "released": "1999",
         "synopsis": "great thriller",
@@ -382,7 +309,7 @@ test("Test review-create-delete if session is authenticated.", function(assert) 
         "duration": 109,
         "freshTotal": 18,
         "freshVotes": 27,
-        "poster": "img/uploads/5627f969b8236b2b7c0a37b6.jpeg?1448200894795",
+        "poster": "img/placeholder.png",
         "rating": "R",
         "released": "1999",
         "synopsis": "great thriller",
@@ -477,7 +404,7 @@ test("Test review-create if session is not authenticated.", function(assert) {
         "duration": 109,
         "freshTotal": 18,
         "freshVotes": 27,
-        "poster": "img/uploads/5627f969b8236b2b7c0a37b6.jpeg?1448200894795",
+        "poster": "img/placeholder.png",
         "rating": "R",
         "released": "1999",
         "synopsis": "great thriller",
@@ -566,87 +493,6 @@ test("Test review-create if session is not authenticated.", function(assert) {
 
 });
 
-test("Test movie-save image succeeds if session is authenticated.", function(assert) {
-    assert.expect(2);
-    var done1 = assert.async();
-    var done2 = assert.async();
-    var done3 = assert.async();
-    var done4 = assert.async();
-    var movie = new splat.Movie({
-        "__v": 0,
-        "dated": "2015-10-21T20:44:27.403Z",
-        "director": "Sean Penn",
-        "duration": 109,
-        "freshTotal": 18,
-        "freshVotes": 27,
-        "poster": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAD/AcIDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD8qqKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD/9k=",
-        "rating": "R",
-        "released": "1999",
-        "synopsis": "great thriller",
-        "title": "Zorba Games",
-        "trailer": "http://archive.org",
-        "genre": ["action"],
-        "starring": ["Bruce Willis", "Amy Winemouse"]
-    }); // model
-    movie.urlRoot = '/movies';
-    var image = new Image();
-    // authenticate user with valid credentials
-    var user = new splat.User({
-        username: "tester",
-        password: "tester",
-        login: 1
-    });
-    var auth = user.save(null, {
-        type: 'put',
-        success: function(model, resp) {
-            done1();
-        }
-    });
-
-    var saveMovie = $.Deferred();
-    // create movie
-    auth.done(function() {
-        movie.save(null, {
-            wait: true,
-            success: function(model, resp) {
-                assert.equal(resp.poster.split('?')[0], 'img/uploads/' + resp._id + '.jpeg',
-                    "image saved properly");
-                image.src = "../" + resp.poster;
-                saveMovie.resolve();
-                done2();
-            }
-        });
-    });
-    var compareImage = $.Deferred();
-    image.onload = function() {
-            var canvas = document.createElement("canvas");
-            canvas.width = image.width;
-            canvas.height = image.height;
-            // Copy the image contents to the canvas
-            var ctx = canvas.getContext("2d");
-            ctx.drawImage(image, 0, 0);
-
-            // Get the data-URL formatted image
-            // Firefox supports PNG and JPEG. You could check img.src to
-            // guess the original format, but be aware the using "image/jpg"
-            // will re-encode the image.
-            var dataURL = canvas.toDataURL("image/jpeg");
-            assert.equal(dataURL, "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAD/AcIDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD8qqKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD/9k=");
-            compareImage.resolve();
-            done3();
-        }
-        // delete movie
-    $.when(compareImage).then(function() {
-        // attempt to delete newly-saved movie
-        movie.destroy({
-            success: function(model, resp) {
-                done4();
-            }
-        });
-    });
-
-});
-
 test("Test movie schema validation in authenticated session.", function(assert) {
     assert.expect(1);
     var done1 = assert.async();
@@ -658,7 +504,7 @@ test("Test movie schema validation in authenticated session.", function(assert) 
         "duration": 109,
         "freshTotal": 18,
         "freshVotes": 27,
-        "poster": "img/uploads/5627f969b8236b2b7c0a37b6.jpeg?1448200894795",
+        "poster": "img/placeholder.png",
         "rating": "R",
         "released": "1999",
         "synopsis": "great thriller",
@@ -705,7 +551,7 @@ test("Test movie dup constaints in authenticated session.", function(assert) {
         "duration": 109,
         "freshTotal": 18,
         "freshVotes": 27,
-        "poster": "img/uploads/5627f969b8236b2b7c0a37b6.jpeg?1448200894795",
+        "poster": "img/placeholder.png",
         "rating": "R",
         "released": "1999",
         "synopsis": "great thriller",
@@ -721,7 +567,7 @@ test("Test movie dup constaints in authenticated session.", function(assert) {
         "duration": 109,
         "freshTotal": 18,
         "freshVotes": 27,
-        "poster": "img/uploads/5627f969b8236b2b7c0a37b6.jpeg?1448200894795",
+        "poster": "img/placeholder.png",
         "rating": "R",
         "released": "1999",
         "synopsis": "great thriller",
