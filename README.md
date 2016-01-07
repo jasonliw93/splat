@@ -1,3 +1,3 @@
-#CSCC09 Splat
+#Splat
 ##Melody Leung and Jason Liw
 
