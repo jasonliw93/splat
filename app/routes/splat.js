@@ -170,7 +170,8 @@ var Review = mongoose.model('Review', ReviewSchema);
 
 // heartbeat response for server API
 exports.api = function(req, res) {
-    res.send(200, '<h3>Splat! 0.2 API is running!</h3><a href="index.html">Splat</a>');
+    res.redirect('index.html');
+    //res.send(200, '<h3>Splat! 0.2 API is running!</h3><a href="index.html">Splat</a>');
 };
 
 // retrieve an individual movie model, using it's id as a DB key

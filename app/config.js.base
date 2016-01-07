@@ -2,15 +2,12 @@
 
 module.exports = {
 	env : 'dev',
-	port : 41261,
-	dbuser : 'liwyanch',
-	dbpass : 'Password1',
-	dbname : 'liwyanch',
-	dbhost : '10.15.2.164',
-	basicAuthUser : 'jason',
-	basicAuthPass : '123456',
-	basicAuth : false,
-	sessionSecret: "super secret session",
+	port : 8000,
+	dbuser : 'USERNAME',
+	dbpass : 'PASSWORD',
+	dbname : 'DBNAME',
+	dbhost : 'DBHOST',
+	sessionSecret: "super secret phrase",
 	sessionTimeout : 30 * 60 * 1000,
 };
 
