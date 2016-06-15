@@ -1,85 +1,91 @@
+// Gruntfile.js
 module.exports = function(grunt) {
-    grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
 
-        uglify: {
-            options: {
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
-            },
-            build: {
-                src: [
-                    'public/js/utils.js',
-                    'public/js/models/review.js',
-                    'public/js/models/movie.js',
-                    'public/js/models/user.js',
-                    'public/js/collections/reviews.js',
-                    'public/js/collections/movies.js',
-                    'public/js/collections/users.js',
-                    'public/js/views/about.js',
-                    'public/js/views/details.js',
-                    'public/js/views/header.js',
-                    'public/js/views/home.js',
-                    'public/js/views/movie.js',
-                    'public/js/views/movieform.js',
-                    'public/js/views/movieformactions.js',
-                    'public/js/views/movieposter.js',
-                    'public/js/views/movies.js',
-                    'public/js/views/review.js',
-                    'public/js/views/reviewer.js',
-                    'public/js/views/reviewsview.js',
-                    'public/js/views/reviewthumbs.js',
-                    'public/js/views/signin.js',
-                    'public/js/views/signup.js',
-                    'public/js/main.js',
-                ],
-                dest: 'public/js/<%= pkg.name %>-min.js'
-            },
-        },
+  grunt.initConfig({
 
-        qunit: {
-            options: {
-                '--ignore-ssl-errors': true
-            },
-            all: {
-                options: {
-                    urls: ['https://mathlab.utsc.utoronto.ca:<%= pkg.port %>/test/test.html']
-                }
-            }
-        },
+    // JS TASKS ================================================================
+    // check all js files for errors
+    jshint: {
+      all: ['public/src/js/**/*.js'] 
+    },
 
-        jshint: {
-            options: {
-                curly: true, // require curly braces around all blocks
-                eqeqeq: true, // require use of exact equality comparison
-                nonew: true, // prohibit use of Constructor for side effects
-                undef: true, // prohibit use of explicitly undeclared var's
-                unused: true, // warn on variables that are defined but not used
-                // want browser false for server-side code, true for client-side
-                browser: false, // expose globals defined by browsers
-                devel: true, // expose globals used for debugging, s.a. console
-                globals: {
-                    jQuery: true,
-                    _: false,
-                    $: false,
-                    Backbone: true
-                },
-                ignores: ['public/js/lib/**/*.js', 'public/js/splat-min.js'],
-                reporter: require('jshint-html-reporter'),
-                reporterOutput: 'public/jshint_report.html'
-            },
-            files: {
-                src: ['public/js/**/*.js']
-            }
+    // take all the js files and minify them into app.min.js
+    uglify: {
+      build: {
+        files: {
+          'public/dist/js/app.min.js': ['public/src/js/**/*.js', 'public/src/js/*.js']
         }
+      }
+    },
 
-    });
+    // CSS TASKS ===============================================================
+    // process the less file to style.css
+    less: {
+      build: {
+        files: {
+          'public/dist/css/style.css': 'public/src/css/style.less'
+        }
+      }
+    },
 
-    // Load plugins for , "uglify", "qunit", "jshint"
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-qunit');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
+    // take the processed style.css file and minify
+    cssmin: {
+      build: {
+        files: {
+          'public/dist/css/style.min.css': 'public/dist/css/style.css'
+        }
+      }
+    },
 
-    // Default task(s)
-    grunt.registerTask('default', ['jshint', 'uglify', 'qunit']);
+    // COOL TASKS ==============================================================
+    // watch css and js files and process the above tasks
+    watch: {
+      css: {
+        files: ['public/src/css/**/*.less'],
+        tasks: ['less', 'cssmin']
+      },
+      js: {
+        files: ['public/src/js/**/*.js'],
+        tasks: ['jshint', 'uglify']
+      }
+    },
+
+    // watch our node server for changes
+    nodemon: {
+      dev: {
+        script: 'app.js'
+      }
+    },
+
+    // run watch and nodemon at the same time
+    concurrent: {
+      options: {
+        logConcurrentOutput: true
+      },
+      tasks: [
+        'nodemon', 
+        //'watch'
+      ]
+    }   
+
+  });
+
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-nodemon');
+  grunt.loadNpmTasks('grunt-concurrent');
+
+  grunt.registerTask('default', 
+    [
+    'nodemon'
+    //'less', 
+    //'cssmin', 
+    //'jshint', 
+    //'uglify', 
+    //'concurrent'
+    ]);
 
 };
