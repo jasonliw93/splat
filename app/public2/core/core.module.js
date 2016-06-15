@@ -1,0 +1,1 @@
+angular.module('core', ['core.movie', 'core.review', 'core.user']);

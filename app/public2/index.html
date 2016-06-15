@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="splatApp">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Splat!</title>
+    <!--ensure devices display responsive-bootstrap pages properly-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css" />
+
+    <link href="css/styles.css" rel="stylesheet">
+    <link rel='shortcut icon' type='image/x-icon' href='img/favicon.png' />
+
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script src="utils.js"></script>
+    <script src="app.module.js"></script>
+    <script src="app.config.js"></script>
+    <script src="core/core.module.js"></script>
+    <script src="core/trusted/trusted.filter.js"></script>
+    <script src="core/movie/movie.module.js"></script>
+    <script src="core/movie/movie.service.js"></script>
+    <script src="core/review/review.module.js"></script>
+    <script src="core/review/review.service.js"></script>
+    <script src="core/user/user.module.js"></script>
+    <script src="core/user/user.service.js"></script>
+    <script src="components/header/header.module.js"></script>
+    <script src="components/header/header.component.js"></script>
+    <script src="components/register/register.module.js"></script>
+    <script src="components/register/register.component.js"></script>
+    <script src="components/login/login.module.js"></script>
+    <script src="components/login/login.component.js"></script>
+    <script src="components/movie-list/movie-list.module.js"></script>
+    <script src="components/movie-list/movie-list.component.js"></script>
+    <script src="components/movie-detail/movie-detail.module.js"></script>
+    <script src="components/movie-detail/movie-detail.component.js"></script>
+    <script src="components/movie-form/movie-form.module.js"></script>
+    <script src="components/movie-form/movie-form.component.js"></script>
+    <script src="components/movie-poster/movie-poster.module.js"></script>
+    <script src="components/movie-poster/movie-poster.component.js"></script>
+    <script src="components/movie-poster/movie-poster.directive.js"></script>
+    <script src="components/review-list/review-list.module.js"></script>
+    <script src="components/review-list/review-list.component.js"></script>
+</head>
+
+<body>
+    <!-- HTML5 markup for view content, labelled with Bootstrap class names -->
+    <header class="header"></header>
+    <!-- full-width content container, spanning entire viewport -->
+    <!-- Background image-->
+    <img id="splash" src='img/home_bg.jpg'>
+    <main class="container-fluid">
+        <!-- row for use in Bootstrap grid layout -->
+        <div class="row" id="mainrow">
+            <div id="content" ng-view></div>
+        </div>
+        <!-- row -->
+    </main>
+
+    <footer class="footer">
+        &copy; Jason & Melody</p>
+    </footer>
+    <!-- container-fluid -->
+
+    <!-- load scripts last for better UI performance -->
+
+    <!-- library scripts you use 
+
+    <script src="splat-min.js" type="text/javascript"></script>
+    -->
+    <!-- set CSRF token -->
+    <script type="text/javascript">
+        var splat = splat || {};
+        splat.token = '<%= csrftoken %>';
+        
+        splat.userid = '<%= userid %>';
+        splat.username = '<%= username %>';
+        splat.auth =  'true' == '<%= auth %>' ;
+    </script>
+    
+
+</body>
+
+</html>

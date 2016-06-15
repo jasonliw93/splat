@@ -10,9 +10,9 @@ var fs = require('fs'),
     bcrypt = require("bcrypt");
 
 // create image-upload directory if it does not exist 
-fs.exists(__dirname + '/../public/img/uploads', function(exists) {
+fs.exists(__dirname + '/../public2/img/uploads', function(exists) {
     if (!exists) {
-        fs.mkdir(__dirname + '/../public/img/uploads', function(err) {
+        fs.mkdir(__dirname + '/../public2/img/uploads', function(err) {
             if (err) {
                 process.exit(1); // can this be cleaned up with throw error???
             };
@@ -21,9 +21,9 @@ fs.exists(__dirname + '/../public/img/uploads', function(exists) {
 });
 
 // create video-upload directory if it does not exist 
-fs.exists(__dirname + '/../public/img/videos', function(exists) {
+fs.exists(__dirname + '/../public2/img/videos', function(exists) {
     if (!exists) {
-        fs.mkdir(__dirname + '/../public/img/videos', function(err) {
+        fs.mkdir(__dirname + '/../public2/img/videos', function(err) {
             if (err) {
                 process.exit(1); // can this be cleaned up with throw error???
             };
@@ -207,7 +207,7 @@ function savePoster(movie, callback) {
         var ext = match[1];
         var data = match[2];
         var imageURL = 'img/uploads/' + movie.id + "." + ext;
-        var newPath = __dirname + '/../public/' + imageURL;
+        var newPath = __dirname + '/../public2/' + imageURL;
         // write the data to file
         fs.writeFile(newPath, data, 'base64', function(err) {
             if (err) {
@@ -227,26 +227,23 @@ function savePoster(movie, callback) {
     }
 }
 
+
 // creates a new movie model
 exports.addMovie = function(req, res) {
     var movie = new Movie(req.body);
     movie.userId = req.session.userid;
-    savePoster(movie, function() {
+    savePoster(movie, function(){
         movie.save(function(err, result) {
             if (!err) {
                 res.status(200).send(movie);
-                broadcastEvent({
-                    model: "movie",
-                    movieId: movie.id,
-                    action: 'add'
-                });
             } else if (err.message && err.message.indexOf("E11000") > -1) {
                 res.status(403).send("Sorry, movie " + movie.title + " directed by " + movie.director + " has already been created");
             } else {
-                res.status(500).send('Unable to save movie at this time: ' + 'please try again later ' + err.message);
+                console.log(err)
+                res.status(500).send('Unable to save movie at this time: ' + 'please try again later.  ' + err.message);
             }
         });
-    });
+    });    
 };
 
 // edits movie model if the model can be found
@@ -264,11 +261,6 @@ exports.editMovie = function(req, res) {
                 movie.save(function(saveErr, result) {
                     if (!saveErr) {
                         res.status(200).send(movie);
-                        broadcastEvent({
-                            model: "movie",
-                            movieId: movie.id,
-                            action: 'edit'
-                        });
                     } else if (saveErr.err && saveErr.err.indexOf("E11000") !== -1) {
                         res.status(403).send("Sorry, movie " + req.body.title + " directed by " + req.body.director + " already exists.");
                     } else if (saveErr.message) {
@@ -290,14 +282,14 @@ exports.deleteMovie = function(req, res) {
         } else if (!movie) {
             res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
         } else {
-            fs.unlink(__dirname + '/../public/img/uploads/' + movie.id + '.jpeg', function(uerr) {
+            fs.unlink(__dirname + '/../public2/img/uploads/' + movie.id + '.jpeg', function(uerr) {
                 if (uerr) {
                     console.log('poster image not deleted : ' + movie.id + '. ' + uerr);
                 } else {
                     console.log('poster image deleted : ' + movie.id);
                 }
             });
-            fs.unlink(__dirname + '/../public/videos/' + movie.id + '.mp4', function(uerr) {
+            fs.unlink(__dirname + '/../public2/videos/' + movie.id + '.mp4', function(uerr) {
                 if (uerr) {
                     console.log('movie trailer not deleted : ' + movie.id + '. ' + uerr);
                 } else {
@@ -314,14 +306,7 @@ exports.deleteMovie = function(req, res) {
                     console.log('removed reviews');
                 }
             });
-            res.status(200).send({
-                "responseText": "movie deleted"
-            });
-            broadcastEvent({
-                model: "movie",
-                movieId: movie.id,
-                action: "remove"
-            });
+            res.status(200).send(movie);
         }
     });
 };
@@ -351,11 +336,6 @@ exports.addReview = function(req, res) {
                             res.status(500).send("Sorry, unable to update movie at this time (" + err.message + ")");
                         } else {
                             res.status(200).send(review);
-                            broadcastEvent({
-                                model: "review",
-                                movieId: req.params.id,
-                                action: "add"
-                            });
                         }
                     });
                 }
@@ -389,7 +369,7 @@ exports.uploadVideo = function(req, res) {
         // id parameter is the movie's "id" attribute as a string value
         videoURL = '/movies/' + req.params.id + '/video',
         // rename the image file to match the imageURL
-        newPath = __dirname + '/../public/img/videos/' + req.params.id + suffix;
+        newPath = __dirname + '/../public2/img/videos/' + req.params.id + suffix;
     fs.rename(filePath, newPath, function(err) {
         if (!err) {
             res.status(200).send(videoURL);
@@ -401,7 +381,7 @@ exports.uploadVideo = function(req, res) {
 
 // handles video playback of trailer video on server
 exports.playMovie = function(req, res) {
-    var file = path.resolve(__dirname, "../public/img/videos/" + req.params.id + ".mp4");
+    var file = path.resolve(__dirname, "../public2/img/videos/" + req.params.id + ".mp4");
     var range = req.headers.range;
     var positions = range.replace(/bytes=/, "").split("-");
     var start = parseInt(positions[0], 10);
@@ -550,38 +530,55 @@ function encryptPassword(user, callback) {
 }
 
 // Server Sent Events
-var subscribers = []; // array of active subscribers
+exports.movieSubscription = new Subscription();
+exports.reviewSubscription = new Subscription();
 
-exports.subscribeEvents = function(req, res) {
-    // set timeout as high as possible
-    res.setTimeout(0);
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
-    res.setHeader('Connection', 'keep-alive');
-    res.write("\n");
-    // push this res object to our global variable
-    subscribers.push(res);
-    // When the request is closed, e.g. the browser window
-    // is closed. We search through the open connections
-    // array and remove this connection.
-    req.on("close", function() {
-        var toRemove;
-        for (var j = 0; j < subscribers.length; j++) {
-            if (subscribers[j] == res) {
-                toRemove = j;
-                break;
+
+function Subscription(){
+    var self = this;
+    self.subscribers = []; // array of active subscribers
+
+    self.subscribe = function(req, res) {
+        // set timeout as high as possible
+        res.setTimeout(0);
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'text/event-stream');
+        res.setHeader('Cache-Control', 'no-cache');
+        res.setHeader('Connection', 'keep-alive');
+        res.write("\n");
+        // push this res object to our global variable
+        self.subscribers.push(res);
+        // When the request is closed, e.g. the browser window
+        // is closed. We search through the open connections
+        // array and remove this connection.
+        req.on("close", function() {
+            var toRemove;
+            for (var j = 0; j < self.subscribers.length; j++) {
+                if (self.subscribers[j] == res) {
+                    toRemove = j;
+                    break;
+                }
             }
-        }
-        subscribers.splice(j, 1);
-    });
+            self.subscribers.splice(j, 1);
+        });
 
-};
+    };
 
-// Write data to each subscriber's stream
-function broadcastEvent(data) {
-    subscribers.forEach(function(res) {
-        res.write("id: " + new Date().valueOf() + "\n");
-        res.write("data: " + JSON.stringify(data) + "\n\n");
-    });
+    // Write data to each subscriber's stream
+    self.broadcast = function(req, res, next) {
+        res.on("finish", function(){
+            var data = { "method" : res.req.method, "model" : res.model };
+            self.subscribers.forEach(function(subscriber) {
+                subscriber.write("id: " + new Date().valueOf() + "\n");
+                subscriber.write("data: " + JSON.stringify(data) + "\n\n");
+            });
+        })
+        var send = res.send;
+        res.send = function(model){
+          res.model = model;
+          res.send = send;
+          res.send(model);
+        };
+        next();
+    }
 }

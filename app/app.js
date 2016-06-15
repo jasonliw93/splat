@@ -54,10 +54,9 @@ if (config.basicAuth) {
 app.use(logger('dev')); // 'default', 'short', 'tiny', 'dev'
 
 // placed before compression otherwise it will not work
-app.get('/events', splat.subscribeEvents);
-
+// app.get('/movies/events', splat.movieSubscription.subscribe);
 // use compression (gzip) to reduce size of HTTP responses
-app.use(compression());
+// app.use(compression());
 
 // parse HTTP request body
 app.use(bodyParser.json({
@@ -70,7 +69,7 @@ app.use(bodyParser.urlencoded({
 
 // set file-upload directory for trailer videos
 var movieMulter = multer({
-    dest: __dirname + '/public/img/videos/',
+    dest: __dirname + '/public2/img/videos/',
     limits: {
         files: 1,
         fileSize: 5 * 1024 * 1024
@@ -100,7 +99,7 @@ app.use(methodOverride());
 
 app.engine('.html', require('ejs').__express);
 
-app.set('views', __dirname + '/public');
+app.set('views', __dirname + '/public2');
 
 app.get('/*', function(req, res, next) {
     res.setHeader('Strict-Transport-Security', 'max-age=604800');
@@ -132,6 +131,9 @@ app.get('/test/test.html', function(req, res) {
 // Heartbeat test of server API
 app.get('/', splat.api);
 
+// Placed here temporarely
+app.get('/movies/events', splat.movieSubscription.subscribe);
+
 // Retrieve a single movie by its id attribute
 app.get('/movies/:id', splat.getMovie);
 
@@ -139,19 +141,22 @@ app.get('/movies/:id', splat.getMovie);
 app.get('/movies', splat.getMovies);
 
 // Create a new movie in the collection
-app.post('/movies', isAuthd, splat.addMovie);
+app.post('/movies', [isAuthd, splat.movieSubscription.broadcast], splat.addMovie);
 
 // Update an existing movie in the collection
-app.put('/movies/:id', [isAuthd, splat.hasPermission], splat.editMovie);
+app.put('/movies/:id', [isAuthd, splat.hasPermission, splat.movieSubscription.broadcast], splat.editMovie);
 
 // Delete a movie from the collection
-app.delete('/movies/:id', [isAuthd, splat.hasPermission], splat.deleteMovie);
+app.delete('/movies/:id', [isAuthd, splat.hasPermission, splat.movieSubscription.broadcast], splat.deleteMovie);
+
+
+app.get('/movies/:id/reviews/events', splat.reviewSubscription.subscribe);
 
 // Retrieve a collection of reviews for movie with given id
 app.get('/movies/:id/reviews', splat.getReviews);
 
 // Create a new review in the collection
-app.post('/movies/:id/reviews', isAuthd, splat.addReview);
+app.post('/movies/:id/reviews', [isAuthd, splat.reviewSubscription.broadcast, splat.movieSubscription.broadcast], splat.addReview);
 
 // Video playback request
 app.get('/movies/:id/video', splat.playMovie);
@@ -166,10 +171,11 @@ app.put('/auth', splat.auth);
 app.post('/auth', splat.signup);
 
 // location of app's static content
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/public2"));
 
 // allow browsing of docs directory
-app.use('/docs', directory(__dirname + "/public/docs/"));
+app.use('/docs', directory(__dirname + "/public2/docs/"));
+
 
 app.use(function(err, req, res, next) {
     if (err.code == 'EBADCSRFTOKEN') {
@@ -188,7 +194,7 @@ app.use(errorHandler({
 
 // Default-route middleware in case none of above match
 app.use(function(req, res) {
-    res.status(404).send('<h3>File Not Found</h3>');
+    res.status(404).send(req);
 });
 
 var options = {
