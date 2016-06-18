@@ -10,9 +10,9 @@ var fs = require('fs'),
     bcrypt = require("bcrypt");
 
 // create image-upload directory if it does not exist 
-fs.exists(__dirname + '/../public2/img/uploads', function(exists) {
+fs.exists(__dirname + '/../public/img/uploads', function(exists) {
     if (!exists) {
-        fs.mkdir(__dirname + '/../public2/img/uploads', function(err) {
+        fs.mkdir(__dirname + '/../public/img/uploads', function(err) {
             if (err) {
                 process.exit(1); // can this be cleaned up with throw error???
             };
@@ -21,9 +21,9 @@ fs.exists(__dirname + '/../public2/img/uploads', function(exists) {
 });
 
 // create video-upload directory if it does not exist 
-fs.exists(__dirname + '/../public2/img/videos', function(exists) {
+fs.exists(__dirname + '/../public/img/videos', function(exists) {
     if (!exists) {
-        fs.mkdir(__dirname + '/../public2/img/videos', function(err) {
+        fs.mkdir(__dirname + '/../public/img/videos', function(err) {
             if (err) {
                 process.exit(1); // can this be cleaned up with throw error???
             };
@@ -207,7 +207,7 @@ function savePoster(movie, callback) {
         var ext = match[1];
         var data = match[2];
         var imageURL = 'img/uploads/' + movie.id + "." + ext;
-        var newPath = __dirname + '/../public2/' + imageURL;
+        var newPath = __dirname + '/../public/' + imageURL;
         // write the data to file
         fs.writeFile(newPath, data, 'base64', function(err) {
             if (err) {
@@ -282,14 +282,14 @@ exports.deleteMovie = function(req, res) {
         } else if (!movie) {
             res.status(404).send("Sorry, that movie doesn't exist; try reselecting from Browse view");
         } else {
-            fs.unlink(__dirname + '/../public2/img/uploads/' + movie.id + '.jpeg', function(uerr) {
+            fs.unlink(__dirname + '/../public/img/uploads/' + movie.id + '.jpeg', function(uerr) {
                 if (uerr) {
                     console.log('poster image not deleted : ' + movie.id + '. ' + uerr);
                 } else {
                     console.log('poster image deleted : ' + movie.id);
                 }
             });
-            fs.unlink(__dirname + '/../public2/videos/' + movie.id + '.mp4', function(uerr) {
+            fs.unlink(__dirname + '/../public/videos/' + movie.id + '.mp4', function(uerr) {
                 if (uerr) {
                     console.log('movie trailer not deleted : ' + movie.id + '. ' + uerr);
                 } else {
@@ -369,7 +369,7 @@ exports.uploadVideo = function(req, res) {
         // id parameter is the movie's "id" attribute as a string value
         videoURL = '/movies/' + req.params.id + '/video',
         // rename the image file to match the imageURL
-        newPath = __dirname + '/../public2/img/videos/' + req.params.id + suffix;
+        newPath = __dirname + '/../public/img/videos/' + req.params.id + suffix;
     fs.rename(filePath, newPath, function(err) {
         if (!err) {
             res.status(200).send(videoURL);
@@ -381,7 +381,7 @@ exports.uploadVideo = function(req, res) {
 
 // handles video playback of trailer video on server
 exports.playMovie = function(req, res) {
-    var file = path.resolve(__dirname, "../public2/img/videos/" + req.params.id + ".mp4");
+    var file = path.resolve(__dirname, "../public/img/videos/" + req.params.id + ".mp4");
     var range = req.headers.range;
     var positions = range.replace(/bytes=/, "").split("-");
     var start = parseInt(positions[0], 10);

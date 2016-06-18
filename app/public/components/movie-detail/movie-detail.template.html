@@ -1,0 +1,34 @@
+<!-- Format details for MovieForm.html-->
+<div class="row">
+    <div class="col-xs-12 col-sm-6">
+        <!-- col 1 -->
+        <movie-form movie="vm.movie">
+        </movie-form>
+    </div>
+    <!-- end column 1 -->
+
+    <!-- Movie poster placement in MovieForm.html-->
+    <div class="col-xs-12 col-sm-6">
+        <!-- col 2 -->
+        <div class="row" id="movieformactions">
+            <div class="col-xs-4">
+                <review-swatch ng-show="vm.movie._id" movie="vm.movie"></review-swatch>
+            </div>
+            <!-- Button for movie changes-->
+
+            <div class="col-xs-8">
+                <div class="editActions">
+                    <input type="button" id="moviesave" class="btn btn-primary save" name="save" value="Save Changes"
+                           ng-click="vm.save()"/>
+                    <input type="button" id="moviedel" class="btn btn-danger delete" name="delete" value="Delete Movie"
+                           ng-click="vm.delete()"/>
+                </div>
+            </div>
+        </div>
+
+        <movie-poster movie="vm.movie">
+        </movie-poster>
+    </div>
+    <!-- end column 2 -->
+</div>
+<!-- row -->

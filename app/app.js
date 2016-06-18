@@ -69,7 +69,7 @@ app.use(bodyParser.urlencoded({
 
 // set file-upload directory for trailer videos
 var movieMulter = multer({
-    dest: __dirname + '/public2/img/videos/',
+    dest: __dirname + '/public/img/videos/',
     limits: {
         files: 1,
         fileSize: 5 * 1024 * 1024
@@ -99,7 +99,7 @@ app.use(methodOverride());
 
 app.engine('.html', require('ejs').__express);
 
-app.set('views', __dirname + '/public2');
+app.set('views', __dirname + '/public');
 
 app.get('/*', function(req, res, next) {
     res.setHeader('Strict-Transport-Security', 'max-age=604800');
@@ -171,10 +171,10 @@ app.put('/auth', splat.auth);
 app.post('/auth', splat.signup);
 
 // location of app's static content
-app.use(express.static(__dirname + "/public2"));
+app.use(express.static(__dirname + "/public"));
 
 // allow browsing of docs directory
-app.use('/docs', directory(__dirname + "/public2/docs/"));
+app.use('/docs', directory(__dirname + "/public/docs/"));
 
 
 app.use(function(err, req, res, next) {

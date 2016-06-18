@@ -1,0 +1,65 @@
+<!-- Navigation Bar-->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <!-- when header collapses, display a dropdown with 3 icon-bar's -->
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <!-- Button Name for homepage Splat -->
+            <ul class="nav navbar-nav home-menu">
+                <li>
+                    <a class="navbar-brand" href="#">Splat!</a>
+                </li>
+            </ul>
+        </div>
+
+        <div id="nav-collapse" class="navbar-collapse collapse">
+            <!-- Button for About page-->
+            <ul class="nav navbar-nav pull-left">
+                <!-- adjust the link to change its behavior -->
+                <li id="orderdrop" class="browse-menu dropdown">
+                    <a id="ordering" href="#!/movies">Browse Movies</a>
+                    <div class="dropdown-menu" id="orderDiv">
+                        <form id="orderForm">
+                            <fieldset>
+                                <h4>Sort Order</h4>
+                                <input class="sortOrder" name="sortOrder" type="radio" value="title" checked/>
+                                <label for="sortOrder">Title</label><br/>
+                                <input class="sortOrder" name="sortOrder" type="radio" value="director"/>
+                                <label for="sortOrder">Director</label><br/>
+                            </fieldset>
+                        </form>
+                    </div>
+                </li>
+                <li ng-show="vm.user.authenticated" id="addMovie"><a href="#!/movies/add">Add Movie</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+                <!-- adjust the link to change its behavior -->
+                <li class="dropdown" id="signupdrop" ng-show="!vm.user.authenticated">
+                    <a class="dropdown-toggle" id="register"
+                       data-toggle="dropdown">Sign Up<strong class="caret"></strong></a>
+                    <register user="vm.user" id="signupDiv" class="dropdown-menu">
+                    </register>
+                </li>
+
+                <li class="dropdown" id="signindrop">
+                    <a class="dropdown-toggle" id="greet"
+                       data-toggle="dropdown">{{vm.user.authenticated? vm.user.username : 'Sign in'}}<strong
+                            class="caret"></strong></a>
+                    <login user="vm.user" id="signinDiv" class="dropdown-menu">
+                    </login>
+                </li>
+                <li><a href="#!/about">About</a>
+                </li>
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</nav>
+<!-- Alert box-->
+<div id="notification-panel" class="navbar-fixed-top" role="alert">
+</div>

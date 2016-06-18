@@ -1,0 +1,28 @@
+<div class="thumbnails" accept-charset="UTF-8">
+    <div class="thumbnail plain col-xs-12">
+        <div class="moviedetails">  <!-- keep Reviews-link with details -->
+            <div class="video-container" data-toggle="tooltip" data-placement="bottom"
+                 title="click here to play movie trailer">
+                <video class="trailer" controls ng-attr-poster="{{vm.movie.poster}}"
+                       preload="none" ng-src="{{vm.movie.trailer | trusted}}">
+                    Your browser does not support the <code>video</code> element.
+                </video>
+            </div>
+            <div class="col-xs-4">
+                <review-swatch movie="vm.movie"></review-swatch>
+            </div>
+            <a href="#!/movies/{{vm.movie._id}}">
+                <div class="details col-xs-8" data-toggle="tooltip" data-placement="top"
+                     title="click here to edit movie">
+                    <p><strong>{{vm.movie.title}}</strong>
+                        ({{ vm.movie.released }})</p>
+                    <p><strong>Directed by: </strong>{{ vm.movie.director }}</p>
+                    <p><strong>Starring: </strong>{{ vm.movie.starring.join(', ') }}</p>
+                    <p><strong>Genres: </strong>{{ vm.movie.genre.join(', ') }} </p>
+                    <p><strong>Runtime:</strong> {{ vm.movie.duration }}min <strong> Rating:</strong> {{ vm.movie.rating
+                        }}</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
